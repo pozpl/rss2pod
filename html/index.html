@@ -1,0 +1,207 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>RSS2POD</title>
+        <style type="text/css">
+            @import "css/style.css";
+        </style>
+        <style>
+            
+            .audiojs {
+                width: 320px;
+                height: 22px;
+                background: #404040;
+                background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #444), color-stop(0.5, #555), color-stop(0.51, #444), color-stop(1, #444));
+                                                                                                                    background-image: -moz-linear-gradient(center top, #444 0%, #555 50%, #444 51%, #444 100%);
+                                                                                                                    -webkit-box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.3); -moz-box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.3);
+                                                                                                                    -o-box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.3); box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.3); }
+                                                                                                                  .audiojs .play-pause { width: 15px; height: 20px; padding: 0px 8px 0px 0px; 
+            																									  }
+                                                                                                                  .audiojs p { width: 25px; height: 20px; margin: -3px 0px 0px -1px; }
+                                                                                                                  .audiojs .scrubber { background: #5a5a5a; width: 170px; height: 10px; margin: 5px; }
+                                                                                                                  .audiojs .progress { height: 10px; width: 0px; background: #ccc;
+                                                                                                                    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #ccc), color-stop(0.5, #ddd), color-stop(0.51, #ccc), color-stop(1, #ccc));
+                                                                                                                    background-image: -moz-linear-gradient(center top, #ccc 0%, #ddd 50%, #ccc 51%, #ccc 100%); }
+                                                                                                                  .audiojs .loaded { height: 10px; background: #000;
+                                                                                                                    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #222), color-stop(0.5, #333), color-stop(0.51, #222), color-stop(1, #222));
+                                                                                                                    background-image: -moz-linear-gradient(center top, #222 0%, #333 50%, #222 51%, #222 100%); }
+                                                                                                                  .audiojs .time { float: left; height: 25px; line-height: 25px; }
+                                                                                                                  .audiojs .error-message { height: 24px;line-height: 24px; }
+                                                                                                            
+                                                                                                                  .track-details { clear: both; height: 20px; width: 448px; padding: 1px 6px; background: #eee; color: #222; font-family: monospace; font-size: 11px; line-height: 20px;
+                                                                                                                    -webkit-box-shadow: inset 1px 1px 5px rgba(0, 0, 0, 0.15); -moz-box-shadow: inset 1px 1px 5px rgba(0, 0, 0, 0.15); }
+                                                                                                                  .track-details:before { content: '♬ '; }
+                                                                                                                  .track-details em { font-style: normal; color: #999; }
+                                                                                                            	  
+                                                                                                            	  
+                                                                                                              
+                                                                                                                  ol.playlist { padding: 0px; margin: 0px; list-style: decimal-leading-zero inside; color: #ccc; width: 460px; border-top: 1px solid #ccc; font-size: 0.9em; }
+                                                                                                                  ol.playlist li { position: relative; margin: 0px; padding: 9px 2px 10px; border-bottom: 1px solid #ccc; cursor: pointer; }
+                                                                                                                  ol.playlist li a { display: block; text-indent: -3.3ex; padding: 0px 0px 0px 20px; }
+                                                                                                                  li.playing { color: #aaa; text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.3); }
+                                                                                                                  li.playing a { color: #000; }
+                                                                                                                  li.playing:before { content: '♬'; width: 14px; height: 14px; padding: 3px; line-height: 14px; margin: 0px; position: absolute; left: -24px; top: 9px; color: #000; font-size: 13px; text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.2); }
+                                                                                                                  
+                                                                                                            
+                                                                                                            	  
+                                                                                                                
+                                                                                                        
+                                                                                            
+                                                                                
+                                                                    
+                                                        
+                                            
+                                
+                    
+        </style>
+        <script src="jslib/audiojs/audio.min.js">
+        </script>
+        <script type="text/javascript" src="jslib/dojo/dojo.js" djconfig="parseOnLoad:true, isDebug:true">
+        </script>
+        <script>
+            dojo.addOnLoad(function(){
+                var as = audiojs.createAll();
+                var audio = as[0];
+                dojo.query("ol > li > a[data-src]:first-child").forEach(function(node, index, arr){
+                    audio.load(dojo.attr(node, "data-src"));
+                    console.debug(dojo.attr(node, "data-src"));
+                });
+                
+                dojo.query("ol > li > a[data-src]").connect("onclick", function(evt){
+                    audio.load(dojo.attr(evt.target, "data-src"));
+                    audio.play();
+                    
+                });
+                
+                
+            });
+        </script>
+    </head>
+    <body>
+        <div id="header">
+            <div id="header_logo">
+                <h1>RSS2POD</h1>
+            </div>
+            <div align="center" class="navbar">
+                <ul class="hr">
+                    <li>
+                        <a href="./index.html">НА ГЛАВНУЮ</a>
+                    </li>
+                    <li>
+                        <a href="./podmanager.cgi?rm=login">ПРЕОБРАЗОВАТЬ РСС В ПОДКАСТ</a>
+                    </li>
+                    <li>
+                        <a href="./index.html">ПОМОЩЬ</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div id="content_area">
+            <div id="sidebar">
+                <!--<p>
+                <audio src="/media/example.mp3" preload="auto" />
+                </p>-->
+                <p>
+                    <h3>wait what — notorious xx <em>(2009)</em></h3>
+                    <audio preload>
+                    </audio>
+                    <ol class="playlist">
+                        <li>
+                            <a href="#" data-src="./media/example.mp3">dead wrong intro</a>
+                        </li>
+                        <li>
+                            <a href="#" data-src="./media/example.mp3">juicy-r</a>
+                        </li>
+                    </ol>
+                </p>
+            </div>
+            <div id="content">
+                <h2>Алтарь демона </h2>
+                <p>
+                    Утром, при ярком солнечном свете, всё выглядело совсем не так и мрачно, как 
+                    планировалось, а даже наоборот. От свечей остались одни потёки, «кровь»  
+                    смотрелась как краска, а перья почти целиком разлетелись от ветра. Хорошо 
+                    сохранились только рисунки мелом, но и они были скорее прикольные, чем злые и загадочные.  
+                    Дети с неподдельным интересом разглядывали изображения, но без тени тех чувств, которые 
+                    испытали взрослые ночью при луне.
+                </p>
+                <p>
+                    Тем не менее, оказался один человек, на которого работа произвела большое 
+                    впечатление, — сторож лагеря. Днём он подошёл к автору «алтаря».
+                </p>
+                <p>
+                    — Ваша работа? - начал сторож, кивая в сторону площади.
+                    <br/>
+                    — А что такое? 
+                    <br/>
+                    — Ну, как же... Тут кровь..., перья птицы мёртвой..., знаки какие-то страшные нарисованы..., 
+                    а у вас всё же дети маленькие, они испугаться могут...
+                </p>
+                <p>
+                    Утром, при ярком солнечном свете, всё выглядело совсем не так и мрачно, как 
+                    планировалось, а даже наоборот. От свечей остались одни потёки, «кровь»  
+                    смотрелась как краска, а перья почти целиком разлетелись от ветра. Хорошо 
+                    сохранились только рисунки мелом, но и они были скорее прикольные, чем злые и загадочные.  
+                    Дети с неподдельным интересом разглядывали изображения, но без тени тех чувств, которые 
+                    испытали взрослые ночью при луне.
+                </p>
+                <p>
+                    Тем не менее, оказался один человек, на которого работа произвела большое 
+                    впечатление, — сторож лагеря. Днём он подошёл к автору «алтаря».
+                </p>
+                <p>
+                    — Ваша работа? - начал сторож, кивая в сторону площади.
+                    <br/>
+                    — А что такое? 
+                    <br/>
+                    — Ну, как же... Тут кровь..., перья птицы мёртвой..., знаки какие-то страшные нарисованы..., 
+                    а у вас всё же дети маленькие, они испугаться могут...
+                </p>
+                <p>
+                    Утром, при ярком солнечном свете, всё выглядело совсем не так и мрачно, как 
+                    планировалось, а даже наоборот. От свечей остались одни потёки, «кровь»  
+                    смотрелась как краска, а перья почти целиком разлетелись от ветра. Хорошо 
+                    сохранились только рисунки мелом, но и они были скорее прикольные, чем злые и загадочные.  
+                    Дети с неподдельным интересом разглядывали изображения, но без тени тех чувств, которые 
+                    испытали взрослые ночью при луне.
+                </p>
+                <p>
+                    Тем не менее, оказался один человек, на которого работа произвела большое 
+                    впечатление, — сторож лагеря. Днём он подошёл к автору «алтаря».
+                </p>
+                <p>
+                    — Ваша работа? - начал сторож, кивая в сторону площади.
+                    <br/>
+                    — А что такое? 
+                    <br/>
+                    — Ну, как же... Тут кровь..., перья птицы мёртвой..., знаки какие-то страшные нарисованы..., 
+                    а у вас всё же дети маленькие, они испугаться могут...
+                </p>
+                <p>
+                    Утром, при ярком солнечном свете, всё выглядело совсем не так и мрачно, как 
+                    планировалось, а даже наоборот. От свечей остались одни потёки, «кровь»  
+                    смотрелась как краска, а перья почти целиком разлетелись от ветра. Хорошо 
+                    сохранились только рисунки мелом, но и они были скорее прикольные, чем злые и загадочные.  
+                    Дети с неподдельным интересом разглядывали изображения, но без тени тех чувств, которые 
+                    испытали взрослые ночью при луне.
+                </p>
+                <p>
+                    Тем не менее, оказался один человек, на которого работа произвела большое 
+                    впечатление, — сторож лагеря. Днём он подошёл к автору «алтаря».
+                </p>
+                <p>
+                    — Ваша работа? - начал сторож, кивая в сторону площади.
+                    <br/>
+                    — А что такое? 
+                    <br/>
+                    — Ну, как же... Тут кровь..., перья птицы мёртвой..., знаки какие-то страшные нарисованы..., 
+                    а у вас всё же дети маленькие, они испугаться могут...
+                </p>
+            </div>
+        </div>
+        <div id="footer">
+            &copy; Pavel Pozdniak
+        </div>
+    </body>
+</html>

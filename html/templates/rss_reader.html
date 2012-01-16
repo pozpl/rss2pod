@@ -1,0 +1,21 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+        <title>reader</title>
+    </head>
+    <body>
+        <div dojoType="dijit.layout.BorderContainer" gutters="true" id="rssReaderBorderContainer" style="width: inherit; height: 100%;">
+            <div dojoType="dijit.layout.ContentPane" region="center" splitter="false" style="height: 100%; overflow: auto;">
+                {{rss_text}}
+            </div>
+            <!--<div dojoType="dijit.layout.ContentPane" region="left" splitter="false" style="height: 50px;">
+            left
+            </div>
+            <div dojoType="dijit.layout.ContentPane" region="center" splitter="false" style="height: 50px;">
+            Right
+            </div>-->
+			<div id="quit_from_read"></div>
+        </div>
+    </body>
+</html>

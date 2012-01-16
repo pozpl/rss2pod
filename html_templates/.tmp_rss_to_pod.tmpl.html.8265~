@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+    <head>
+        <title>RSS2POD</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script type="text/javascript" src="jslib/dojo/dojo.js" djconfig="parseOnLoad:true, isDebug:true">
+        </script>
+        <script type="text/javascript" src="js/pod_panel_logic.js">
+        </script>
+        <script type="text/javascript" src="js/single_pod_panel_logic.js">
+        </script>
+        <script type="text/javascript" src="js/feeds_panel_logic.js">
+        </script>
+        <script type="text/javascript" src="js/rss_to_pod_interface.js">
+        </script>
+        <style type="text/css">
+            @import "jslib/dijit/themes/tundra/tundra.css";
+        </style>
+        <style type="text/css">
+            html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                overflow: hidden;
+            }
+            
+            #borderContainer {
+                width: inherit;
+                height: inherit;
+            }
+            
+            #JsUIConteiner {
+                width: 900px;
+                height: 550;
+            }
+        </style>
+    </head>
+    <body class="tundra" role="application">
+        <table style="text-align: left; width: 100%;" border="0" cellpadding="2" cellspacing="2">
+            <tbody>
+                <tr>
+                    <td colspan="3" rowspan="1" style="vertical-align: top; width: 179px;">
+                        <a href="run_auth.cgi?rm=logout">Logout</a>
+                        <br>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="vertical-align: top; width: auto;">
+                        <br>
+                    </td>
+                    <td id="JsUIConteiner">
+                        <div dojoType="dijit.layout.BorderContainer" design="sidebar" gutters="true" liveSplitters="true" id="borderContainer">
+                            <div id="podcastsPane" dojoType="dijit.layout.ContentPane" splitter="true" region="leading" style="width: 20%;">
+                                <!--<button dojoType=dijit.form.Button id="addPodcastButton" name="addPodcastButton">
+                                ADD PODCAST
+                                </button>-->
+                            </div>
+                            <div id="singlePodPane" dojoType="dijit.layout.ContentPane" splitter="true" region="center">
+                                <div id="singlePodName">
+                                </div>
+                                <button dojoType=dijit.form.Button id="delCurrentPodcastButton" name="delCurrentPodcastButton">
+                                    Delete podcast
+                                </button>
+                                <br>
+                                <a href="fest_rss_oldstyle.cgi?rm=auth_get_podcast_file&pod_index_in_list=0"><img style="width: 316px; height: 153px;" alt="rss2pod" src="images/baner_rss_to_pod_enter.jpg"><a>
+                                        <br>
+                                        <div id="podRssList">
+                                        </div>
+                                        </div>
+                                        <div id="rssPane" dojoType="dijit.layout.ContentPane" splitter="true" region="right" style="width: 30%">
+                                            <button dojoType=dijit.form.Button id="addFeedButton" name="addFeedButton">
+                                                ADD FEED
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    </td>
+                                    <td style="vertical-align: top; width: auto;">
+                                        <br>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" rowspan="1" style="vertical-align: top; width: auto;">
+                                        <br>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <!--Out of page staff-->
+                            <!--ADD PODCAST DIALOG-->
+                            <div dojoType="dijit.Dialog" id="addPodcastDialog" title="Add new podcast" execute="podPanelObj.addNewPodcast(arguments[0]);">
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <label for="desc">
+                                                Podcast name:
+                                            </label>
+                                        </td>
+                                        <td>
+                                            <input id="podcast_name" type="text" name="podcast_name" dojoType="dijit.form.ValidationTextBox" required="true" invalidMessage="Please provide podcast name.">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" align="center">
+                                            <button dojoType=dijit.form.Button type="submit" onClick="return dijit.byId('addPodcastDialog').isValid();">
+                                                OK
+                                            </button>
+                                            <button dojoType="dijit.form.Button" type="button" onClick="dijit.byId('addPodcastDialog').hide();">
+                                                Cancel
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <!--ADD FEED DIALOG-->
+                            <div dojoType="dijit.Dialog" id="addFeedDialog" title="Add new feed" execute="feedPanelObj.addNewFeed(arguments[0]);">
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <label for="desc">
+                                                Feed URL:
+                                            </label>
+                                        </td>
+                                        <td>
+                                            <!--<input id="feed_url" type="text" name="feed_url" dojoType="dijit.form.ValidationTextBox" required="true" invalidMessage="Please provide valid feed URL." regExpGen="dojox.validate.regexp.url">-->
+                                            <input id="feed_url" type="text" name="feed_url" dojoType="dijit.form.ValidationTextBox" required="true">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" align="center">
+                                            <button dojoType=dijit.form.Button type="submit" onClick="return dijit.byId('addFeedDialog').isValid();">
+                                                OK
+                                            </button>
+                                            <button dojoType="dijit.form.Button" type="button" onClick="dijit.byId('addFeedDialog').hide();">
+                                                Cancel
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            </body>
+                        </html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>RSS2POD</title>
+        <style type="text/css">
+            @import "css/style.css";
+        </style>
+        <!--TMPL_VAR NAME="LOAD_JS"-->
+    </head>
+    <body class="tundra">
+        <div id="header">
+            <div id="header_logo">
+                <h1><img src="images/logo.png" alt="RSS2POD" width="140" /></h1>
+            </div>
+            <div align="center" class="navbar">
+                <ul class="hr">
+                    <li>
+                        <a href="./index.cgi">НА ГЛАВНУЮ</a>
+                    </li>
+                    <!--TMPL_IF NAME="APP_PAGE"-->
+                    <li>
+                        <a href="./index.cgi">ПОМОЩЬ</a>
+                    </li>
+                    <li>
+                        <a href="./run_auth.cgi?rm=logout">ВЫЙТИ</a>
+                    </li>
+                    <!--TMPL_ELSE-->
+                    <li>
+                        <a href="./fest_rss_oldstyle.cgi">ПРЕОБРАЗОВАТЬ РСС В ПОДКАСТ</a>
+                    </li>
+                    <li>
+                        <a href="./index.cgi">ПОМОЩЬ</a>
+                    </li>
+                    <!--/TMPL_IF-->
+                </ul>
+            </div>
+        </div>
+        <div id="content_area">
+            <!--TMPL_IF NAME="APP_PAGE"-->
+            <!--TMPL_VAR NAME="MAIN_CONTENT"-->
+            <!--TMPL_ELSE-->
+            <div id="sidebar">
+                <!--TMPL_VAR NAME="SIDEBAR_CONTENT"-->
+            </div>
+            <div id="content">
+                <!--TMPL_VAR NAME="MAIN_CONTENT"-->
+            </div>
+            <!--/TMPL_IF-->
+        </div>
+        <div id="footer">
+            &copy; Pavel Pozdniak
+        </div>		
+    </body>
+</html>

@@ -1,0 +1,13 @@
+<div class="rss_palyer">
+<h3>Примеры преобразованных RSS</h3>
+<audio preload="none"></audio>
+
+<ol class="playlist">
+    <li>
+        <span  data-src="./media/example.mp3">Хабрахабр</span>
+    </li>
+    <li>
+        <span  data-src="./media/example.mp3">Lenta.ru</span>
+    </li>
+</ol>
+</div>

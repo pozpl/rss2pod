@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>RSS2POD</title>
+        <style type="text/css">
+            @import "css/style.css";
+        </style>
+        <!--TMPL_IF NAME="APP_PAGE"--><!--TMPL_INCLUDE NAME="script_load_rss2pod.tmpl.html"--><!--/TMPL_IF--><!--TMPL_IF NAME="INDEX_PAGE"--><!--TMPL_INCLUDE NAME="script_load_index.tmpl.html"--><!--/TMPL_IF--><!--TMPL_IF NAME="AUTH_PAGE"--><!--TMPL_INCLUDE NAME="script_load_auth.tmpl.html"--><!--/TMPL_IF-->
+    </head>
+    <body class="tundra">
+        <div id="container">
+            <div id="header">
+                <div id="header_logo">
+                    <h1><a href="./index.cgi"><img src="images/logo.png" alt="RSS2POD" width="140" /></a></h1>
+                </div>
+                <div align="center" class="navbar">
+                    <ul class="hr">
+                        <li>
+                            <a href="./index.cgi">НА ГЛАВНУЮ</a>
+                        </li>
+                        <!--TMPL_IF NAME="APP_PAGE"-->
+                        <li>
+                            <a href="./index.cgi">ПОМОЩЬ</a>
+                        </li>
+                        <li>
+                            <a href="./run_auth.cgi?rm=logout">ВЫЙТИ</a>
+                        </li>
+                        <!--TMPL_ELSE-->
+                        <li>
+                            <a href="./fest_rss_oldstyle.cgi">ПРЕОБРАЗОВАТЬ РСС В ПОДКАСТ</a>
+                        </li>
+                        <li>
+                            <a href="./index.cgi">ПОМОЩЬ</a>
+                        </li>
+                        <!--/TMPL_IF-->
+                    </ul>
+                </div>
+            </div>
+            <div id="content_area">
+                <!--TMPL_IF NAME="APP_PAGE"-->
+                <!--TMPL_INCLUDE NAME="rss2pod.tmpl.html"-->
+                <!--/TMPL_IF-->
+                <!--TMPL_IF NAME="AUTH_PAGE"-->
+                <!--TMPL_INCLUDE NAME="auth.tmpl.html"-->
+                <!--/TMPL_IF-->
+                <!--TMPL_IF NAME="INDEX_PAGE"-->
+                <div id="sidebar">
+                    <!--TMPL_INCLUDE NAME="index_sidebar_content.tmpl.html"-->
+                </div>
+                <div id="content">
+                    <!--TMPL_INCLUDE NAME="index_main_content.tmpl.html"-->
+                </div>
+                <!--/TMPL_IF-->
+            </div>
+           <!--TMPL_IF NAME="INDEX_PAGE"-->
+            <div id="footer">
+                <div id="footer_content">
+                    &copy; Pavel Pozdniak
+                </div>
+            </div>
+			<!--/TMPL_IF-->
+        </div>
+    </body>
+</html>

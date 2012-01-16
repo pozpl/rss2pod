@@ -1,0 +1,34 @@
+<form name="loginform" method="post" action="./run_auth.cgi">
+    <div class="login">
+        <div class="login_header">
+            ВОЙТИ
+        </div>
+        <div class="login_content">
+            <ul class="message">
+                <li>
+                    Пожалуйста введите логин и пароль.
+                </li>
+            </ul>
+            <fieldset>
+                <label for="authen_username">
+                    Логин
+                </label>
+                <input id="authen_loginfield" tabindex="1" type="text" name="authen_username" size="20" value="" />
+                <br/>
+                <label for="authen_password">
+                    Пароль
+                </label>
+                <input id="authen_passwordfield" tabindex="2" type="password" name="authen_password" size="20" />
+                <br/>
+                <input id="authen_rememberuserfield" tabindex="3" type="checkbox" name="authen_rememberuser" value="1" />Запомнить меня
+                <br/>
+            </fieldset>
+        </div>
+        <div class="login_footer">
+            <div class="buttons">
+                <input id="authen_loginbutton" tabindex="4" type="submit" name="authen_loginbutton" value="Войти" class="button" /><a href="run_auth.cgi?rm=start_reg" id="authen_registerlink" tabindex="5">Зарегистрируйтесь сейчас!</a>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" name="destination" value="./run_auth.cgi" /><input type="hidden" name="rm" value="start" />
+</form>

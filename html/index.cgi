@@ -1,0 +1,13 @@
+#!/usr/bin/perl
+#use lib "../lib";
+
+
+
+use strict;
+use warnings;
+
+
+#use base 'CGI::Application';
+use Web::SiteEngine;
+
+SiteEngine->new->run;

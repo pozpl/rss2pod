@@ -1,0 +1,28 @@
+<table width="100%">
+    <tr>
+        <!--{% if show_add_button%} -->
+        <td width="10%">
+            <div id="{{add_id}}">
+                <img src="images/add_feed.png" width="24" alt="add" />
+            </div>
+        </td><!-- {% endif %} -->
+        <!--{%if show_faid %}-->
+        <td>
+            <div id="{{feed_name_id}}">
+                {{feed_name}}
+            </div>
+            <div id="{{feed_manage_id}}">
+            </div>
+        </td>
+        <!--{%else%}-->
+        <td>
+            {{feed_name}}
+        </td>
+        <!-- {% endif %} -->
+        <td width="10%">
+            <div id="{{del_id}}">
+                <!--{%if show_faid %}--><img src="images/del_feed.png" width="24" alt="del" /><!--{%else%}--><img src="images/rem_feed.png" width="24" alt="del" /><!--{% endif %} -->
+            </div>
+        </td>
+    </tr>
+</table>

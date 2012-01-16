@@ -1,0 +1,62 @@
+<div class="reg_form" align="center">
+<!--TMPL_IF NAME="REG_DONE"-->
+	<!--TMPL_INCLUDE NAME="registration_complite.tmpl.html"-->
+<!--TMPL_ELSE-->
+		
+		<!--TMPL_IF NAME="passwords_coincides_err"--> <b>Предоставленные вами пароли не совпадают.</b> <br /><!--/TMPL_IF-->
+		<!--TMPL_IF NAME="password_novalid_err"--> <b>Ваш пароль пустой или содержит запрещённые знаки. </b> <br /><!--/TMPL_IF-->
+		<!--TMPL_IF NAME="username_already_exists_err"--> <b>Пользователь с таким именем уже существует.</b> <br /><!--/TMPL_IF-->
+	    <!--TMPL_IF NAME="username_novalid_err"--> <b>Вы не задали имя пользователя.</b> <br /><!--/TMPL_IF-->
+	    <!--TMPL_IF NAME="capcha_coincides_err"--> <b>Неверно введена капча.</b> <br /><!--/TMPL_IF-->
+		<!--TMPL_IF NAME="email_novalid_err"--> <b>Ваш E-mail содержит запрещённые знаки.</b><br /> <!--/TMPL_IF-->
+		
+        <form action="run_auth.cgi" method="POST" accept-charset="utf-8">
+            <table width="200" border="0">
+                <tr>
+                    <td>
+                        Имя пользователя
+                    </td>
+                    <td>
+                        <input type="text" name="user_name" size="50" maxlength="256" value='<!--TMPL_VAR NAME="user_name"-->' />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Пароль
+                    </td>
+                    <td>
+                        <input type="password" name="password" value='<!--TMPL_VAR NAME="password"-->' size="50" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Пароль
+                    </td>
+                    <td>
+                        <input type="password" name="password_confirm" value='<!--TMPL_VAR NAME="password_confirm"-->' size="50" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        E-mail
+                    </td>
+                    <td>
+                        <input type="text" name="user_email" size="50" maxlength="256" value='<!--TMPL_VAR NAME="user_email"-->'/>
+                    </td>
+                </tr>
+				<tr>
+                    <td>
+                        <img src="run_auth.cgi?rm=get_reg_captcha">
+                    </td>
+                    <td>
+                        <input type="text" name="reg_captcha" size="50" maxlength="256" value=''/>
+                    </td>
+                </tr>
+            </table>
+            <p>
+                <input type="submit" value="Зарегистрироваться" /><input type="hidden" name="rm" value="register"/>
+            </p>
+        </form>
+		
+<!--/TMPL_IF-->	
+</div>

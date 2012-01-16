@@ -1,0 +1,49 @@
+#!/sbin/runscript
+
+pidfile_rssfetcher=/var/run/rss2pod_rssfetcher.pid
+pidfile_voicefier=/var/run/rss2pod_voicefier.pid
+pidfile_podgenerator=/var/run/rss2pod_podgenerator.pid
+
+#if [ -n "${RSS2POD_HOME:-x}" ]; then
+#RSS2POD_HOME="/opt/rss2pod"
+#fi
+
+PERL5LIB="./lib"
+start() {
+        cd $RSS2POD_HOME/bin
+        
+        ebegin "Starting rss fetcher service"
+        checkconfig 
+	    $RSS2POD_HOME/misc/run_rssfetcher.sh $RSS2POD_HOME $RSS2POD_LOCAL_LIB $RSS2POD_LOCAL_ARCH_SPECIFIC_LIB > $pidfile_rssfetcher
+        eend $? "Failed to start rss fetcher service!"
+
+        ebegin "Starting voicefication service"
+        $RSS2POD_HOME/misc/run_voicefier.sh $RSS2POD_HOME $RSS2POD_LOCAL_LIB $RSS2POD_LOCAL_ARCH_SPECIFIC_LIB > $pidfile_voicefier
+        eend $? "Failed to start voicefication service!"
+
+        ebegin "Starting podcasts generation service"
+        $RSS2POD_HOME/misc/run_podgenerator.sh  $RSS2POD_HOME $RSS2POD_LOCAL_LIB $RSS2POD_LOCAL_ARCH_SPECIFIC_LIB > $pidfile_podgenerator
+        eend $? "Failed to start podcasts generation service!"
+}
+
+stop() {
+	ebegin "Stopping rss fetcher service"
+	kill -9 $( cat $pidfile_rssfetcher)
+	rm -f ${pidfile_rssfetcher}
+	eend $? "Failed to stop rss fetcher service!"
+    
+    ebegin "Stopping voicefication service"
+	kill -9 $( cat $pidfile_voicefier)
+	rm -f ${pidfile_voicefier}
+	eend $? "Failed to stop voicefication service!"
+    
+    ebegin "Stopping podcasts generation service"
+	kill -9 $( cat $pidfile_podgenerator)
+	rm -f ${pidfile_podgenerator}
+	eend $? "Failed to stop podcasts generation service!"    
+}
+
+checkconfig() {
+	[ -f $RSS2POD_HOME/config/rss2pod.conf ] || return 1
+	return 0
+}

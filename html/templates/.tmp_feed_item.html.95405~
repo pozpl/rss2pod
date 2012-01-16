@@ -1,0 +1,31 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+        <title>Untitled Document</title>
+    </head>
+    <body>
+        <table width="100%">
+            <tr >
+            	<!--{% if show_add_button%} -->
+                <td width="10%">
+                	<div id="{{add_id}}"> <img src="images/Plus.png" width="24" alt="add" /> </div>
+                </td>				
+				<!-- {% endif %} -->
+				<!--{%if show_faid %}-->
+				<td>
+                	<div id="{{feed_name_id}}">{{feed_name}}</div>
+					<div id="{{feed_manage_id}}"></div>
+                </td>
+				<!--{%else%}-->
+                <td>
+                	{{feed_name}}
+                </td>
+				<!-- {% endif %} -->
+                <td width="10%">
+                	<div id="{{del_id}}">  <img src="images/minus.png" width="24" alt="del" /> </div>                	
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

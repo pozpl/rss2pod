@@ -1,0 +1,10 @@
+<audio preload>
+</audio>
+<ol class="playlist">
+    <li>
+        <a href="#" data-src="./media/example.mp3">Хабрахабр</a>
+    </li>
+    <li>
+        <a href="#" data-src="./media/example.mp3">Lenta.ru</a>
+    </li>
+</ol>
