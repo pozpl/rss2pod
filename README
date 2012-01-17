@@ -1,0 +1,3 @@
+The aim of this project is to build system that will help with RSS to Podcast transformation.
+Current verion is very raw and suppor only one text to speech engine - festival. But in futere
+I want to add new engines so on. 
