@@ -617,7 +617,25 @@ sub check_update_user_password() {
 sub check_is_user_password_valid() {
 	my $redis    = open_connection();     #connect to local redis
 	my $db_redis = DB::DBRedis->new();    #connect to local redis
-
+	
+	#PREPARE
+	$db_redis->add_new_user( $TEST_USER, $TEST_USER_PASSWORD,
+		$TEST_USER_EMAIL );
+	
+	#EXECUTE
+	my $new_pass_for_test_user = 'BRAND_NEW_PASSWORD';
+	#$db_redis->update_user_password($TEST_USER, $new_pass_for_test_user );
+	my $is_pass_valid = $db_redis->is_user_password_valid($TEST_USER, $TEST_USER_PASSWORD);
+	my $is_new_pass_valid = $db_redis->is_user_password_valid($TEST_USER, $new_pass_for_test_user);
+	
+	#CHECK
+	my $all_ok = $is_new_pass_valid  ? 0 
+				: $is_pass_valid     ? 1
+				:	                   0;
+	
+	#CLEAN ENVIRONMENT
+	$db_redis->delete_user($TEST_USER);
+	
 	close_connection();
 	return $all_ok;
 }
