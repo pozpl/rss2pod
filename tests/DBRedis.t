@@ -44,9 +44,9 @@ feeds:vqueuelist - list queue of tasks to voicefy the task is json object wirh f
 =cut
 
 #default test user
-my $TEST_USER          = "DEFAULT_TEST_USER";
-my $TEST_USER_PASSWORD = "DEFAULT_BLOODY_PASSWORD";
-my $TEST_USER_EMAIL    = "test_user@email.com";
+local $TEST_USER          = "DEFAULT_TEST_USER";
+local $TEST_USER_PASSWORD = "DEFAULT_BLOODY_PASSWORD";
+local $TEST_USER_EMAIL    = "test_user@email.com";
 
 sub open_connection() {
 
@@ -634,8 +634,7 @@ sub check_is_user_password_valid() {
 				:	                   0;
 	
 	#CLEAN ENVIRONMENT
-	$db_redis->delete_user($TEST_USER);
-	
+	$db_redis->delete_user($TEST_USER);	
 	close_connection();
 	return $all_ok;
 }
@@ -643,7 +642,21 @@ sub check_is_user_password_valid() {
 sub check_update_user_email() {
 	my $redis    = open_connection();     #connect to local redis
 	my $db_redis = DB::DBRedis->new();    #connect to local redis
-
+	
+	#PREPARE
+	$db_redis->add_new_user( $TEST_USER, $TEST_USER_PASSWORD,
+		$TEST_USER_EMAIL );
+	my $new_email_to_update = 'some@new.email';
+		
+	#EXECUTE
+	$db_redis->update_user_email($TEST_USER, $new_email_to_update);
+	
+	#CHECK
+	my $geted_email = $db_redis->get_user_email($TEST_USER);
+	my $all_ok = ($new_email_to_update eq $geted_email)   ? 1 : 0;
+	
+	#CLEAN ENVIRONMENT
+	$db_redis->delete_user($TEST_USER);	
 	close_connection();
 	return $all_ok;
 }
@@ -651,7 +664,19 @@ sub check_update_user_email() {
 sub check_get_user_email() {
 	my $redis    = open_connection();     #connect to local redis
 	my $db_redis = DB::DBRedis->new();    #connect to local redis
-
+	
+	#PREPARE
+	$db_redis->add_new_user( $TEST_USER, $TEST_USER_PASSWORD,
+		$TEST_USER_EMAIL );
+		
+	#EXECUTE
+	my $geted_email = $db_redis->get_user_email($TEST_USER);
+	
+	#CHECK	
+	my $all_ok = ($TEST_USER_EMAIL eq $geted_email)   ? 1 : 0;
+	
+	#CLEAN ENVIRONMENT
+	$db_redis->delete_user($TEST_USER);	
 	close_connection();
 	return $all_ok;
 }
@@ -659,7 +684,35 @@ sub check_get_user_email() {
 sub check_add_user_podcast() {
 	my $redis    = open_connection();     #connect to local redis
 	my $db_redis = DB::DBRedis->new();    #connect to local redis
-
+	
+	#PREPARE
+	$db_redis->add_new_user( $TEST_USER, $TEST_USER_PASSWORD,
+		$TEST_USER_EMAIL );
+	my $podcast_label = "Some test podcast";
+	
+	#EXECUTE
+	$db_redis->add_user_podcast($TEST_USER, $podcast_label);
+	
+	#CHECK
+	my $all_ok =  !$redis->exists( $db_redis->USER_USER_ID_POD_NEXTID($user_id))     ? 0
+				: !$redis->exists( $db_redis->USER_USER_ID_POD_POD_ZSET($user_id))   ? 0				
+				:                                                                      1;
+	if($all_ok){
+		if(  $redis->exists( $db_redis->USER_USER_ID_POD_POD_NAME_ID($user_id))  ){
+			my $pod_id =  $redis->get($db_redis->USER_USER_ID_POD_POD_NAME_ID($user_id));
+			
+			$all_ok = !$redis->exists( $db_redis->USER_USER_ID_POD_POD_ID_RSS_ZSET($user_id, $pod_id))     ? 0
+				: !$redis->exists( $db_redis->USER_USER_ID_POD_POD_ID_RSS_NEXTID($user_id, $pod_id))   	   ? 0		
+				: !$redis->exists( $db_redis->USER_USER_ID_POD_POD_ID_LAST_CHK_TIME($user_id, $pod_id))    ? 0		
+				:                                                                      					     1;
+		}
+		else{
+			$all_ok = 0;
+		}
+	}
+	
+	#CLEAN ENVIRONMENT
+	$db_redis->delete_user($TEST_USER);		
 	close_connection();
 	return $all_ok;
 }
@@ -667,7 +720,17 @@ sub check_add_user_podcast() {
 sub check_add_feed_id_to_user_feeds() {
 	my $redis    = open_connection();     #connect to local redis
 	my $db_redis = DB::DBRedis->new();    #connect to local redis
-
+	
+	#PREPARE
+	$db_redis->add_new_user( $TEST_USER, $TEST_USER_PASSWORD,
+		$TEST_USER_EMAIL );
+	my $feed_id = "1";
+	
+	#EXECUTE
+	$db_redis->add_feed_id_to_user_feeds($TEST_USER, $feed_id);
+	
+	#CHECK
+	
 	close_connection();
 	return $all_ok;
 }
