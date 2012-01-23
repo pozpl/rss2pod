@@ -1,3 +1,15 @@
+RSS2POD README 
 The aim of this project is to build system that will help with RSS to Podcast transformation.
-Current verion is very raw and suppor only one text to speech engine - festival. But in futere
-I want to add new engines so on. 
+Current version is very raw and support only one text to speech engine - festival. But in future
+I want to add new engines and so on. 
+
+Copyright (C) 2010-2012 Pozdniak Pavel <pozdpl@gmail.com>
+
+You can DOWNLOAD project from github.
+	 git@github.com:pozpl/rss2pod.git
+
+Installation is described on INSTALL file.
+
+
+
+

@@ -1,0 +1,58 @@
+This is INSTALL file for RSS2POD product.
+==================
+REQUIREMENTS.
+==================
+This product initially was build to run on Linux platform. 
+Before installation you need to be sure that your system has
+some software, which is necessary to run rss2pod.
+------------------------
+Non Perl requirements.
+------------------------
+Redis - NoSQL database server.
+gd - library to deal with graphix
+lame - library and stand alone application for mp3 encoding
+festival - text to speech engine
+festival voices - voices for festival to work (rss2pod now support only English and Russian)
+mp3wrap - command line utility to bundle mp3 files 
+-----------------------
+Perl requirements
+-----------------------
+In ideal world this requirements would be downloaded automatically.
+The process of installation would be described below.
+For installation itself, we need App::Build packet if we would install rss2pod 
+with root credentials. We will provide this module within core installation archive,
+but if you can install it yourself it would lead to less work during the installation process.
+For installation without root credentials again you wold need nothing, but it
+if you wold install Carton module it would save your time.
+
+===========================
+INSTALLATION PROCESS
+===========================
+Now let as assume that we already downloaded rss2pod project files,
+and reside in the root directory of this project.
+cd ./rss2pod
+
+---------------------------------
+INSTALLING WITH ROOT PRIVILEGES
+---------------------------------
+This part of the installation process requires root privileges, if you do not 
+have ones go to the next section, where standalone installation would be described.
+If you do not have App::Builder installed  on the your machine, than edit 
+Build.PL and add this line 
+use lib qw(/path/to/rss2pod/folder/local/lib/perl5); #$path_to_this_folder + /local/lib/perl5
+!!HINT path to current folder we can gain via pwd command.
+This line will add path to your local libs, where App::Build resides. 
+After that run
+perl ./Build.PL --install_base=/path/where/to/install
+This will create Build script. Run it
+./Build
+./Build install
+
+---------------------------------------
+INSTALLATION WITHOUT ROOT PRIVILEGES
+---------------------------------------
+
+Install carton
+--------------
+
+We will use carton as packets manager
