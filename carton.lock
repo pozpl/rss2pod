@@ -1,0 +1,457 @@
+{
+   "modules" : {
+      "Env" : {
+         "dist" : "Env-1.03",
+         "module" : "Env",
+         "mymeta" : {
+            "abstract" : "perl module that imports environment variables as scalars or arrays",
+            "author" : [
+               "Chip Salzenberg <chip@fin.uucp>",
+               "Gregor N. Purdy <gregor@focusresearch.com>",
+               "The Perl 5 Porters"
+            ],
+            "dynamic_config" : 0,
+            "generated_by" : "Dist::Zilla version 4.200010, CPAN::Meta::Converter version 2.110930, CPAN::Meta::Converter version 2.112150",
+            "license" : [
+               "perl_5"
+            ],
+            "meta-spec" : {
+               "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+               "version" : "2"
+            },
+            "name" : "Env",
+            "prereqs" : {
+               "build" : {
+                  "requires" : {}
+               },
+               "configure" : {
+                  "requires" : {
+                     "ExtUtils::MakeMaker" : "6.30"
+                  }
+               },
+               "runtime" : {
+                  "requires" : {
+                     "Tie::Array" : 0
+                  }
+               }
+            },
+            "release_status" : "stable",
+            "resources" : {
+               "bugtracker" : {
+                  "web" : "http://rt.perl.org/rt3/"
+               },
+               "homepage" : "http://search.cpan.org/dist/Env",
+               "repository" : {
+                  "type" : "git",
+                  "url" : "git://github.com/rafl/env.git"
+               }
+            },
+            "version" : "1.03",
+            "x_Dist_Zilla" : {
+               "plugins" : [
+                  {
+                     "class" : "Dist::Zilla::Plugin::GatherDir",
+                     "name" : "@Basic/GatherDir",
+                     "version" : "4.200010"
+                  },
+                  {
+                     "class" : "Dist::Zilla::Plugin::PruneCruft",
+                     "name" : "@Basic/PruneCruft",
+                     "version" : "4.200010"
+                  },
+                  {
+                     "class" : "Dist::Zilla::Plugin::ManifestSkip",
+                     "name" : "@Basic/ManifestSkip",
+                     "version" : "4.200010"
+                  },
+                  {
+                     "class" : "Dist::Zilla::Plugin::MetaYAML",
+                     "name" : "@Basic/MetaYAML",
+                     "version" : "4.200010"
+                  },
+                  {
+                     "class" : "Dist::Zilla::Plugin::License",
+                     "name" : "@Basic/License",
+                     "version" : "4.200010"
+                  },
+                  {
+                     "class" : "Dist::Zilla::Plugin::Readme",
+                     "name" : "@Basic/Readme",
+                     "version" : "4.200010"
+                  },
+                  {
+                     "class" : "Dist::Zilla::Plugin::ExtraTests",
+                     "name" : "@Basic/ExtraTests",
+                     "version" : "4.200010"
+                  },
+                  {
+                     "class" : "Dist::Zilla::Plugin::ExecDir",
+                     "name" : "@Basic/ExecDir",
+                     "version" : "4.200010"
+                  },
+                  {
+                     "class" : "Dist::Zilla::Plugin::ShareDir",
+                     "name" : "@Basic/ShareDir",
+                     "version" : "4.200010"
+                  },
+                  {
+                     "class" : "Dist::Zilla::Plugin::MakeMaker",
+                     "name" : "@Basic/MakeMaker",
+                     "version" : "4.200010"
+                  },
+                  {
+                     "class" : "Dist::Zilla::Plugin::Manifest",
+                     "name" : "@Basic/Manifest",
+                     "version" : "4.200010"
+                  },
+                  {
+                     "class" : "Dist::Zilla::Plugin::TestRelease",
+                     "name" : "@Basic/TestRelease",
+                     "version" : "4.200010"
+                  },
+                  {
+                     "class" : "Dist::Zilla::Plugin::ConfirmRelease",
+                     "name" : "@Basic/ConfirmRelease",
+                     "version" : "4.200010"
+                  },
+                  {
+                     "class" : "Dist::Zilla::Plugin::UploadToCPAN",
+                     "name" : "@Basic/UploadToCPAN",
+                     "version" : "4.200010"
+                  },
+                  {
+                     "class" : "Dist::Zilla::Plugin::DualLife",
+                     "name" : "DualLife",
+                     "version" : "0.01"
+                  },
+                  {
+                     "class" : "Dist::Zilla::Plugin::MetaConfig",
+                     "name" : "MetaConfig",
+                     "version" : "4.200010"
+                  },
+                  {
+                     "class" : "Dist::Zilla::Plugin::MetaJSON",
+                     "name" : "MetaJSON",
+                     "version" : "4.200010"
+                  },
+                  {
+                     "class" : "Dist::Zilla::Plugin::PodSyntaxTests",
+                     "name" : "PodSyntaxTests",
+                     "version" : "4.200010"
+                  },
+                  {
+                     "class" : "Dist::Zilla::Plugin::MetaResources",
+                     "name" : "MetaResources",
+                     "version" : "4.200010"
+                  },
+                  {
+                     "class" : "Dist::Zilla::Plugin::Prereqs",
+                     "config" : {
+                        "Dist::Zilla::Plugin::Prereqs" : {
+                           "phase" : "runtime",
+                           "type" : "requires"
+                        }
+                     },
+                     "name" : "Prereqs",
+                     "version" : "4.200010"
+                  },
+                  {
+                     "class" : "Dist::Zilla::Plugin::FinderCode",
+                     "name" : ":InstallModules",
+                     "version" : "4.200010"
+                  },
+                  {
+                     "class" : "Dist::Zilla::Plugin::FinderCode",
+                     "name" : ":IncModules",
+                     "version" : "4.200010"
+                  },
+                  {
+                     "class" : "Dist::Zilla::Plugin::FinderCode",
+                     "name" : ":TestFiles",
+                     "version" : "4.200010"
+                  },
+                  {
+                     "class" : "Dist::Zilla::Plugin::FinderCode",
+                     "name" : ":ExecFiles",
+                     "version" : "4.200010"
+                  },
+                  {
+                     "class" : "Dist::Zilla::Plugin::FinderCode",
+                     "name" : ":ShareFiles",
+                     "version" : "4.200010"
+                  },
+                  {
+                     "class" : "Dist::Zilla::Plugin::FinderCode",
+                     "name" : ":MainModule",
+                     "version" : "4.200010"
+                  }
+               ],
+               "zilla" : {
+                  "class" : "Dist::Zilla::Dist::Builder",
+                  "config" : {
+                     "is_trial" : 0
+                  },
+                  "version" : "4.200010"
+               }
+            }
+         },
+         "name" : "Env",
+         "pathname" : "F/FL/FLORA/Env-1.03.tar.gz",
+         "provides" : {
+            "Env" : {
+               "file" : "Env.pm",
+               "version" : "1.03"
+            },
+            "Env::Array" : {
+               "file" : "Env.pm"
+            },
+            "Env::Array::VMS" : {
+               "file" : "Env.pm"
+            }
+         },
+         "version" : "1.03"
+      },
+      "Sys::Syslog" : {
+         "dist" : "Sys-Syslog-0.29",
+         "module" : "Sys::Syslog",
+         "mymeta" : {
+            "abstract" : "Perl interface to the UNIX syslog(3) calls",
+            "author" : [
+               "Sebastien Aperghis-Tramoni <sebastien@aperghis.net>"
+            ],
+            "dynamic_config" : 0,
+            "generated_by" : "ExtUtils::MakeMaker version 6.56, CPAN::Meta::Converter version 2.112150",
+            "license" : [
+               "perl_5"
+            ],
+            "meta-spec" : {
+               "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+               "version" : "2"
+            },
+            "name" : "Sys-Syslog",
+            "no_index" : {
+               "directory" : [
+                  "t",
+                  "inc"
+               ]
+            },
+            "prereqs" : {
+               "build" : {
+                  "requires" : {
+                     "ExtUtils::MakeMaker" : 0
+                  }
+               },
+               "configure" : {
+                  "requires" : {
+                     "ExtUtils::MakeMaker" : 0
+                  }
+               },
+               "runtime" : {
+                  "requires" : {
+                     "Carp" : 0,
+                     "Fcntl" : 0,
+                     "File::Basename" : 0,
+                     "File::Spec" : 0,
+                     "POSIX" : 0,
+                     "Socket" : 0,
+                     "Test::More" : 0,
+                     "XSLoader" : 0
+                  }
+               }
+            },
+            "release_status" : "stable",
+            "version" : "0.29"
+         },
+         "name" : "Sys::Syslog",
+         "pathname" : "S/SA/SAPER/Sys-Syslog-0.29.tar.gz",
+         "provides" : {
+            "Sys::Syslog" : {
+               "file" : "Sys/Syslog.pm",
+               "version" : "0.29"
+            }
+         },
+         "version" : "0.29"
+      },
+      "Time::HiRes" : {
+         "dist" : "Time-HiRes-1.9724",
+         "module" : "Time::HiRes",
+         "mymeta" : {
+            "abstract" : "High resolution alarm, sleep, gettimeofday, interval timers",
+            "author" : [
+               "Jarkko Hietaniemi <jhi@iki.fi>"
+            ],
+            "dynamic_config" : 0,
+            "generated_by" : "ExtUtils::MakeMaker version 6.57_05, CPAN::Meta::Converter version 2.112150",
+            "license" : [
+               "unknown"
+            ],
+            "meta-spec" : {
+               "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+               "version" : "2"
+            },
+            "name" : "Time-HiRes",
+            "no_index" : {
+               "directory" : [
+                  "t",
+                  "inc"
+               ]
+            },
+            "prereqs" : {
+               "build" : {
+                  "requires" : {
+                     "ExtUtils::MakeMaker" : 0
+                  }
+               },
+               "configure" : {
+                  "requires" : {
+                     "ExtUtils::MakeMaker" : 0
+                  }
+               },
+               "runtime" : {
+                  "requires" : {
+                     "Carp" : 0,
+                     "Config" : 0,
+                     "DynaLoader" : 0,
+                     "Exporter" : 0,
+                     "ExtUtils::MakeMaker" : 0,
+                     "Test::More" : "0.82",
+                     "strict" : 0
+                  }
+               }
+            },
+            "release_status" : "stable",
+            "version" : "1.9724"
+         },
+         "name" : "Time::HiRes",
+         "pathname" : "Z/ZE/ZEFRAM/Time-HiRes-1.9724.tar.gz",
+         "provides" : {
+            "Time::HiRes" : {
+               "file" : "Time/HiRes.pm",
+               "version" : "1.9724"
+            }
+         },
+         "version" : "1.9724"
+      },
+      "XSLoader" : {
+         "dist" : "XSLoader-0.15",
+         "module" : "XSLoader",
+         "mymeta" : {
+            "abstract" : "Dynamically load C libraries into Perl code",
+            "author" : [
+               "Sebastien Aperghis-Tramoni <sebastien@aperghis.net>"
+            ],
+            "dynamic_config" : 0,
+            "generated_by" : "ExtUtils::MakeMaker version 6.56, CPAN::Meta::Converter version 2.112150",
+            "license" : [
+               "perl_5"
+            ],
+            "meta-spec" : {
+               "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+               "version" : "2"
+            },
+            "name" : "XSLoader",
+            "no_index" : {
+               "directory" : [
+                  "t",
+                  "inc"
+               ]
+            },
+            "prereqs" : {
+               "build" : {
+                  "requires" : {
+                     "ExtUtils::MakeMaker" : 0
+                  }
+               },
+               "configure" : {
+                  "requires" : {
+                     "ExtUtils::MakeMaker" : 0
+                  }
+               },
+               "runtime" : {
+                  "requires" : {
+                     "Test::More" : "0.62"
+                  }
+               }
+            },
+            "release_status" : "stable",
+            "version" : "0.15"
+         },
+         "name" : "XSLoader",
+         "pathname" : "S/SA/SAPER/XSLoader-0.15.tar.gz",
+         "provides" : {
+            "DynaLoader" : {
+               "file" : "XSLoader.pm"
+            },
+            "XSLoader" : {
+               "file" : "XSLoader.pm",
+               "version" : "0.15"
+            }
+         },
+         "version" : "0.15"
+      },
+      "threads" : {
+         "dist" : "threads-1.86",
+         "module" : "threads",
+         "mymeta" : {
+            "abstract" : "Perl interpreter-based threads",
+            "author" : [
+               "Artur Bergman, Jerry D. Hedden <jdhedden AT cpan DOT org>"
+            ],
+            "dynamic_config" : 0,
+            "generated_by" : "ExtUtils::MakeMaker version 6.62, CPAN::Meta::Converter version 2.112621, CPAN::Meta::Converter version 2.112150",
+            "license" : [
+               "perl_5"
+            ],
+            "meta-spec" : {
+               "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+               "version" : "2"
+            },
+            "name" : "threads",
+            "no_index" : {
+               "directory" : [
+                  "t",
+                  "inc"
+               ]
+            },
+            "prereqs" : {
+               "build" : {
+                  "requires" : {
+                     "ExtUtils::MakeMaker" : 0
+                  }
+               },
+               "configure" : {
+                  "requires" : {
+                     "ExtUtils::MakeMaker" : 0
+                  }
+               },
+               "runtime" : {
+                  "requires" : {
+                     "Carp" : 0,
+                     "Config" : 0,
+                     "ExtUtils::testlib" : 0,
+                     "Hash::Util" : 0,
+                     "IO::File" : 0,
+                     "Test::More" : 0,
+                     "XSLoader" : 0,
+                     "overload" : 0,
+                     "strict" : 0,
+                     "warnings" : 0
+                  }
+               }
+            },
+            "release_status" : "stable",
+            "version" : "1.86"
+         },
+         "name" : "threads",
+         "pathname" : "J/JD/JDHEDDEN/threads-1.86.tar.gz",
+         "provides" : {
+            "threads" : {
+               "file" : "threads.pm",
+               "version" : "1.86"
+            }
+         },
+         "version" : "1.86"
+      }
+   },
+   "version" : "0.9"
+}
