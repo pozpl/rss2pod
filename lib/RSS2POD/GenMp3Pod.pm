@@ -15,7 +15,7 @@ use Sys::Syslog qw(:standard);
 #use Audio::Wav;
 use Audio::ConvTools qw/:DEFAULT :Tmp :Log/;
 #use FestText2Wav;
-use WavMerger;
+use RSS2POD::WavMerger;
 my $VERSION = "0.001";
 
 sub new {
