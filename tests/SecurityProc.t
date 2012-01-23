@@ -1,7 +1,7 @@
 use Test::More tests => 11;
 use Encode;
 use lib "../lib";
-use SecurityProc;
+use RSS2POD::SecurityProc;
 
 my $securityProc = new SecurityProc();
 #digit cases
