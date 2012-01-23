@@ -1,5 +1,5 @@
 
 
 RSS2POD_HOME="/home/pozpl/workspace/FestRSS/"
-RSS2POD_LOCAL_LIB="/home/pozpl/workspace/FestRSS/local/perl5/lib"
-RSS2POD_LOCAL_ARCH_SPECIFIC_LIB="/home/pozpl/workspace/FestRSS/local/perl5/lib/x86_64-linux-thread-debug-multi"
+RSS2POD_LOCAL_LIB="/home/pozpl/workspace/FestRSS/local/lib/perl5"
+RSS2POD_LOCAL_ARCH_SPECIFIC_LIB="/home/pozpl/workspace/FestRSS/local/lib/perl5/x86_64-linux-thread-debug-multi"

@@ -15,13 +15,15 @@ my $build = App::Build->new(
 	},
 	requires => {
 		'perl' => '5.14.2',
-
+		
+		'Audio::ConvTools'				           => 0.08,
 		'Config::Simple'                           => 0,
 		'IO::Socket::INET'                         => 0,
 		'HTML::TreeBuilder'                        => 0,
 		'Encode'                                   => 0,		
 		'Net::Daemon'                              => 0,		
 		'Lingua::Translit'                         => 0,
+		'Getopt::Long'                             => 2.38,
 		'CGI::Application'                         => 0,
 		'CGI::Application::Plugin::Session'        => 0,
 		'CGI::Application::Plugin::Config::Simple' => 1.01,

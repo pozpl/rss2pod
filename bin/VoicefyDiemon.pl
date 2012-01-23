@@ -15,9 +15,17 @@ use FestText2Wav;
 use JSON;
 use Audio::ConvTools qw/:DEFAULT :Tmp :Log/;
 use threads;
+use Getopt::Long;
 
 #Initiate configuration file========================================================
-my $config = new Config::Simple("../config/rss2pod.conf");
+my $conf_file_path;
+GetOptions(
+	"conf=s" => \$conf_file_path,
+);
+$conf_file_path = defined $conf_file_path ? $conf_file_path : "../config/rss2pod.conf";
+
+
+my $config = new Config::Simple($conf_file_path);
 
 #End initate config options=========================================================
 #initiate syslog

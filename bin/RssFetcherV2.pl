@@ -15,6 +15,13 @@ use Encode;
 use Config::Simple;
 use JSON;
 use LangUtils::TextHandler qw(prepare_text);
+use Getopt::Long;
+
+my $conf_file_path;
+GetOptions(
+	"conf=s" => \$conf_file_path,
+);
+$conf_file_path = defined $conf_file_path ? $conf_file_path : "../config/rss2pod.conf";
 
 ############Prototypes Section
 sub initReaders();
@@ -22,7 +29,7 @@ sub check_for_dirs();
 ############
 
 #Initiate configuration file========================================================
-my $config = new Config::Simple("../config/rss2pod.conf");
+my $config = new Config::Simple($conf_file_path);
 
 #End initate config options=========================================================
 #initiate syslog
