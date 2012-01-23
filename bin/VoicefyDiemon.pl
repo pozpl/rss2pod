@@ -11,7 +11,7 @@ use Redis;
 use Digest::MD5 qw(md5 md5_hex md5_base64);
 use Encode;
 use Config::Simple;
-use FestText2Wav;
+use RSS2POD::FestText2Wav;
 use JSON;
 use Audio::ConvTools qw/:DEFAULT :Tmp :Log/;
 use threads;

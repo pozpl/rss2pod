@@ -5,7 +5,7 @@ use warnings;
 use Sys::Syslog qw(:standard);
 use Config::Simple;
 use Getopt::Long;
-use PodGenerateDaemon;
+use RSS2POD::PodGenerateDaemon;
 
 my $conf_file_path;
 GetOptions(
