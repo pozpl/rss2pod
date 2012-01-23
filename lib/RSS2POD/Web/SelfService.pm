@@ -118,7 +118,7 @@ sub PH_change_user_info() {
 	$password_novalid_err = 0;
 
 	#email block
-	my $secObj = new SecurityProc();
+	my $secObj = new RSS2POD::SecurityProc();
 	$email_novalid_err = 0;
 	unless ($secObj->get_preg( $email, 'email' )){
 		$email_novalid_err = 1;

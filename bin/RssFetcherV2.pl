@@ -14,7 +14,7 @@ use Digest::MD5 qw(md5 md5_hex md5_base64);
 use Encode;
 use Config::Simple;
 use JSON;
-use LangUtils::TextHandler qw(prepare_text);
+use RSS2POD::LangUtils::TextHandler qw(prepare_text);
 use Getopt::Long;
 
 my $conf_file_path;
@@ -223,7 +223,7 @@ sub putRssItemIntoDatabase() {
 
 	 #number of items in feed during system work, this is used for item handling
 		my $item     = $feed_title . " " . $feed_content;
-		my $item_txt = LangUtils::TextHandler::prepare_text($item);
+		my $item_txt = RSS2POD::LangUtils::TextHandler::prepare_text($item);
 		if (
 			!$redis->zscore( "feed:$feed_id:items_md5_zset",
 				md5_hex( $item_txt->{text} ) )

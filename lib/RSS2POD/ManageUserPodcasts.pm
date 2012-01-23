@@ -53,7 +53,7 @@ Convert single feed item into mp3 and store file
 
 sub convFeedItem() {
 	my ( $self, $wave_queue, $file_name ) = @_;
-	my $gen_mp3_pod = GenMp3Pod->new();
+	my $gen_mp3_pod = RSS2POD::GenMp3Pod->new();
 	#my @txt_queue;
 	#do some work under txt file
 	#my %txt_str_hash = $self->normalyseText($text);

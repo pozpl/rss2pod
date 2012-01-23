@@ -63,7 +63,7 @@ sub genMp3 {
 
 sub mergeWavPieces {
 	my ( $self, $result_file_name, $audio_wav_pieces  ) = @_;
-	my $wav_merger         = new WavMerger();
+	my $wav_merger         = new RSS2POD::WavMerger();
 	my $merged_wav_data = $wav_merger->merge_wav($audio_wav_pieces);
 	
 	my $result_file_handle;

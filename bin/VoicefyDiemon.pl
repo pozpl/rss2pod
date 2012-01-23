@@ -117,7 +117,7 @@ Connect to festival and convert text to speech
 =cut
 sub get_wave() {
 	my ( $lang, $text ) = @_;
-	my $festClient = FestText2Wav->new();
+	my $festClient = RSS2POD::FestText2Wav->new();
 	$festClient->festival_connect();
 	my $s_voice = $config->param( "voice." . $lang );
 	$festClient->voice($s_voice);

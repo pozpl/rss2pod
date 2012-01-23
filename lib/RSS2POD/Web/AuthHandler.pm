@@ -189,7 +189,7 @@ sub register() {
 	$email            = $self->query->param("user_email");
 
 	my $redis        = Redis->new();          #Add new redis connection
-	my $security_obj = SecurityProc->new();
+	my $security_obj = RSS2POD::SecurityProc->new();
 	my $user_name_md5 = md5_hex($user_name);
 	
 	#check for valid values of parameters;

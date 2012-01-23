@@ -1,4 +1,4 @@
-package LangUtils::TextHandler;
+package RSS2POD::LangUtils::TextHandler;
 
 
 use warnings;

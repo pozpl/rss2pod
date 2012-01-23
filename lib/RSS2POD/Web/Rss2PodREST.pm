@@ -208,7 +208,7 @@ sub PH_add_podcast() {
 	my $user_name_md5 = md5_hex($user_name);
 	my $user_id       = $redis->get("id:$user_name_md5");
 
-	my $secProcObj = new SecurityProc();
+	my $secProcObj = new RSS2POD::SecurityProc();
 	$user_id = 0 unless $secProcObj->get_preg( $user_id, 'digit' );
 	$podcast_name = $secProcObj->trim_too_long_string( $podcast_name, 100 );
 
@@ -684,7 +684,7 @@ sub PH_add_feed() {
 	my $user_id       = $redis->get("id:$user_name_md5");
 	my $feed_url      = $self->query->param("feed_url");
 
-	my $sec_proc_obj = new SecurityProc();
+	my $sec_proc_obj = new RSS2POD::SecurityProc();
 	$feed_url = $sec_proc_obj->trim_too_long_string( $feed_url, 300 );
 
 	#print "delete: $pod_index_in_list \n";
@@ -813,7 +813,7 @@ sub PH_add_rss_to_podcast() {
 	my $feed_id = $self->query->param("feed_id");
 	my $pod_id  = $self->query->param("pod_id");
 
-	my $sec_proc_obj = new SecurityProc();
+	my $sec_proc_obj = new RSS2POD::SecurityProc();
 	$feed_id = 0 unless $sec_proc_obj->get_preg( $feed_id, 'digit' );
 	$pod_id  = 0 unless $sec_proc_obj->get_preg( $pod_id,  'digit' );
 	$feed_id = $sec_proc_obj->trim_too_long_string( $feed_id, 10 );
@@ -868,7 +868,7 @@ sub PH_del_feed_from_user_list() {
 	my $user_id       = $redis->get("id:$user_name_md5");
 	my $feed_id       = $self->query->param("feed_id");
 
-	my $sec_proc_obj = new SecurityProc();
+	my $sec_proc_obj = new RSS2POD::SecurityProc();
 	$feed_id = 0 unless $sec_proc_obj->get_preg( $feed_id, 'digit' );
 	$feed_id = $sec_proc_obj->trim_too_long_string( $feed_id, 10 );
 
@@ -910,7 +910,7 @@ sub PH_del_feed_from_podcast() {
 	my $feed_id = $self->query->param("feed_id");
 	my $pod_id  = $self->query->param("pod_id");
 
-	my $sec_proc_obj = new SecurityProc();
+	my $sec_proc_obj = new RSS2POD::SecurityProc();
 	$feed_id = 0 unless $sec_proc_obj->get_preg( $feed_id, 'digit' );
 	$pod_id  = 0 unless $sec_proc_obj->get_preg( $pod_id,  'digit' );
 	$feed_id = $sec_proc_obj->trim_too_long_string( $feed_id, 10 );
@@ -1097,7 +1097,7 @@ sub PH_get_podcast_file() {
 	$pod_id      = 0 unless defined $pod_id;
 	$old_pod_num = 0 unless defined $old_pod_num;
 
-	my $sec_proc_obj = new SecurityProc();
+	my $sec_proc_obj = new RSS2POD::SecurityProc();
 	$old_pod_num = 0 unless $sec_proc_obj->get_preg( $old_pod_num, 'digit' );
 	$pod_id      = 0 unless $sec_proc_obj->get_preg( $pod_id,      'digit' );
 	$old_pod_num = $sec_proc_obj->trim_too_long_string( $old_pod_num, 10 );
@@ -1178,7 +1178,7 @@ sub PH_get_old_pod_files_lables_json() {
 	my $user_id       = $redis->get("id:$user_name_md5");
 	my $pod_id        = $self->query->param("pod_id");
 
-	my $sec_proc_obj = new SecurityProc();
+	my $sec_proc_obj = new RSS2POD::SecurityProc();
 	$pod_id = 0 unless $sec_proc_obj->get_preg( $pod_id, 'digit' );
 	$pod_id = $sec_proc_obj->trim_too_long_string( $pod_id, 10 );
 
@@ -1287,7 +1287,7 @@ sub PH_generate_podcast_file() {
 	my $pod_id        = $self->query->param("pod_id");
 	my $user_datatime = $self->query->param("datatime");
 
-	my $sec_proc_obj = new SecurityProc();
+	my $sec_proc_obj = new RSS2POD::SecurityProc();
 	$pod_id = 0 unless $sec_proc_obj->get_preg( $pod_id, 'digit' );
 	$user_datatime = $sec_proc_obj->trim_too_long_string( $user_datatime, 100 );
 	$pod_id        = $sec_proc_obj->trim_too_long_string( $pod_id,        10 );

@@ -16,7 +16,7 @@ $conf_file_path = defined $conf_file_path ? $conf_file_path : "../config/pod_gen
 
 openlog( "pod_generator", "pid,perror,nofatal", "local0" );
 
-my $server = PodGenerateDaemon->new(
+my $server = RSS2POD::PodGenerateDaemon->new(
 	{
 		'pidfile'    => 'none',
 		'localport'  => 9996,
