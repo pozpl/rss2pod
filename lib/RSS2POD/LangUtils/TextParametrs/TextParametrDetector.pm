@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-package LangUtils::TextParametrs::TextParametrDetector;
+package RSS2POD::LangUtils::TextParametrs::TextParametrDetector;
 
 require Exporter;
 use strict;

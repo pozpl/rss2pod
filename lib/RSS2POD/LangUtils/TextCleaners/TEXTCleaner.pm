@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-package LangUtils::TextCleaners::TEXTCleaner;
+package RSS2POD::LangUtils::TextCleaners::TEXTCleaner;
 
 require Exporter;
 use strict;

@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-package LangUtils::Tools::CharsetDecoderTool;
+package RSS2POD::LangUtils::Tools::CharsetDecoderTool;
 
 require Exporter;
 use strict;

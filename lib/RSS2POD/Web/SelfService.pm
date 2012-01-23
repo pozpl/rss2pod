@@ -10,7 +10,7 @@ use CGI::Application::Plugin::Session;
 use CGI::Application::Plugin::Authentication;
 use CGI::Application::Plugin::Redirect;
 use Digest::MD5 qw(md5 md5_hex md5_base64);
-use SecurityProc;
+use RSS2POD::SecurityProc;
 use Redis;
 use CGI::Application::Plugin::CAPTCHA;
 

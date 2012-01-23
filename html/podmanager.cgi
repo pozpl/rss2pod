@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 
-use Web::Rss2PodREST;
+use RSS2POD::Web::Rss2PodREST;
 
 Rss2PodREST->new->run;
 

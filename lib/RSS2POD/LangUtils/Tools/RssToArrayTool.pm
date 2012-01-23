@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-package LangUtils::Tools::RssToArrayTool;
+package RSS2POD::LangUtils::Tools::RssToArrayTool;
 
 require Exporter;
 use strict;

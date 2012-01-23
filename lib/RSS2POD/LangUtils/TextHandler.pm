@@ -7,10 +7,10 @@ use POSIX;
 use JSON;
 use Encode;
 
-use LangUtils::TextParametrs::TextParametrDetector qw(DetectMainParametrs);
-use LangUtils::Tools::CharsetDecoderTool qw(DecodeString);
-use LangUtils::TextCleaners::HTMLCleaner qw(HTMLProc);
-use LangUtils::TextCleaners::TEXTCleaner qw(TEXTProc);
+use RSS2POD::LangUtils::TextParametrs::TextParametrDetector qw(DetectMainParametrs);
+use RSS2POD::LangUtils::Tools::CharsetDecoderTool qw(DecodeString);
+use RSS2POD::LangUtils::TextCleaners::HTMLCleaner qw(HTMLProc);
+use RSS2POD::LangUtils::TextCleaners::TEXTCleaner qw(TEXTProc);
 
 require Exporter;
 use strict;

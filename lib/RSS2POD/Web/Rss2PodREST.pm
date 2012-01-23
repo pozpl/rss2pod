@@ -17,7 +17,7 @@ use Redis;
 use Digest::MD5 qw(md5 md5_hex md5_base64);
 
 #use ManageUserPodcasts;
-use SecurityProc;
+use RSS2POD::SecurityProc;
 
 #check and validate feed
 use LWP::Simple qw(get);

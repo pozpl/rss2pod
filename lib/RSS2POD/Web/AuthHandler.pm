@@ -12,7 +12,7 @@ use CGI::Application::Plugin::Authentication;
 use CGI::Application::Plugin::Redirect;
 #use CGI::Application::Plugin::DBH (qw/dbh_config dbh/);
 use Digest::MD5 qw(md5 md5_hex md5_base64);
-use SecurityProc;
+use RSS2POD::SecurityProc;
 use Redis;
 #use Redis::hiredis;
 use CGI::Application::Plugin::CAPTCHA;

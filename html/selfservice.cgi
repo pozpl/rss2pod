@@ -3,7 +3,7 @@ use strict;
 use warnings;
 
 
-use Web::SelfService;
+use RSS2POD::Web::SelfService;
 
 SelfService->new->run;
 

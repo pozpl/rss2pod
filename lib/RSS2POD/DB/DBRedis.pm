@@ -1,4 +1,4 @@
-package DB::DBRedis;
+package RSS2POD::DB::DBRedis;
 
 use Moose;
 use Redis;

@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 
-use Web::AuthHandler;
+use RSS2POD::Web::AuthHandler;
 
 use Module::Load;
 load 'CGI::Application::Plugin::Authentication::Driver::Generic';

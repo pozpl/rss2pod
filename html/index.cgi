@@ -8,6 +8,6 @@ use warnings;
 
 
 #use base 'CGI::Application';
-use Web::SiteEngine;
+use RSS2POD::Web::SiteEngine;
 
 SiteEngine->new->run;
