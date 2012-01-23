@@ -4,7 +4,7 @@ GenMp3Pod
 =head2 Synopsys
 =cut
 
-package GenMp3Pod;
+package RSS2POD::GenMp3Pod;
 
 use strict;
 use warnings;

@@ -6,7 +6,7 @@ RssFeedTaskDaemon
 This module is for listening socket or port for new tasks fo feed processing
 =cut
 
-package PodGenerateDaemon;
+package RSS2POD::PodGenerateDaemon;
 
 use strict;
 use warnings;
@@ -18,7 +18,7 @@ use POSIX qw(:termios_h);
 use AppConfig;
 use Sys::Syslog qw(:standard);
 use Redis;
-use ManageUserPodcasts;
+use RSS2POD::ManageUserPodcasts;
 use Config::Simple;
 use JSON;
 use MP3::Tag;

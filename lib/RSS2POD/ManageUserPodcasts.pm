@@ -4,7 +4,7 @@ ManageUserPodcasts
 =head2 Synopsys
 =cut
 
-package ManageUserPodcasts;
+package RSS2POD::ManageUserPodcasts;
 
 use strict;
 use warnings;
@@ -13,7 +13,7 @@ use POSIX qw(:termios_h);
 #use AppConfig qw(:expand :argcount);
 use Config::Simple;
 use Sys::Syslog qw(:standard);
-use GenMp3Pod;
+use RSS2POD::GenMp3Pod;
 
 my $VERSION = "0.001";
 my $config;
