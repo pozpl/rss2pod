@@ -22,7 +22,6 @@ my $build = App::Build->new(
 		'HTML::TreeBuilder'                        => 0,
 		'Encode'                                   => 0,		
 		'Net::Daemon'                              => 0,		
-		
 		'Getopt::Long'                             => 2.38,
 		'CGI::Application'                         => 0,
 		'CGI::Application::Plugin::Session'        => 0,

@@ -1,4 +1,4 @@
-package SecurityProc;
+package RSS2POD::SecurityProc;
 
 use strict;
 use warnings;
