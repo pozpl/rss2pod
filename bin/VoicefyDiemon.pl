@@ -1,5 +1,4 @@
 #!/usr/bin/perl
-
 use strict;
 use warnings;
 
@@ -14,7 +13,6 @@ use Config::Simple;
 use RSS2POD::FestText2Wav;
 use JSON;
 use Audio::ConvTools qw/:DEFAULT :Tmp :Log/;
-use threads;
 use Getopt::Long;
 
 #Initiate configuration file========================================================

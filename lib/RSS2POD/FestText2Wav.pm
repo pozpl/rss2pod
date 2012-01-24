@@ -1,4 +1,4 @@
-package FestText2Wav;
+package RSS2POD::FestText2Wav;
 use strict;
 use warnings;
 use POSIX qw(:termios_h);
