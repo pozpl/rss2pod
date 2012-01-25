@@ -352,8 +352,8 @@ function SinglePodPanel(){
                     case "empty_file":
                         singlePodPad.addDownloadStandby.hide();
                         var feedNotFoundDial = new dijit.Dialog({
-                            title: "Нечего закачивать",
-                            content: "С момента вашего последнего скачивания ничего не изменилось.",
+                            title: "Nothing to download",
+                            content: "There is no new podcasts.",
                             style: "width: 300px"
                         });
                         feedNotFoundDial.show();
@@ -361,8 +361,8 @@ function SinglePodPanel(){
                     case "internal_error":
                         singlePodPad.addDownloadStandby.hide();
                         var someErrorDial = new dijit.Dialog({
-                            title: "Случилось что-то плохое",
-                            content: "К сожалению, в данный момент мы не можем выполнить ваш запрос. Попробуйте пожже." + response,
+                            title: "Something bad hapened",
+                            content: "Sorry, but now we can not process your query." + response,
                             style: "width: 300px"
                         });
                         someErrorDial.show();

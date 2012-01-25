@@ -37,7 +37,7 @@ function RssReaderPanel(){
         dijit.byId("borderContainer").addChild(this.readerPane);
         dijit.byId("rssPane").resize();
         var button = new dijit.form.Button({
-            label: "Вернуться из режима чтения",
+            label: "Return from reading",
             onClick: function(){
             
             },

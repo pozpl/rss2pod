@@ -227,7 +227,7 @@ function FeedPanel(){
                     if (response == "url_is_not_available") {
                         var feedNotFoundDial = new dijit.Dialog({
                             title: "Error during feed addition",
-                            content: "Извините, но мы не можем найти RSS каналы по данной вами ссылке.",
+                            content: "Sorry, but we can not find RSS channel for this URL.",
                             style: "width: 300px"
                         });
                         feedNotFoundDial.show();
