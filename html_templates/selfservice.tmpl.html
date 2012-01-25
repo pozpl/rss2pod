@@ -1,14 +1,14 @@
 <div class="reg_form" align="center">
-		<!--TMPL_IF NAME="passwords_coincides_err"--> <b>Предоставленные вами пароли не совпадают.</b> <br /><!--/TMPL_IF-->
-		<!--TMPL_IF NAME="password_novalid_err"--> <b>Ваш пароль пустой или содержит запрещённые знаки. </b> <br /><!--/TMPL_IF-->		
-	    <!--TMPL_IF NAME="email_novalid_err"--> <b>Ваш E-mail содержит запрещённые знаки.</b><br /> <!--/TMPL_IF-->
-		Информация пользователя <b> <!--TMPL_VAR NAME="user_name"--> </b>
+		<!--TMPL_IF NAME="passwords_coincides_err"--> <b>The passwords are not coinside.</b> <br /><!--/TMPL_IF-->
+		<!--TMPL_IF NAME="password_novalid_err"--> <b>Your password is empty or full of forbiden symbols. </b> <br /><!--/TMPL_IF-->		
+	    <!--TMPL_IF NAME="email_novalid_err"--> <b>Your E-mail is not valid.</b><br /> <!--/TMPL_IF-->
+		User information <b> <!--TMPL_VAR NAME="user_name"--> </b>
         <form action="selfservice.cgi" method="POST" accept-charset="utf-8">        	
             <table width="200" border="0">
                 
                 <tr>
                     <td>
-                        Пароль
+                        Password
                     </td>
                     <td>
                         <input type="password" name="password"  size="50" />
@@ -16,7 +16,7 @@
                 </tr>
                 <tr>
                     <td>
-                        Пароль
+                        Password again
                     </td>
                     <td>
                         <input type="password" name="password_confirm"  size="50" />
@@ -40,7 +40,7 @@
                 </tr>-->
             </table>
             <p>
-                <input type="submit" value="Изменить" /><input type="hidden" name="rm" value="change"/>
+                <input type="submit" value="Change" /><input type="hidden" name="rm" value="change"/>
             </p>
         </form>
 </div>

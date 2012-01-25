@@ -5,14 +5,14 @@
         <div id="podcastsPane" dojoType="dijit.layout.ContentPane" splitter="true" region="left" style="width: 20%; overflow:auto;">
             <!--<button dojoType=dijit.form.Button id="addPodcastButton" name="addPodcastButton">
             ADD PODCAST
-            </button>--><b>Ваши подкасты:</b>
+            </button>--><b>Your podcasts:</b>
             <div id="podcastsAddButton">
             </div>
             <div id="podcastsListPane">
             </div>
         </div>
         <div id="singlePodPane" dojoType="dijit.layout.ContentPane" splitter="true" region="center" style="overflow:auto;">
-            <b>Имя текущего подкаста: <span id="singlePodNameArea"></span></b>
+            <b>Current podcast name: <span id="singlePodNameArea"></span></b>
             <div id="delPodcastButtonArea">
             </div>
             <div id="getPodArea">
@@ -21,12 +21,12 @@
 			<div id="getOldPodcastsButton"></div>
             <div id="floatclear_left">
             </div>
-            <b>RSS каналы в этом подкасте:</b>
+            <b>RSS channels in this podcast:</b>
             <div id="podRssList">
             </div>
         </div>
         <div id="rssPane" dojoType="dijit.layout.ContentPane" splitter="true" region="right" style="width: 30%; overflow:auto;">
-            <b>Ваши RSS  каналы:</b>
+            <b>Your RSS  channels:</b>
             <div id="addFeedButtonArea">
             </div>
             <div id="feedsListPane">
@@ -41,7 +41,7 @@
             <tr>
                 <td>
                     <label for="desc">
-                        Имя подкаста:
+                        Podcast name:
                     </label>
                 </td>
                 <td>
@@ -51,10 +51,10 @@
             <tr>
                 <td colspan="2" align="center">
                     <button dojoType=dijit.form.Button type="submit" onClick="return dijit.byId('addPodcastDialog').isValid();">
-                        Добавить
+                        Add podcast
                     </button>
                     <button dojoType="dijit.form.Button" type="button" onClick="dijit.byId('addPodcastDialog').hide();">
-                        Отмена
+                        Cancel
                     </button>
                 </td>
             </tr>
@@ -66,7 +66,7 @@
             <tr>
                 <td>
                     <label for="desc">
-                        Адрес RSS канала:
+                        RSS channel address:
                     </label>
                 </td>
                 <td>
@@ -77,10 +77,10 @@
             <tr>
                 <td colspan="2" align="center">
                     <button dojoType=dijit.form.Button type="submit" onClick="return dijit.byId('addFeedDialog').isValid();">
-                        Добавить
+                        Add RSS channel
                     </button>
                     <button dojoType="dijit.form.Button" type="button" onClick="dijit.byId('addFeedDialog').hide();">
-                        Отмена
+                        Cancel 
                     </button>
                 </td>
             </tr>

@@ -3,18 +3,18 @@
 	<!--TMPL_INCLUDE NAME="registration_complite.tmpl.html"-->
 <!--TMPL_ELSE-->
 		
-		<!--TMPL_IF NAME="passwords_coincides_err"--> <b>Предоставленные вами пароли не совпадают.</b> <br /><!--/TMPL_IF-->
-		<!--TMPL_IF NAME="password_novalid_err"--> <b>Ваш пароль пустой или содержит запрещённые знаки. </b> <br /><!--/TMPL_IF-->
-		<!--TMPL_IF NAME="username_already_exists_err"--> <b>Пользователь с таким именем уже существует.</b> <br /><!--/TMPL_IF-->
-	    <!--TMPL_IF NAME="username_novalid_err"--> <b>Вы не задали имя пользователя.</b> <br /><!--/TMPL_IF-->
-	    <!--TMPL_IF NAME="capcha_coincides_err"--> <b>Неверно введена капча.</b> <br /><!--/TMPL_IF-->
-		<!--TMPL_IF NAME="email_novalid_err"--> <b>Ваш E-mail содержит запрещённые знаки.</b><br /> <!--/TMPL_IF-->
+		<!--TMPL_IF NAME="passwords_coincides_err"--> <b>Passwords are not coinside.</b> <br /><!--/TMPL_IF-->
+		<!--TMPL_IF NAME="password_novalid_err"--> <b>Your password is empty or full of forbiden symbols. </b> <br /><!--/TMPL_IF-->
+		<!--TMPL_IF NAME="username_already_exists_err"--> <b>Sorry a user with this name already exists.</b> <br /><!--/TMPL_IF-->
+	    <!--TMPL_IF NAME="username_novalid_err"--> <b>Please fill the user login field.</b> <br /><!--/TMPL_IF-->
+	    <!--TMPL_IF NAME="capcha_coincides_err"--> <b>CAPTHCHA is mistyped.</b> <br /><!--/TMPL_IF-->
+		<!--TMPL_IF NAME="email_novalid_err"--> <b>Your E-mail is not valid.</b><br /> <!--/TMPL_IF-->
 		
         <form action="run_auth.cgi" method="POST" accept-charset="utf-8">
             <table width="200" border="0">
                 <tr>
                     <td>
-                        Имя пользователя
+                        User login
                     </td>
                     <td>
                         <input type="text" name="user_name" size="50" maxlength="256" value='<!--TMPL_VAR NAME="user_name"-->' />
@@ -22,7 +22,7 @@
                 </tr>
                 <tr>
                     <td>
-                        Пароль
+                        Password
                     </td>
                     <td>
                         <input type="password" name="password" value='<!--TMPL_VAR NAME="password"-->' size="50" />
@@ -30,7 +30,7 @@
                 </tr>
                 <tr>
                     <td>
-                        Пароль
+                        Retype password
                     </td>
                     <td>
                         <input type="password" name="password_confirm" value='<!--TMPL_VAR NAME="password_confirm"-->' size="50" />
