@@ -37,13 +37,32 @@ h2 {
     margin-top: 0; /* Убираем отступ сверху */
 }
 
-#header_logo {
+#header_logo {	
+	
 }
 
 #header_info {
 }
 
+#fork_me{
+	margin-left: 210px;
+	
+}
+
+#fork_me_figure{
+	text-align: right;
+}
+
+#logo_image{
+	float : left;	
+	width:  : 200px;	
+}
+
+
+
+
 .navbar {
+	clear : left;
     background-color: #333;
     padding: 2px 0px 5px 0px;
 }
