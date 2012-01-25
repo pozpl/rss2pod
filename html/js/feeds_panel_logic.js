@@ -21,7 +21,7 @@ function FeedPanel(){
         var feedsObj = this;
         this.userProfileHandl = userProfileHdl;
         var button = new dijit.form.Button({
-            label: "Добавить RSS канал",
+            label: "Add RSS channel",
             onClick: function(){
                 // Do something:                        
                 var addFeedDlg = dijit.byId("addFeedDialog");

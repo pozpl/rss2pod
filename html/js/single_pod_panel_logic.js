@@ -34,7 +34,7 @@ function SinglePodPanel(){
         this.podId = userProfileHdl.pod_info.first_pod_id;
         
         var button = new dijit.form.Button({
-            label: "Удалить подкаст",
+            label: "Delete this podcast",
             onClick: function(){
                 singlePodObj.deletePodcast();
             },
@@ -117,9 +117,7 @@ function SinglePodPanel(){
         singlePodPad.podId = podId;
         
         singlePod.innerHTML = userProfileHandl.pod_info[podId].name;
-        //var downlNode = dojo.byId("getPodArea");//dojo.byId("getPodHref");
-        //downlNode.href = "podmanager.cgi?rm=auth_get_podcast_file&pod_id=" + podId;
-        //dojo.connect(downlNode, "onclick", this, this.genAudioPod);
+        
         //show rss list for this podcast
         var feedItemTmplCont = dojo.cache("", "../templates/feed_item.html");
         var feedTemplate = new dojox.dtl.Template(feedItemTmplCont);
@@ -151,7 +149,7 @@ function SinglePodPanel(){
                 }
             }, "podRssList");
             
-            //dojo.style("singlePodDelFeed_" + feed_id, "opacity", "0");
+            
         });
         //Update border container
         dijit.byId("borderContainer").resize();
@@ -441,7 +439,7 @@ function SinglePodPanel(){
                     }
                     
                     var button = new dijit.form.ComboButton({
-                        label: "Получить ваши предыдущие подкасты",
+                        label: "Get your previous podcasts",
                         dropDown: menu,
                         id: "old_podcasts_dropdown_button"
                     });

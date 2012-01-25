@@ -22,7 +22,7 @@ function PodPanel(singlePodPan){
         this.userProfileHandl = userProfileHdl;
         //draw new button to add podcast
         var button = new dijit.form.Button({
-            label: "Добавить подкаст",
+            label: "Add new podcast",
             onClick: function(){
                 // Do something:                        
                 var addPodDial = dijit.byId("addPodcastDialog");

@@ -22,13 +22,14 @@ use RSS2POD::ManageUserPodcasts;
 use Config::Simple;
 use JSON;
 use MP3::Tag;
-
+use POSIX;
+use IPC::Run3;
 #use threads;
 #use Thread::Queue;
 
 my $VERSION = "0.001";
 
-my $config = new Config::Simple("../config/rss2pod.conf");
+my $config;
 
 #my $feedsTaskQueue;
 
@@ -39,6 +40,10 @@ Jast another supercharjing of function
 sub new ($$;$) {
 	my ( $class, $attr, $args ) = @_;
 	my ($self) = $class->SUPER::new( $attr, $args );
+
+	my $rss2pod_conf_path = $attr->{'rss2pod_conf'};
+	$config = new Config::Simple($rss2pod_conf_path);
+	syslog( "info", "Load config from $rss2pod_conf_path" );
 	$self;
 }
 
@@ -95,11 +100,12 @@ sub generate_podcast_file() {
 		  . $current_time
 		  . "_MP3WRAP.mp3";
 
-		my $is_wrap_sucess = $self->merge_file_peaces_in_one($pod_file_name, \@podcast_files);
-		
+		my $is_wrap_sucess =
+		  $self->merge_file_peaces_in_one( $pod_file_name, \@podcast_files );
+
 		#merge feed items into user podcast file
 		if ( $is_wrap_sucess == 1 ) {
-			$self->add_tags_to_pod_file($pod_file_name, $user_datatime);
+			$self->add_tags_to_pod_file( $pod_file_name, $user_datatime );
 			my $json            = JSON->new->allow_nonref;
 			my %pod_file_struct = (
 				file_path => $pod_file_name,
@@ -114,7 +120,7 @@ sub generate_podcast_file() {
 			syslog( 'info', "podcast $pod_file_name generated" );
 		}
 		else {
-			syslog( "err", "mp3wrap failed ($?): $!" );
+			syslog( "err", "Something wrong with podcast compilation" );
 			$redis->set( "user:$user_id:pod:$pod_id:gen_mp3_stat",
 				"internal_error" );
 		}
@@ -129,20 +135,23 @@ sub generate_podcast_file() {
 
 =head3 add_tags_to_pod_file
 =cut
-sub add_tags_to_pod_file(){
-	my ($self, $filename, $user_datatime) = @_;
+
+sub add_tags_to_pod_file() {
+	my ( $self, $filename, $user_datatime ) = @_;
 	my $mp3 = MP3::Tag->new($filename);
-	
-	$mp3->title_set("RSS2POD recording " . $user_datatime), 
-	$mp3->artist_set("RSS2POD");
+
+	$mp3->title_set( "RSS2POD recording " . $user_datatime ),
+	  $mp3->artist_set("RSS2POD");
 	$mp3->album_set("RSS2POD");
-	my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime();
+	my ( $sec, $min, $hour, $mday, $mon, $year, $wday, $yday, $isdst ) =
+	  localtime();
 	$year += 1900;
-	$mp3->year_set($year); 
+	$mp3->year_set($year);
 	$mp3->comment_set("rss2pod is cool");
+
 	#$mp3->track_set();
-	$mp3->genre_set("podcast");	
-	$mp3->update_tags(); 
+	$mp3->genre_set("podcast");
+	$mp3->update_tags();
 	$mp3->close();
 }
 
@@ -151,33 +160,57 @@ sub add_tags_to_pod_file(){
 	
 	return 1 if all ok and 0 instead 
 =cut
-sub merge_file_peaces_in_one(){
-	my ($self, $pod_file_name, $podcast_files) = @_;
-	
-	my $wrap_file_arg = "cat  ";
-	
-	foreach my $rss_item_file_name (@{$podcast_files}) {		
-			my $mp3_file_location =
-			    $config->param("general.podcasts_dir") . "/"
-			  . $rss_item_file_name . ".mp3";
-			if ( -e $mp3_file_location ) {
-				$wrap_file_arg = $wrap_file_arg . " " . $mp3_file_location;
-			}
-		}
-		$wrap_file_arg = $wrap_file_arg . " > $pod_file_name";
-		my $is_wrap_sucess = 0;
 
-		if ( system($wrap_file_arg) == 0 ) {
-			syslog( 'info', " Last chunk of $pod_file_name is generated" );
-			$is_wrap_sucess = 1;
+sub merge_file_peaces_in_one() {
+	my ( $self, $pod_file_name, $podcast_files ) = @_;
+
+	my $wrap_file_arg = 'cat  ';
+
+	foreach my $rss_item_file_name ( @{$podcast_files} ) {
+		my $mp3_file_location =
+		    $config->param("general.podcasts_dir") . "/"
+		  . $rss_item_file_name . ".mp3";
+		if ( -e $mp3_file_location ) {
+			$wrap_file_arg = $wrap_file_arg . " " . $mp3_file_location;
 		}
-		else {
-			$is_wrap_sucess = 0;
-			syslog( "err", "mp3wrap failed ($?): $!" );
-		}
-		return $is_wrap_sucess;
+	}
+	$wrap_file_arg = $wrap_file_arg . " > $pod_file_name";
+
+	syslog( "info", "Performing: $wrap_file_arg" );
+	my $is_wrap_sucess = 0;
+	
+	my $wrap_success = $self->run_wrap_command($wrap_file_arg);
+	 if ( $wrap_success )
+	{
+		syslog( 'info', " Last chunk of $pod_file_name is generated" );
+		$is_wrap_sucess = 1;
+	}
+	else {
+		$is_wrap_sucess = 0;
+		syslog( "err", "mp3wrap failed ($?): $!" );
+	}
+	return $is_wrap_sucess;
 }
 
+############################################
+# Usage      : SecurityProcObj->get_preg("user@mail.com", 'email');
+# Purpose    : check input variables for compiliance with some rules
+# Returns    : true or false
+# Parameters : input string, rule type
+# Throws     : no exceptions
+# Comments   : Check if input string argument is coverred by
+#			   rule. E.g. if the email is a valid email, the digit is a digit, etc/
+# See Also   : n/a
+sub run_wrap_command() {
+	my ($self, $mp3_wrap_command) = @_;
+	
+	
+	my $command_out;
+	my $command_err;
+	my $wrap_ok = run3($mp3_wrap_command, undef, $command_out, $command_err);
+	syslog( "info", "Wrap files with result:$command_out | errors: $command_err" );
+	return $wrap_ok;
+}
 
 =head3 Delete old user files
 =cut

@@ -1047,7 +1047,7 @@ sub PH_check_pod_complite() {
 	my $pod_id        = $self->query->param("pod_id");
 	my $current_time  = time();
 
-	my $sec_proc_obj = new SecurityProc();
+	my $sec_proc_obj = new RSS2POD::SecurityProc();
 	$pod_id = 0 unless $sec_proc_obj->get_preg( $pod_id, 'digit' );
 	$pod_id = $sec_proc_obj->trim_too_long_string( $pod_id, 10 );
 

@@ -45,6 +45,7 @@ my $build = App::Build->new(
 		'strict'                                   => 0,
 		'diagnostics'                              => 0,		
 		'IO::Socket'                               => 0,
+		'IPC::Run3'								   => 0.44,
 		'HTML::Parser'                             => 0,
 		'AppConfig'                                => 0,		
 		'bytes'                                    => 0,
