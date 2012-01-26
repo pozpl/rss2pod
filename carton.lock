@@ -2109,6 +2109,50 @@
          },
          "version" : "0.01"
       },
+      "Class::Factory::Util" : {
+         "dist" : "Class-Factory-Util-1.7",
+         "module" : "Class::Factory::Util",
+         "mymeta" : {
+            "abstract" : "Provide utility methods for factory classes",
+            "author" : [
+               "Dave Rolsky, <autarch@urth.org>.",
+               "Removed from Alzabo and packaged by Terrence Brannon,\n<tbone@cpan.org>."
+            ],
+            "dynamic_config" : 0,
+            "generated_by" : "Module::Build version 0.38, CPAN::Meta::Converter version 2.113640",
+            "license" : [
+               "perl_5"
+            ],
+            "meta-spec" : {
+               "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+               "version" : "2"
+            },
+            "name" : "Class-Factory-Util",
+            "prereqs" : {},
+            "provides" : {
+               "Class::Factory::Util" : {
+                  "file" : "lib/Class/Factory/Util.pm",
+                  "version" : "1.7"
+               }
+            },
+            "release_status" : "stable",
+            "resources" : {
+               "license" : [
+                  "http://dev.perl.org/licenses/"
+               ]
+            },
+            "version" : "1.7"
+         },
+         "name" : "Class::Factory::Util",
+         "pathname" : "D/DR/DROLSKY/Class-Factory-Util-1.7.tar.gz",
+         "provides" : {
+            "Class::Factory::Util" : {
+               "file" : "Class/Factory/Util.pm",
+               "version" : "1.7"
+            }
+         },
+         "version" : "1.7"
+      },
       "Class::ISA" : {
          "dist" : "Class-ISA-0.36",
          "module" : "Class::ISA",
@@ -13193,6 +13237,88 @@
          },
          "version" : "0.72"
       },
+      "IPC::Run3" : {
+         "dist" : "IPC-Run3-0.045",
+         "module" : "IPC::Run3",
+         "mymeta" : {
+            "abstract" : "run a subprocess with input/ouput redirection",
+            "author" : [
+               "Barrie Slaymaker <barries@slaysys.com>"
+            ],
+            "dynamic_config" : 0,
+            "generated_by" : "ExtUtils::MakeMaker version 6.62, CPAN::Meta::Converter version 2.112621, CPAN::Meta::Converter version 2.113640",
+            "license" : [
+               "open_source"
+            ],
+            "meta-spec" : {
+               "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+               "version" : "2"
+            },
+            "name" : "IPC-Run3",
+            "no_index" : {
+               "directory" : [
+                  "lib/IPC/Run3"
+               ],
+               "file" : [
+                  "bin/run3profpp"
+               ]
+            },
+            "prereqs" : {
+               "build" : {
+                  "requires" : {
+                     "ExtUtils::MakeMaker" : 0
+                  }
+               },
+               "configure" : {
+                  "requires" : {
+                     "ExtUtils::MakeMaker" : 0
+                  }
+               },
+               "runtime" : {
+                  "requires" : {
+                     "Test::More" : "0.31",
+                     "Time::HiRes" : 0
+                  }
+               }
+            },
+            "release_status" : "stable",
+            "resources" : {
+               "repository" : {
+                  "url" : "http://github.com/rjbs/ipc-run3/"
+               }
+            },
+            "version" : "0.045"
+         },
+         "name" : "IPC::Run3",
+         "pathname" : "R/RJ/RJBS/IPC-Run3-0.045.tar.gz",
+         "provides" : {
+            "IPC::Run3" : {
+               "file" : "IPC/Run3.pm",
+               "version" : "0.045"
+            },
+            "IPC::Run3::ProfArrayBuffer" : {
+               "file" : "IPC/Run3/ProfArrayBuffer.pm",
+               "version" : "0.045"
+            },
+            "IPC::Run3::ProfLogReader" : {
+               "file" : "IPC/Run3/ProfLogReader.pm",
+               "version" : "0.045"
+            },
+            "IPC::Run3::ProfLogger" : {
+               "file" : "IPC/Run3/ProfLogger.pm",
+               "version" : "0.045"
+            },
+            "IPC::Run3::ProfPP" : {
+               "file" : "IPC/Run3/ProfPP.pm",
+               "version" : "0.045"
+            },
+            "IPC::Run3::ProfReporter" : {
+               "file" : "IPC/Run3/ProfReporter.pm",
+               "version" : "0.045"
+            }
+         },
+         "version" : "0.045"
+      },
       "JSON" : {
          "dist" : "JSON-2.53",
          "module" : "JSON",
@@ -13571,6 +13697,62 @@
             }
          },
          "version" : "6.01"
+      },
+      "Lingua::Identify" : {
+         "dist" : "Lingua-Identify-0.50",
+         "module" : "Lingua::Identify",
+         "mymeta" : {
+            "abstract" : "Language identification",
+            "author" : [
+               "unknown"
+            ],
+            "dynamic_config" : 0,
+            "generated_by" : "ExtUtils::MakeMaker version 6.62, CPAN::Meta::Converter version 2.112621, CPAN::Meta::Converter version 2.113640",
+            "license" : [
+               "unknown"
+            ],
+            "meta-spec" : {
+               "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+               "version" : "2"
+            },
+            "name" : "Lingua-Identify",
+            "no_index" : {
+               "directory" : [
+                  "t",
+                  "inc"
+               ]
+            },
+            "prereqs" : {
+               "build" : {
+                  "requires" : {
+                     "ExtUtils::MakeMaker" : 0
+                  }
+               },
+               "configure" : {
+                  "requires" : {
+                     "ExtUtils::MakeMaker" : 0
+                  }
+               },
+               "runtime" : {
+                  "requires" : {
+                     "Class::Factory::Util" : "1.6",
+                     "Text::Affixes" : "0.07",
+                     "Text::Ngram" : "0.13"
+                  }
+               }
+            },
+            "release_status" : "stable",
+            "version" : "0.50"
+         },
+         "name" : "Lingua::Identify",
+         "pathname" : "A/AM/AMBS/Lingua/Lingua-Identify-0.50.tar.gz",
+         "provides" : {
+            "Lingua::Identify" : {
+               "file" : "Lingua/Identify.pm",
+               "version" : "0.50"
+            }
+         },
+         "version" : "0.50"
       },
       "Lingua::Translit" : {
          "dist" : "Lingua-Translit-0.19",
@@ -20136,6 +20318,58 @@
          },
          "version" : "1.01"
       },
+      "Text::Affixes" : {
+         "dist" : "Text-Affixes-0.07",
+         "module" : "Text::Affixes",
+         "mymeta" : {
+            "abstract" : "Prefixes and suffixes analisys of text",
+            "author" : [
+               "Jose Castro <cog@cpan.org>"
+            ],
+            "dynamic_config" : 0,
+            "generated_by" : "ExtUtils::MakeMaker version 6.62, CPAN::Meta::Converter version 2.113640",
+            "license" : [
+               "unknown"
+            ],
+            "meta-spec" : {
+               "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+               "version" : "2"
+            },
+            "name" : "Text-Affixes",
+            "no_index" : {
+               "directory" : [
+                  "t",
+                  "inc"
+               ]
+            },
+            "prereqs" : {
+               "build" : {
+                  "requires" : {
+                     "ExtUtils::MakeMaker" : 0
+                  }
+               },
+               "configure" : {
+                  "requires" : {
+                     "ExtUtils::MakeMaker" : 0
+                  }
+               },
+               "runtime" : {
+                  "requires" : {}
+               }
+            },
+            "release_status" : "stable",
+            "version" : "0.07"
+         },
+         "name" : "Text::Affixes",
+         "pathname" : "C/CO/COG/Text-Affixes-0.07.tar.gz",
+         "provides" : {
+            "Text::Affixes" : {
+               "file" : "Text/Affixes.pm",
+               "version" : "0.07"
+            }
+         },
+         "version" : "0.07"
+      },
       "Text::Diff" : {
          "dist" : "Text-Diff-1.41",
          "module" : "Text::Diff",
@@ -20206,6 +20440,58 @@
             }
          },
          "version" : "1.41"
+      },
+      "Text::Ngram" : {
+         "dist" : "Text-Ngram-0.14",
+         "module" : "Text::Ngram",
+         "mymeta" : {
+            "abstract" : "Ngram analysis of text",
+            "author" : [
+               "Alberto Simoes <ambs@cpan.org>"
+            ],
+            "dynamic_config" : 0,
+            "generated_by" : "ExtUtils::MakeMaker version 6.62, CPAN::Meta::Converter version 2.113640",
+            "license" : [
+               "unknown"
+            ],
+            "meta-spec" : {
+               "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+               "version" : "2"
+            },
+            "name" : "Text-Ngram",
+            "no_index" : {
+               "directory" : [
+                  "t",
+                  "inc"
+               ]
+            },
+            "prereqs" : {
+               "build" : {
+                  "requires" : {
+                     "ExtUtils::MakeMaker" : 0
+                  }
+               },
+               "configure" : {
+                  "requires" : {
+                     "ExtUtils::MakeMaker" : 0
+                  }
+               },
+               "runtime" : {
+                  "requires" : {}
+               }
+            },
+            "release_status" : "stable",
+            "version" : "0.14"
+         },
+         "name" : "Text::Ngram",
+         "pathname" : "A/AM/AMBS/Text/Text-Ngram-0.14.tar.gz",
+         "provides" : {
+            "Text::Ngram" : {
+               "file" : "Text/Ngram.pm",
+               "version" : "0.14"
+            }
+         },
+         "version" : "0.14"
       },
       "Text::ParseWords" : {
          "dist" : "Text-ParseWords-3.27",
