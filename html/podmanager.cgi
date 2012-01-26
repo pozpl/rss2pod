@@ -2,8 +2,8 @@
 use strict;
 use warnings;
 
-use RSS2POD::Web::Rss2PodREST;
+use RSS2POD::Web::Rss2PodCTL;
 
-Rss2PodREST->new->run;
+Rss2PodCTL->new->run;
 
 

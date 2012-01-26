@@ -1,6 +1,4 @@
-package Rss2PodREST;
-
-
+package Rss2PodCTL;
 
 use strict;
 use warnings;
@@ -30,6 +28,7 @@ use Feed::Find;
 use Sys::Syslog qw(:standard);
 use CGI::Application::Plugin::Config::Simple;
 use Encode;
+use utf8;
 use MIME::Base64;
 use Time::HiRes qw(time);
 use IO::Socket::INET;
@@ -211,8 +210,7 @@ sub PH_add_podcast() {
 	my $secProcObj = new RSS2POD::SecurityProc();
 	$user_id = 0 unless $secProcObj->get_preg( $user_id, 'digit' );
 	$podcast_name = $secProcObj->trim_too_long_string( $podcast_name, 100 );
-
-	if ($user_id) {
+	if ($user_id) {		
 		$response = $self->add_podcast( $redis, $user_id, $podcast_name );
 	}
 	else {
@@ -242,12 +240,9 @@ sub add_podcast() {
 			$new_pod_id );
 		$set_ok =
 		  $redis->zadd( "user:$user_id:pod:pod_zset", $new_pod_id,
-			$podcast_name );
-
+			$podcast_name );		
 		if ( !$set_ok ) {
 			$response = "redis_error";
-
-			#Error handling
 		}
 	}
 	else {
@@ -295,64 +290,30 @@ sub PH_get_user_profile() {
 	my $user_name = $self->authen->username();
 	my $user_name_md5 = md5_hex($user_name);
 	my $user_id       = $redis->get("id:$user_name_md5");
-	my %podcasts_info = ();
+
 	if ($user_id) {
-		unless ( $redis->exists("user:$user_id:pod:pod_zset")
-			&& $redis->exists("user:$user_id:feeds:feeds_id_zset") )
+		if (   !$redis->exists("user:$user_id:pod:pod_zset")
+			&& !$redis->exists("user:$user_id:feeds:feeds_id_zset") )
 		{
 			$self->generate_first_run_user_profile( $user_id, $redis );
 		}
-		if ( $redis->exists("user:$user_id:pod:pod_zset") ) {
 
-			#all ok we can proceed
-			#my $pod_list_len = $redis->llen("user:$user_id:pod:pod_list");
-			my @podcasts_names_list =
-			  $redis->zrange( "user:$user_id:pod:pod_zset", 0, -1 );
-			if ( @podcasts_names_list > 0 ) {
-				my $pod_name = $podcasts_names_list[0];
-				my $pod_id   = $redis->get(
-					"user:$user_id:pod:" . md5_hex($pod_name) . ":id" );
-				$podcasts_info{'first_pod_id'} = ($pod_id);
-			}
-			my @pod_id_list =
-			  ();    #store the order of all podcasts in youre installation
-			foreach my $pod_name (@podcasts_names_list) {
-				$pod_name = encode_utf8($pod_name);
-				my $pod_name_enc_dec->{'name'} = $pod_name;
-				$pod_name_enc_dec->{'name_base64'} = encode_base64($pod_name);
-				my $pod_id = $redis->get(
-					"user:$user_id:pod:" . md5_hex($pod_name) . ":id" );
-				my @podcast_feeds_ids =
-				  $redis->zrange( "user:$user_id:pod:$pod_id:rss_zset", 0, -1 );
-				$pod_name_enc_dec->{'pod_feeds'} = \@podcast_feeds_ids;
-				$podcasts_info{$pod_id} = $pod_name_enc_dec;
-				push( @pod_id_list, $pod_id );
-			}
-			my @user_feeds_id_list =
-			  $redis->zrange( "user:$user_id:feeds:feeds_id_zset", 0, -1 );
+		#all ok we can proceed
+		#my $pod_list_len = $redis->llen("user:$user_id:pod:pod_list");
 
-			my %feeds_title_mapping;
-			foreach my $feed_id (@user_feeds_id_list) {
-				my %feed_entity;
-				my $feed_title = $redis->get("feed:$feed_id:title");
-				if ( defined $feed_title ) {
-					$feed_title = encode( 'utf8', $feed_title );
-				}
-				else {
-					$feed_title = $redis->get("feed:$feed_id:url");
-				}
-				$feeds_title_mapping{$feed_id} = $feed_title;
-			}
-			$user_profile{'pod_list'}            = \@pod_id_list;
-			$user_profile{'pod_info'}            = \%podcasts_info;
-			$user_profile{'feeds_title_mapping'} = \%feeds_title_mapping;
-			$user_profile{'feeds_list'}          = \@user_feeds_id_list;
-		}
-		else {
-			syslog( 'err',
-"Error during access to redis database can't find user:$user_id:pod:pod_zset key"
-			);
-		}
+		my @pod_id_list = $self->get_user_pod_id_list( $user_id, $redis );
+		my %podcasts_info = $self->get_user_podcasts_struct( $user_id, $redis );
+		my @user_feeds_id_list =
+		  $redis->zrange( "user:$user_id:feeds:feeds_id_zset", 0, -1 );
+		my %feeds_title_mapping = $self->get_user_feeds_title_id_mapping(
+			$user_id, \@user_feeds_id_list,
+			$redis
+		);
+
+		$user_profile{'pod_list'}            = \@pod_id_list;
+		$user_profile{'pod_info'}            = \%podcasts_info;
+		$user_profile{'feeds_title_mapping'} = \%feeds_title_mapping;
+		$user_profile{'feeds_list'}          = \@user_feeds_id_list;
 
 	}
 	else {
@@ -364,6 +325,102 @@ sub PH_get_user_profile() {
 	$self->header_add( -Content_Type => 'text/html; charset=UTF-8' );
 	$redis->quit();
 	return $json_pod_list;
+}
+
+############################################
+# Usage      : $self->get_user_pod_id_list($user_id, $redis);
+# Purpose    : get list of ID's of user podcasts
+# Returns    : list
+# Parameters : digit - user Id, and handle to redis database connection
+# Throws     : no exceptions
+# Comments   : ???
+# See Also   : n/a
+sub get_user_pod_id_list() {
+	my ( $self, $user_id, $redis ) = @_;
+
+	my @pod_id_list;
+
+	if ( $redis->exists("user:$user_id:pod:pod_zset") ) {
+		my @podcasts_names_list =
+		  $redis->zrange( "user:$user_id:pod:pod_zset", 0, -1 );
+		foreach my $pod_name (@podcasts_names_list) {
+			my $pod_id =
+			  $redis->get( "user:$user_id:pod:" . md5_hex($pod_name) . ":id" );
+			push( @pod_id_list, $pod_id );
+		}
+	}
+
+	return @pod_id_list;
+}
+
+############################################
+# Usage      : $self->get_user_podcasts_struct($user_id, $redis);
+# Purpose    : get list of ID's of user podcasts
+# Returns    : list
+# Parameters : digit - user Id, and handle to redis database connection
+# Throws     : no exceptions
+# Comments   : ???
+# See Also   : n/a
+sub get_user_podcasts_struct() {
+	my ( $self, $user_id, $redis ) = @_;
+	my %podcasts_info;
+	my @podcasts_names_list =
+	  $redis->zrange( "user:$user_id:pod:pod_zset", 0, -1 );
+
+	#Fill first podcast id field
+	if ( @podcasts_names_list > 0 ) {
+		my $pod_name = $podcasts_names_list[0];
+		my $pod_id =
+		  $redis->get( "user:$user_id:pod:" . md5_hex($pod_name) . ":id" );
+		$podcasts_info{'first_pod_id'} = ($pod_id);
+	}
+
+	#Get pod name and pod feeds ids, amd get this stuff into hash
+	my @pod_id_list = (); #store the order of all podcasts in youre installation
+	foreach my $pod_name (@podcasts_names_list) {
+		
+		my $pod_name_enc_dec->{'name'} = $pod_name;
+		
+		$pod_name_enc_dec->{'name_base64'} = encode_base64($pod_name);
+		my $pod_id =
+		  $redis->get( "user:$user_id:pod:" . md5_hex($pod_name) . ":id" );
+		
+		my @podcast_feeds_ids =
+		  $redis->zrange( "user:$user_id:pod:$pod_id:rss_zset", 0, -1 );
+		$pod_name_enc_dec->{'pod_feeds'} = \@podcast_feeds_ids;
+		
+		$podcasts_info{$pod_id} = $pod_name_enc_dec;
+	}
+
+	return %podcasts_info;
+}
+
+############################################
+# Usage      : $self->get_user_feeds_title_id_mapping($user_id, \@feeds_id_list,$redis);
+# Purpose    : return hash of feed_id => feed title
+# Returns    : hash
+# Parameters : digit - user Id, reference to feeds_ids_list,and handle to redis database connection
+# Throws     : no exceptions
+# Comments   : ???
+# See Also   : n/a
+sub get_user_feeds_title_id_mapping() {
+	my ( $self, $user_id, $user_feeds_id_list_ref, $redis, ) = @_;
+
+	my %feeds_title_mapping;
+	foreach my $feed_id ( @{$user_feeds_id_list_ref} ) {
+		my %feed_entity;
+		my $feed_title = $redis->get("feed:$feed_id:title");
+		if ( defined $feed_title ) {
+
+			#$feed_title = encode( 'utf8', $feed_title );
+		}
+		else {
+			$feed_title = $redis->get("feed:$feed_id:url");
+		}
+		$feeds_title_mapping{$feed_id} = $feed_title;
+	}
+
+	return %feeds_title_mapping;
 }
 
 =header3
@@ -1235,9 +1292,9 @@ sub get_amount_of_stored_pod_files() {
 }
 
 sub send_data_to_gen_pod_daemon() {
-	my ( $self, $user_id, $pod_id , $user_datatime, $current_time) = @_;
-	my $is_send = 1; 
-	my $socket = IO::Socket::INET->new(
+	my ( $self, $user_id, $pod_id, $user_datatime, $current_time ) = @_;
+	my $is_send = 1;
+	my $socket  = IO::Socket::INET->new(
 		PeerAddr => $self->config_param("general.pod_gen_host"),
 		PeerPort => $self->config_param("general.pod_gen_port"),
 		Proto    => "tcp",
@@ -1268,7 +1325,7 @@ sub send_data_to_gen_pod_daemon() {
 		}
 		$data_to_read = <$socket>;
 		syslog( "info", "Stop protocol with $data_to_read" );
-		$socket->close();		
+		$socket->close();
 	}
 	return $is_send;
 }
@@ -1300,10 +1357,13 @@ sub PH_generate_podcast_file() {
 #nothing, in future this should be changed to empty mp3 with some noise about donation
 	my $response = "ok";
 	if ($user_id) {
-		my $is_send = $self->send_data_to_gen_pod_daemon($user_id, $pod_id , $user_datatime, $current_time);
-		unless($is_send){
+		my $is_send =
+		  $self->send_data_to_gen_pod_daemon( $user_id, $pod_id, $user_datatime,
+			$current_time );
+		unless ($is_send) {
 			$response = "internal_error";
-		}else{
+		}
+		else {
 			$redis->set( "user:$user_id:pod:$pod_id:gen_mp3_stat", "init" );
 		}
 	}
