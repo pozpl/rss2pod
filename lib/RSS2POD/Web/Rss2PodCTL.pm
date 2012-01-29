@@ -625,35 +625,6 @@ sub PH_delete_single_pod_data() {
 			}
 			#######then delete filed in redis################################
 			$ok_del = $redis->del("user:$user_id:pod:$pod_id:pod_files_names");
-
-=del
-			if ( $ok_del && $ok_del_from_list ) {
-				my $is_key_exists =
-				  $redis->exists("user:$user_id:pod:$pod_id:rss_zset");
-				if ($is_key_exists) {
-					syslog( 'err',
-						"Delete key user:$user_id:pod:$pod_id:rss_zset" );
-					$ok_del = $redis->del("user:$user_id:pod:$pod_id:rss_zset");
-					if ( !$ok_del ) {
-						$success_return = "error can't del rss_zset";
-					}
-				}
-				$is_key_exists =
-				  $redis->exists("user:$user_id:pod:$pod_id:rss_nextId");
-				if ($is_key_exists) {
-					$ok_del =
-					  $redis->del("user:$user_id:pod:$pod_id:rss_nextId");
-					if ( !$ok_del ) {
-						$success_return = "error  can't del rss_nextId";
-					}
-				}
-
-			}
-			else {
-				$success_return = "error can't del pod_name";
-			}
-=cut
-
 		}
 		else {
 			$success_return = "error can't find user:$user_id:pod:pod_list";
@@ -968,9 +939,7 @@ sub PH_del_feed_from_podcast() {
 	my $redis_ok;
 	if ($user_id) {
 		if ( $redis->exists("user:$user_id:pod:pod_zset") ) {
-
-			#my $pod_id =
-			#  $redis->get( "user:$user_id:pod:" . md5_hex($pod_name) . ":id" );
+			
 			my $redis_ok =
 			  $redis->zrem( "user:$user_id:pod:$pod_id:rss_zset", $feed_id );
 			if ( !$redis_ok ) {
@@ -1052,7 +1021,7 @@ sub PH_get_podcast_file() {
 	$pod_id      = 0 unless $sec_proc_obj->get_preg( $pod_id,      'digit' );
 	$old_pod_num = $sec_proc_obj->trim_too_long_string( $old_pod_num, 10 );
 	$pod_id      = $sec_proc_obj->trim_too_long_string( $pod_id,      10 );
-	syslog( 'info', "Pod Id to $pod_id" );
+	
 
 	my $current_time = time();
 
@@ -1074,10 +1043,8 @@ sub PH_get_podcast_file() {
 				  $out_files_json[ $#out_files_json - $old_pod_num ]
 				  ;    #$out_files_json[0];
 				my $file_struct = $json->decode($out_file_json);
-				$file_name =
-				    "rss2pod_"
-				  . md5_hex( $user_id . $pod_id . $file_struct->{"file_path"} )
-				  . ".mp3";
+				$file_name = $self->gen_podcast_file_name($user_id, $pod_id, $file_struct->{"file_path"});
+				    
 				my $out_file_handle;
 				open $out_file_handle, $file_struct->{"file_path"};
 				binmode $out_file_handle;
@@ -1093,11 +1060,7 @@ sub PH_get_podcast_file() {
 			$mp3_output = "";
 		}
 	}
-	else {
-
-		#ERROR no such user somthing wrong
-		#$response="no_such_user";
-	}
+	
 	use bytes;
 	my $mp3_len = length($mp3_output);
 	no bytes;
@@ -1112,6 +1075,24 @@ sub PH_get_podcast_file() {
 	return $mp3_output;
 
 }
+
+############################################
+# Usage      : $self->gen_podcast_file_name($user_id, $pod_id, $file_puth);
+# Purpose    : Create podcast file name  for user
+# Returns    : string with file name
+# Parameters : user id, podcast id, file_path from file_struct
+# Throws     : no exceptions
+# Comments   : File path can be substituted by every string unic for
+#every file of podcasts for this user
+# See Also   : n/a
+sub gen_podcast_file_name(){
+	my ($self, $user_id, $pod_id, $file_path) = @_;
+	my $file_name = "rss2pod_"
+				  . md5_hex( $user_id . $pod_id . $file_path )
+				  . ".mp3";
+	return $file_name;			 
+}
+
 
 =head3
 Get json struct of for stored pods
@@ -1150,11 +1131,7 @@ sub PH_get_old_pod_files_lables_json() {
 		}
 
 	}
-	else {
-
-		#ERROR no such user somthing wrong
-		#$response="no_such_user";
-	}
+	
 	my $pod_lables_json = $json->encode( \@pod_lables );
 	$redis->quit();
 	return $pod_lables_json;
@@ -1167,20 +1144,14 @@ sub get_amount_of_stored_pod_files() {
 	my $user_name_md5 = md5_hex($user_name);
 	my $user_id       = $redis->get("id:$user_name_md5");
 
-	#my $pod_id       = $self->query->param("pod_id");
-
+	
 	my $ammount_of_stored_files = 0;
 	if ($user_id) {
 		if ( $redis->exists("user:$user_id:pod:$pod_id:pod_files_names") ) {
 			$ammount_of_stored_files =
 			  $redis->llen("user:$user_id:pod:$pod_id:pod_files_names");
 		}
-	}
-	else {
-
-		#ERROR no such user somthing wrong
-		#$response="no_such_user";
-	}
+	}	
 	return $ammount_of_stored_files;
 }
 
@@ -1293,12 +1264,10 @@ sub check_feed_availability() {
 		if ($feed_parsed) {
 			my $feed_title = $feed_parsed->title;
 
-			#write the title of feed
-			if ( defined $feed_title && !( $feed_title eq "" ) ) {
-
-				#$feed_title = Encode::encode( 'utf8', $feed_title );
+			if ( defined $feed_title && !( $feed_title eq "" ) ) {				
 				$single_feed->{'title'} = $feed_title;
 			}
+			
 			syslog( 'info',
 				"Add $furl into list of feeds for adding into database" );
 			push( @feeds_info, $single_feed );
