@@ -298,6 +298,8 @@ function SinglePodPanel(){
             load: function(response, ioArgs){
                 if (response == "ok") {
 					singlePodPad.checkAudioPodAvail(podId);
+				}else{
+					singlePodPad.addDownloadStandby.hide();
 				}
                 return response;
             },

@@ -2,20 +2,29 @@ This is INSTALL file for RSS2POD product.
 ==================
 REQUIREMENTS.
 ==================
-This product initially was build to run on Linux platform. 
+This product initially was build to run on the Linux platform. 
 Before installation you need to be sure that your system has
 some software, which is necessary to run rss2pod.
+------------------------
+Perl requirements
+------------------------
+This software was tested on the Perl 5.14 and above with a threads support.
+NOTE!!! A threads support is essential because of some nasty bug or feature
+in the NET::Daemon module, if it run in a fork mode, and we need to run the 'system' command.
+It simply do not run it at all, with an error about childes... So since I do not have 
+enough time to deal with it, be patient.
+
 ------------------------
 Non Perl requirements.
 ------------------------
 Redis - NoSQL database server.
-gd - library to deal with graphix
+gd - library to deal with graphic
 lame - library and stand alone application for mp3 encoding
 festival - text to speech engine
 festival voices - voices for festival to work (rss2pod now support only English and Russian)
-mp3wrap - command line utility to bundle mp3 files 
+cut - terminal command :)
 -----------------------
-Perl requirements
+CPAN requirements
 -----------------------
 In ideal world this requirements would be downloaded automatically.
 The process of installation would be described below.
@@ -33,8 +42,9 @@ and reside in the root directory of this project.
 cd ./rss2pod
 
 ---------------------------------
-INSTALLING WITH ROOT PRIVILEGES
+INSTALLING SYSTEM WIDE
 ---------------------------------
+(This part now is deprecated, so go to the next section)
 This part of the installation process requires root privileges, if you do not 
 have ones go to the next section, where standalone installation would be described.
 If you do not have App::Builder installed  on the your machine, than edit 
@@ -49,11 +59,12 @@ This will create Build script. Run it
 ./Build install
 
 ---------------------------------------
-INSTALLATION WITHOUT ROOT PRIVILEGES
+STANDALONE INSTALLATION
 ---------------------------------------
+Standalone installation will be performed by means of the Carton tool.
+This meant that all necessary modules would be stored in project folder within 
+local directory.
 
-Install carton
---------------
-
-We will use carton as packets manager.
+NOTE!!! In current state installation process is very raw, and need some axiomatization.
+So this section will be accomplished when I will implement script for automatic install.
 

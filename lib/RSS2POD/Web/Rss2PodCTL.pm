@@ -202,7 +202,7 @@ sub PH_add_podcast() {
 	my $response     = "ok";
 	$podcast_name = $self->query->param("podcast_name");
 
-	my $redis     = Redis->new();                #( server => '127.0.0.1:6379');
+	my $redis     = Redis->new(encode=>undef);                #( server => '127.0.0.1:6379');
 	my $user_name = $self->authen->username();
 	my $user_name_md5 = md5_hex($user_name);
 	my $user_id       = $redis->get("id:$user_name_md5");
@@ -286,20 +286,17 @@ sub PH_get_user_profile() {
 	my $self         = shift;
 	my %user_profile = ();
 
-	my $redis     = Redis->new();                #( server => '127.0.0.1:6379');
+	my $redis     = Redis->new(encode=>undef);                #( server => '127.0.0.1:6379');
 	my $user_name = $self->authen->username();
 	my $user_name_md5 = md5_hex($user_name);
 	my $user_id       = $redis->get("id:$user_name_md5");
 
 	if ($user_id) {
 		if (   !$redis->exists("user:$user_id:pod:pod_zset")
-			&& !$redis->exists("user:$user_id:feeds:feeds_id_zset") )
-		{
+			&& !$redis->exists("user:$user_id:feeds:feeds_id_zset") ){
+				
 			$self->generate_first_run_user_profile( $user_id, $redis );
 		}
-
-		#all ok we can proceed
-		#my $pod_list_len = $redis->llen("user:$user_id:pod:pod_list");
 
 		my @pod_id_list = $self->get_user_pod_id_list( $user_id, $redis );
 		my %podcasts_info = $self->get_user_podcasts_struct( $user_id, $redis );
@@ -309,7 +306,7 @@ sub PH_get_user_profile() {
 			$user_id, \@user_feeds_id_list,
 			$redis
 		);
-
+		
 		$user_profile{'pod_list'}            = \@pod_id_list;
 		$user_profile{'pod_info'}            = \%podcasts_info;
 		$user_profile{'feeds_title_mapping'} = \%feeds_title_mapping;
@@ -319,9 +316,9 @@ sub PH_get_user_profile() {
 	else {
 		syslog( 'info', "Aeccess violation can't enter as $user_name" );
 	}
-	my $json = JSON->new->allow_nonref;
-
+	my $json = JSON->new->utf8(0);
 	my $json_pod_list = $json->encode( \%user_profile );
+	
 	$self->header_add( -Content_Type => 'text/html; charset=UTF-8' );
 	$redis->quit();
 	return $json_pod_list;
@@ -378,8 +375,9 @@ sub get_user_podcasts_struct() {
 	#Get pod name and pod feeds ids, amd get this stuff into hash
 	my @pod_id_list = (); #store the order of all podcasts in youre installation
 	foreach my $pod_name (@podcasts_names_list) {
-		
-		my $pod_name_enc_dec->{'name'} = $pod_name;
+		my $podname_decoded = $pod_name;
+		utf8::decode($podname_decoded);
+		my $pod_name_enc_dec->{'name'} = $podname_decoded;
 		
 		$pod_name_enc_dec->{'name_base64'} = encode_base64($pod_name);
 		my $pod_id =
@@ -435,7 +433,7 @@ sub generate_first_run_user_profile() {
 	if ( !$redis->exists("user:$user_id:pod:pod_zset") ) {
 
 		#&& $redis->zcount("user:$user_id:pod:pod_zset", "-inf", "+inf") == 0
-		my $podcast_name = "Youre first podcast";
+		my $podcast_name = "Your first podcast";
 		$self->add_podcast( $redis, $user_id, $podcast_name );
 	}
 
@@ -528,12 +526,10 @@ sub PH_get_single_pod_data() {
 			  $redis->get( "user:$user_id:pod:"
 				  . md5_hex( $podcast_info{"pod_name"} )
 				  . ":id " );
-			print "user:$user_id:pod:"
-			  . md5_hex( $podcast_info{"pod_name"} )
-			  . ":id \n";
+			
 			my @podcast_feeds_ids =
 			  $redis->zrange( "user:$user_id:pod:$pod_id:rss_zset", 0, -1 );
-			print "user:$user_id:pod:$pod_id:rss_zset \n";
+			
 			my @podcast_feeds_url;
 
 			foreach my $feed_id (@podcast_feeds_ids) {
@@ -570,10 +566,8 @@ sub PH_get_single_pod_data() {
 		#$response="no_such_user";
 	}
 
-	#print @podcasts_list;
 	my $json = JSON->new->allow_nonref;
 
-	#$json = $json->utf8(1);
 	my $json_pod_list = $json->encode( \%podcast_info );
 	$redis->quit();
 	$self->header_add( -Content_Type => 'text/html; charset=UTF-8' );
@@ -600,7 +594,6 @@ sub PH_delete_single_pod_data() {
 	my $pod_name_pase64 = $self->query->param("pod_name_pase64");
 	my $pod_name        = decode_base64($pod_name_pase64);
 
-	#print "delete: $pod_index_in_list \n";
 	my $success_return = "ok";
 
 	if ($user_id) {
@@ -619,6 +612,7 @@ sub PH_delete_single_pod_data() {
 			$ok_del = $redis->del("user:$user_id:pod:$pod_id:rss_nextId");
 			$ok_del = $redis->del("user:$user_id:pod:$pod_id:last_chk_time");
 			$ok_del = $redis->del("user:$user_id:pod:$pod_id:gen_mp3_stat");
+			
 			###delete all podcast files###################################
 			if ( $redis->exists("user:$user_id:pod:$pod_id:pod_files_names") ) {
 				my $json = JSON->new->allow_nonref;
@@ -744,7 +738,6 @@ sub PH_add_feed() {
 	my $sec_proc_obj = new RSS2POD::SecurityProc();
 	$feed_url = $sec_proc_obj->trim_too_long_string( $feed_url, 300 );
 
-	#print "delete: $pod_index_in_list \n";
 	my $success_return = "ok";
 
 	my $redis_ok = "1";
@@ -876,7 +869,6 @@ sub PH_add_rss_to_podcast() {
 	$feed_id = $sec_proc_obj->trim_too_long_string( $feed_id, 10 );
 	$pod_id  = $sec_proc_obj->trim_too_long_string( $pod_id,  10 );
 
-	#print "delete: $pod_index_in_list \n";
 	my $success_return = "ok";
 	my $redis_ok;
 	if ($user_id) {
@@ -929,7 +921,6 @@ sub PH_del_feed_from_user_list() {
 	$feed_id = 0 unless $sec_proc_obj->get_preg( $feed_id, 'digit' );
 	$feed_id = $sec_proc_obj->trim_too_long_string( $feed_id, 10 );
 
-	#print "delete: $pod_index_in_list \n";
 	my $success_return = "ok";
 	my $redis_ok;
 	if ($user_id) {
@@ -996,104 +987,6 @@ sub PH_del_feed_from_podcast() {
 	return $success_return;
 }
 
-=head3 get podcast text from redis
-Check if this query is out of time for new query (now approximatly 20 minutes), else get text from last query for this podcast.
-Else build text from entires in redis database, and save this snippet of code into cash storage. The cash capacity is about
-3-4 items. So we can handle user history up to 4 times down to hte ocean of time.
-=cut
-
-=comment
-sub get_podcast_text() {
-	my ( $self, $redis, $user_id, $pod_id, $current_time ) = @_;
-	my @pod_text_struct = ();
-
-#First of all check if this query is in the time interval for get new text (20 min);
-
-	my $last_time_of_check =
-	  $redis->get("user:$user_id:pod:$pod_id:last_chk_time");
-	$last_time_of_check = 0 unless defined $last_time_of_check;
-
-	my $json = JSON->new->allow_nonref;
-
-	if ( $current_time - $last_time_of_check > 1 ) {
-		if ( $redis->exists("user:$user_id:pod:$pod_id:rss_zset") ) {
-
-			#all ok we can proceed
-			my @podcast_feeds_ids =
-			  $redis->zrange( "user:$user_id:pod:$pod_id:rss_zset", 0, -1 );
-			print "user:$user_id:pod:$pod_id:rss_zset \n";
-			my @podcast_feeds_url;
-
-			#create text for all feeds
-			foreach my $feed_id (@podcast_feeds_ids) {
-				my $last_checked =
-				  $redis->get("user:$user_id:feeds:$feed_id:last_chk_num");
-				$last_checked = 0 unless defined $last_checked;
-				my $feeds_items_shift =
-				  $redis->get("feed:$feed_id:items_shift");
-				$feeds_items_shift = 0 unless defined $feeds_items_shift;
-				my $feeds_list_length = $redis->llen("feed:$feed_id:items");
-				$feeds_list_length = 0 unless defined $feeds_list_length;
-				my $first_item_position =
-				  ( $last_checked + 1 ) - $feeds_items_shift;
-				$first_item_position = 0 if $first_item_position < 0;
-				my $how_many_items_get =
-				  $feeds_list_length - $first_item_position;
-
-				if ( $how_many_items_get > 50 ) {
-					$how_many_items_get = 50;
-				}
-				my @feed_items =
-				  $redis->lrange( "feed:$feed_id:items", $first_item_position,
-					$first_item_position + $how_many_items_get );
-				my $redis_ok = $redis->set(
-					"user:$user_id:feeds:$feed_id:last_chk_num",
-					$feeds_list_length + $feeds_items_shift
-				);
-				if ( $self->config_param('general.debug') ) {
-					syslog( 'info',
-						"get feed items @feed_items, $how_many_items_get" );
-				}
-				for my $item (@feed_items) {
-					if ( $self->config_param('general.debug') ) {
-						syslog( 'info', "User get $item from database" );
-					}
-					my $perl_struct_item = $json->decode($item);
-					push( @pod_text_struct, $perl_struct_item );
-				}
-				$redis_ok = $redis->set(
-					"user:$user_id:feeds:$feed_id:last_chk_num",
-					$feeds_list_length + $feeds_items_shift
-				);
-			}
-
-			my $redis_ok =
-			  $redis->set( "user:$user_id:pod:$pod_id:last_chk_time",
-				$current_time );
-			if (@pod_text_struct) {
-				my $json_text = $json->encode( \@pod_text_struct );
-				$redis_ok = $redis->zadd( "user:$user_id:pod:$pod_id:cash_zset",
-					$current_time, $json_text );
-			}
-		}
-	}
-	else {
-		if ( $redis->exists("user:$user_id:pod:$pod_id:cash_zset") ) {
-			my @redis_out =
-			  $redis->zrange( "user:$user_id:pod:$pod_id:cash_zset", -1, -1 );
-			if (@redis_out) {
-				my $json_pod_text = $redis_out[0];
-				if ( $self->config_param('general.debug') ) {
-					syslog( 'info',
-						"User get cached items: $json_pod_text<end>" );
-				}
-				@pod_text_struct = @{ $json->decode($json_pod_text) };
-			}
-		}
-	}
-	return @pod_text_struct;
-}
-=cut
 
 sub PH_check_pod_complite() {
 	my $self      = shift;

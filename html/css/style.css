@@ -166,14 +166,14 @@ A#getPodHref {
 }
 
 #getPodArea A {
-    background: url(../images/download_pod.png); /* Путь к файлу с исходным рисунком  */
+    background: url(../images/download_pod_eng.png); /* Путь к файлу с исходным рисунком  */
     display: block; /* Рисунок как блочный элемент */
     width: 200px; /* Ширина рисунка */
     height: 64px; /* Высота рисунка */
 }
 
 #getPodArea A:hover {
-    background: url(../images/download_pod_hover.png); /* Путь к файлу с заменяемым рисунком  */
+    background: url(../images/download_pod_hover_eng.png); /* Путь к файлу с заменяемым рисунком  */
 }
 
 #floatclear_left {

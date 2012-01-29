@@ -1,0 +1,13 @@
+RSS2POD TODO
+There are a lot of work in this project, but here is main features that will be
+implemented. Now all this stuff in disarray, but maybe in future I will accomplish
+tasks to be done.
+
+
+1. Improve language package for English to Russian and Russian to English transcriptions.
+2. Write a lot of integration, unit and all kinds of tests for rss2pod AJAX interface.
+3. Do something with internalization.
+4. Improve Install mechanism for "stand alone" environment. Now this is a bunch of hand work, and this is sad :(
+5. Make configuration more easy. Some system parameters should be got on the fly instead of by the hands.
+6. Write better database access level.
+7. Find solid Perl CMS for project instead of this ugly handmaid page that it has now.
