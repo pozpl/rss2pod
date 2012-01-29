@@ -87,25 +87,23 @@ ul.hr li A {
 }
 
 ul.hr li A:hover {
-    color: #999; /* Цвет ссылки при наведении на нее курсора мыши */
-    text-decoration: underline; /* Добавляем подчеркивание */
+    color: #999; 
+    text-decoration: underline; 
 }
 
 ul.hr li:hover {
-    background-color: #eee9e9; /* Цвет ссылки при наведении на нее курсора мыши */
+    background-color: #eee9e9; 
 }
 
-#header { /* Верхний блок */
+#header { /* up block */
     background-color: #eeeeee;
-    padding: 10px; /* Поля вокруг текста */
+    padding: 10px; /* space around a text */
     background-image: url(../images/header_background.png);
     background-repeat: repeat-x;
 }
 
 #content_area {
-    clear: left;
-	/*background-image: url(../images/back-image.png);
-	background-repeat: repeat;*/	
+    clear: left;	
 }
 
 #info_frame {
@@ -113,28 +111,28 @@ ul.hr li:hover {
 	margin: 0 auto;
 }
 
-#sidebar { /* Right column */
-    float: right; /* Обтекание справа */
-    border: 1px solid #999; /* Параметры рамки вокруг */
+#sidebar { 
+    float: right;
+    border: 1px solid #999;
     min-width: 320px;
-    width: 33%; /* Ширина колонки */
-    padding: 5px; /* Поля вокруг текста */
-    margin: 10px 5px 20px 5px; /* Значения отступов */
+    width: 33%; 
+    padding: 5px;
+    margin: 10px 5px 20px 5px; 
 	background-color: #eeeeee;
 }
 
-#content { /* Left column  */
-    margin: 10px 35% 20px 10px; /* Значения отступов */
-    padding: 5px; /* Поля вокруг текста */
-    border: 1px solid #999; /* Параметры рамки */
+#content { 
+    margin: 10px 35% 20px 10px; 
+    padding: 5px; 
+    border: 1px solid #999; 
     min-height: 300px;	
 	background-color: #eeeeee;
 }
 
-#footer { /* Нижний блок */
-    background: #333; /* Цвет фона */
-    color: #fff; /* Цвет текста */
-    clear: both; /* Отменяем действие float */
+#footer { 
+    background: #333; 
+    color: #fff; 
+    clear: both; 
     width: 100%;
 }
 
@@ -143,7 +141,7 @@ ul.hr li:hover {
 }
 
 A {
-    text-decoration: none; /* Отменяем подчеркивание у ссылки */
+    text-decoration: none; 
 }
 
 A img {
@@ -166,14 +164,14 @@ A#getPodHref {
 }
 
 #getPodArea A {
-    background: url(../images/download_pod_eng.png); /* Путь к файлу с исходным рисунком  */
-    display: block; /* Рисунок как блочный элемент */
-    width: 200px; /* Ширина рисунка */
-    height: 64px; /* Высота рисунка */
+    background: url(../images/download_pod_eng.png); 
+    display: block; 
+    width: 200px; 
+    height: 64px; 
 }
 
 #getPodArea A:hover {
-    background: url(../images/download_pod_hover_eng.png); /* Путь к файлу с заменяемым рисунком  */
+    background: url(../images/download_pod_hover_eng.png); 
 }
 
 #floatclear_left {
@@ -181,8 +179,8 @@ A#getPodHref {
 }
 
 .delPodArea {	
-    border-top: 2px solid white; /* Параметры рамки */
-    padding: 1px; /* Поля вокруг текста */
+    border-top: 2px solid white; 
+    padding: 1px; 
 }
 
 .buttonCustomIcon{
