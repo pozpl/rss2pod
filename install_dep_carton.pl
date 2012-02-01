@@ -11,7 +11,7 @@ if ( ! is_carton_installed() ) {
 	}
 	install_carton();
 }
-
+install_app_build_module($current_working_dir);
 install_deps($current_working_dir);
 
 
@@ -79,6 +79,41 @@ sub install_carton() {
 		print $ps_line;
 	}
 }
+
+############################################
+# Usage      : install_app_build_module()
+# Purpose    : install App::Builder module
+# Returns    : none
+# Parameters : cwd - project dir path  
+# Throws     : no exceptions
+# Comments   : Now I use App::Builder for my Build.PL staff. Maybe in future
+#			   I will migrate ot Module::Build but not now.
+# See Also   : n/a
+sub install_app_build_module(){
+	my ($cwd) = @_;
+	
+	my $local_bin_path = $cwd . '/local/bin';
+	open( my $sh_out, "PATH=$PATH:$local_bin_path |" ) || die "Failed: $!\n";
+	while ( my $out_line = <$sh_out> ) {
+		print $ps_line;
+	}
+	
+	$local_lib   = $cwd . '/local/lib/perl5';	
+	
+	my @perl_minus_v = `perl -v`;	
+	$perl_arch = 'x86_64-linux';
+	if($perl_minus_v[1] =~ qr{(?:.*?)built \s+ for \s+ (?<perl_arch>.*?)$}xms){
+		$perl_arch = $+{perl_arch};
+	}
+	$local_arch_lib =	$path_to_project . '/local/lib/perl5/' . $perl_arch;
+	
+	
+	open( my $sh_out, "perl -I $local_lib -I $local_arch_lib ./local/bin/carton App::Build |" ) || die "Failed: $!\n";
+	while ( my $out_line = <$sh_out> ) {
+		print $ps_line;
+	}
+}
+
 
 ############################################
 # Usage      : install_deps()
