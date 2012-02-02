@@ -29,12 +29,10 @@ sub prepare_text($){
 	my ($TextCharset,$Language) = DetectMainParametrs($text);
 	$text = HTMLProc($text);	
 	$text = TEXTProc($text,$Language);
-	my($result)={text=> Encode::encode( 'utf8',$text ),
-		         lang=>$Language, 
+	my $result = {text=> Encode::encode( 'utf8',$text ),
+		          lang=>$Language, 
 		  
-	}; 
-	#my $json_text = JSON->new->allow_nonref->encode($result); #encode_json $result;
-	#return $json_text;
+	        }; 
 	$result;
 }
 1;

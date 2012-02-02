@@ -18,7 +18,6 @@ use Sys::Syslog qw(:standard);
 use POSIX;
 
 use Encode::Detect::Detector;
-#use Lingua::DetectCyrillic;
 use Lingua::Identify qw(:language_identification :language_manipulation);
 use Encode qw(from_to);
 
@@ -32,6 +31,9 @@ sub DetectMainParametrs{
 		activate_language('en');
 		activate_language('ru');
 		my $language = langof($text);
+		
+		$language = defined $language ? $language : 'EN';
+		
 		print "LANG: $language \n";
 		print "TEXT: $text\n";
 		$language =~ tr/A-Z/a-z/;
