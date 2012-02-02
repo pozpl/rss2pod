@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<rss version="2.0"
+ xmlns:blogChannel="http://backend.userland.com/blogChannelModule"
+ xmlns:syn="http://purl.org/rss/1.0/modules/syndication/"
+ xmlns:dc="http://purl.org/dc/elements/1.1/"
+ xmlns:taxo="http://purl.org/rss/1.0/modules/taxonomy/"
+ xmlns:content="http://purl.org/rss/1.0/modules/content/"
+ xmlns:admin="http://webns.net/mvcb/"
+>
+
+<channel>
+<title>&#x41C;&#x43E;&#x439; &#x43A;&#x430;&#x43D;&#x430;&#x43B;</title>
+<link>http://localhost/rss.xml</link>
+<description>It is description</description>
+<language>eng-ru</language>
+<copyright>free</copyright>
+<pubDate>Thu, 23 Aug 1999 07:00:00 GMT</pubDate>
+<lastBuildDate>Thu, 23 Aug 20102010:20:26 GMT</lastBuildDate>
+<docs>http://www.blahblah.org/fm.cdf</docs>
+<managingEditor>pozpl@dvo.ru</managingEditor>
+<webMaster>pozpl@dvo.ru</webMaster>
+
+<item>
+<title>GTKeyboard 0.85</title>
+<link>http://localhost/lam</link>
+<description>blah blah</description>
+<guid isPermaLink="true">http://freshmeat.net/news/1999/06/21/930003829.html</guid>
+<enclosure url="http://localhost" type="application/x-bittorrent" />
+</item>
+<item>
+<title>GTKeyboard 0.85</title>
+<link>http://localhost/lam</link>
+<description>blah blah</description>
+<guid isPermaLink="true">http://freshmeat.net/news/1999/06/21/930003829.html</guid>
+<enclosure url="http://localhost" type="application/x-bittorrent" />
+</item>
+<item>
+<title>GTKeyboard 0.85</title>
+<link>http://localhost/lam</link>
+<description>blah blah</description>
+<guid isPermaLink="true">http://freshmeat.net/news/1999/06/21/930003829.html</guid>
+<enclosure url="http://localhost" type="application/x-bittorrent" />
+</item>
+<item>
+<title>GTKeyboard 0.85</title>
+<link>http://localhost/lam</link>
+<description>blah blah</description>
+<guid isPermaLink="true">http://freshmeat.net/news/1999/06/21/930003829.html</guid>
+<enclosure url="http://localhost" type="application/x-bittorrent" />
+</item>
+<item>
+<title>GTKeyboard 0.85</title>
+<link>http://localhost/lam</link>
+<description>blah blah</description>
+<guid isPermaLink="true">http://freshmeat.net/news/1999/06/21/930003829.html</guid>
+<enclosure url="http://localhost" type="application/x-bittorrent" />
+</item>
+<item>
+<title>GTKeyboard 0.85</title>
+<link>http://localhost/lam</link>
+<description>blah blah fack</description>
+<guid isPermaLink="true">http://freshmeat.net/news/1999/06/21/930003829.html</guid>
+<enclosure url="http://localhost" type="application/x-bittorrent" />
+</item>
+<item>
+<title>GTKeyboard 0.ddda5</title>
+<link>http://localhost/lam</link>
+<description>lblah blah fack</description>
+<guid isPermaLink="true">http://freshmeat.net/news/1999/06/21/930003829.html</guid>
+<enclosure url="http://localhost" type="application/x-bittorrent" />
+</item>
+
+</channel>
+</rss>

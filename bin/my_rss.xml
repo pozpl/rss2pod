@@ -11,7 +11,7 @@
 
 <channel>
 <title>&#x41C;&#x43E;&#x439; &#x43A;&#x430;&#x43D;&#x430;&#x43B;</title>
-<link>http://localhost/rss.xml</link>
+<link>http://rss2pod.urbancamper.ru/my_rss.xml</link>
 <description>It is description</description>
 <language>eng-ru</language>
 <copyright>free</copyright>
@@ -22,46 +22,12 @@
 <webMaster>pozpl@dvo.ru</webMaster>
 
 <item>
-<title>GTKeyboard 0.85</title>
-<link>http://localhost/lam</link>
-<description>blah blah</description>
-<guid isPermaLink="true">http://freshmeat.net/news/1999/06/21/930003829.html</guid>
-<enclosure url="http://localhost" type="application/x-bittorrent" />
+<title>Your test rss.</title>
+<link>http://rss2pod.urbancamper.ru</link>
+<description>This is your first rss feed. Enjoy.</description>
+<guid isPermaLink="true">http://rss2pod.urbancamper.ru</guid>
+<enclosure url="http://rss2pod.urbancamper.ru" type="application/x-bittorrent" />
 </item>
-<item>
-<title>GTKeyboard 0.85</title>
-<link>http://localhost/lam</link>
-<description>blah blah</description>
-<guid isPermaLink="true">http://freshmeat.net/news/1999/06/21/930003829.html</guid>
-<enclosure url="http://localhost" type="application/x-bittorrent" />
-</item>
-<item>
-<title>GTKeyboard 0.85</title>
-<link>http://localhost/lam</link>
-<description>blah blah</description>
-<guid isPermaLink="true">http://freshmeat.net/news/1999/06/21/930003829.html</guid>
-<enclosure url="http://localhost" type="application/x-bittorrent" />
-</item>
-<item>
-<title>GTKeyboard 0.85</title>
-<link>http://localhost/lam</link>
-<description>blah blah</description>
-<guid isPermaLink="true">http://freshmeat.net/news/1999/06/21/930003829.html</guid>
-<enclosure url="http://localhost" type="application/x-bittorrent" />
-</item>
-<item>
-<title>GTKeyboard 0.85</title>
-<link>http://localhost/lam</link>
-<description>blah blah</description>
-<guid isPermaLink="true">http://freshmeat.net/news/1999/06/21/930003829.html</guid>
-<enclosure url="http://localhost" type="application/x-bittorrent" />
-</item>
-<item>
-<title>GTKeyboard 0.85</title>
-<link>http://localhost/lam</link>
-<description>blah blah</description>
-<guid isPermaLink="true">http://freshmeat.net/news/1999/06/21/930003829.html</guid>
-<enclosure url="http://localhost" type="application/x-bittorrent" />
-</item>
+
 </channel>
 </rss>

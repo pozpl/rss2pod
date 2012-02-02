@@ -438,7 +438,7 @@ sub generate_first_run_user_profile() {
 	}
 
 	unless ( $redis->exists("user:$user_id:feeds:feeds_id_zset") ) {
-		my $feed_url   = "http://localhost/my_rss.xml";
+		my $feed_url   = "http://rss2pod.urbancamper.ru/my_rss.xml";
 		my $feed_title = "Youre first feed";
 
 		$self->add_feed_to_database( $redis, $feed_url, $feed_title );
