@@ -66,7 +66,7 @@ sub _create_test_feed($) {
 
 	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
 
-	$db_redis->del_feed($feed_url);       #delete all feed related information
+	$db_redis->del_feed($feed_url);    #delete all feed related information
 	$db_redis->create_feed_for_url($feed_url);
 }
 
@@ -221,12 +221,12 @@ sub check_add_feed_url_to_queue_of_new_feeds() {
 }
 
 sub check_add_feed_item_to_voicefy_queue() {
-	my $redis    = open_connection();     #connect to local redis
+	my $redis    = open_connection();              #connect to local redis
 	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
 
 	#by default we put text blob, that is feed item in string form
 	#prepare IT
-	$feed_id = 1;                         #jast test value
+	$feed_id = 1;                                  #jast test value
 	my $item      = "Test feed title   feed content";
 	my $item_txt  = LangUtils::TextHandler::prepare_text($item);
 	my $json      = JSON->new->allow_nonref;
@@ -251,7 +251,7 @@ sub check_add_feed_item_to_voicefy_queue() {
 }
 
 sub check_get_and_del_feed_item_from_voicefy_queue() {
-	my $redis    = open_connection();     #connect to local redis
+	my $redis    = open_connection();              #connect to local redis
 	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
 
 	#PUT text blob into voicefy queue
@@ -286,7 +286,7 @@ sub check_get_and_del_feed_item_from_voicefy_queue() {
 }
 
 sub check_get_feed_id_for_url() {
-	my $redis    = open_connection();     #connect to local redis
+	my $redis    = open_connection();              #connect to local redis
 	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
 
 	#Prepare feed to add
@@ -306,7 +306,7 @@ sub check_get_feed_id_for_url() {
 }
 
 sub check_add_item_to_feed() {
-	my $redis    = open_connection();     #connect to local redis
+	my $redis    = open_connection();              #connect to local redis
 	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
 
 	#feed item is only JSON encoded text blob but we need text part of it anyway
@@ -349,7 +349,7 @@ sub check_add_item_to_feed() {
 }
 
 sub check_is_item_alrady_in_feed() {
-	my $redis    = open_connection();     #connect to local redis
+	my $redis    = open_connection();              #connect to local redis
 	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
 
 	#Prepare feed to add
@@ -383,12 +383,12 @@ sub check_is_item_alrady_in_feed() {
 }
 
 sub check_create_feed_for_url() {
-	my $redis    = open_connection();       #connect to local redis
-	my $db_redis = RSS2POD::DB::DBRedis->new();      #connect to local redis
+	my $redis    = open_connection();              #connect to local redis
+	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
 
 	#prepare clear environment
 	my $feed_test_url = "http://my.test.url.com";
-	$db_redis->del_feed($feed_test_url);    #delete feed
+	$db_redis->del_feed($feed_test_url);           #delete feed
 
 	#EXECUTE
 	$db_redis->create_feed_for_url($feed_test_url);
@@ -414,8 +414,8 @@ sub check_create_feed_for_url() {
 }
 
 sub check_del_and_get_old_items_from_feed() {
-	my $redis    = open_connection();       #connect to local redis
-	my $db_redis = RSS2POD::DB::DBRedis->new();      #connect to local redis
+	my $redis    = open_connection();              #connect to local redis
+	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
 
 	#PREPARE
 	my $feed_test_url = "http://my.test.url.com";
@@ -453,7 +453,7 @@ sub check_del_and_get_old_items_from_feed() {
 }
 
 sub check_del_feed() {
-	my $redis    = open_connection();     #connect to local redis
+	my $redis    = open_connection();              #connect to local redis
 	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
 
 	#prepare clear environment
@@ -490,7 +490,7 @@ sub check_del_feed() {
 }
 
 sub check_add_new_user() {
-	my $redis    = open_connection();     #connect to local redis
+	my $redis    = open_connection();              #connect to local redis
 	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
 
 	#PREPARE
@@ -522,7 +522,7 @@ sub check_add_new_user() {
 }
 
 sub check_delete_user() {
-	my $redis    = open_connection();     #connect to local redis
+	my $redis    = open_connection();              #connect to local redis
 	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
 
 	#PREPARE
@@ -571,7 +571,7 @@ sub check_delete_user() {
 }
 
 sub check_is_user_exists() {
-	my $redis    = open_connection();     #connect to local redis
+	my $redis    = open_connection();              #connect to local redis
 	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
 
 	#PREPARE
@@ -580,12 +580,13 @@ sub check_is_user_exists() {
 
 	#EXECUTE
 	my $is_user_exists = $db_redis->is_user_exists($TEST_USER);
-	
+
 	#CHECK
 	my $all_ok =
 	   !$is_user_exists                                                 ? 0
 	  : $db_redis->is_user_exists( $TEST_USER . "_no_such_user_login" ) ? 0
-	  :																	  1;
+	  :                                                                   1;
+
 	#CLEAN ENVIRONMENT
 	$db_redis->delete_user($TEST_USER);
 	close_connection();
@@ -593,21 +594,22 @@ sub check_is_user_exists() {
 }
 
 sub check_update_user_password() {
-	my $redis    = open_connection();     #connect to local redis
+	my $redis    = open_connection();              #connect to local redis
 	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
-	
+
 	#PREPARE
 	$db_redis->add_new_user( $TEST_USER, $TEST_USER_PASSWORD,
 		$TEST_USER_EMAIL );
-	
+
 	#EXECUTE
 	my $new_pass_for_test_user = 'BRAND_NEW_PASSWORD';
-	$db_redis->update_user_password($TEST_USER, $new_pass_for_test_user );
-	
+	$db_redis->update_user_password( $TEST_USER, $new_pass_for_test_user );
+
 	#CHECK
-	my $is_new_pass_valid = $db_redis->is_user_password_valid($TEST_USER, $new_pass_for_test_user); 
-	my $all_ok = $is_new_pass_valid  ? 1 : 0;
-	
+	my $is_new_pass_valid =
+	  $db_redis->is_user_password_valid( $TEST_USER, $new_pass_for_test_user );
+	my $all_ok = $is_new_pass_valid ? 1 : 0;
+
 	#CLEAN ENVIRONMENT
 	$db_redis->delete_user($TEST_USER);
 	close_connection();
@@ -615,152 +617,264 @@ sub check_update_user_password() {
 }
 
 sub check_is_user_password_valid() {
-	my $redis    = open_connection();     #connect to local redis
+	my $redis    = open_connection();              #connect to local redis
 	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
-	
+
 	#PREPARE
 	$db_redis->add_new_user( $TEST_USER, $TEST_USER_PASSWORD,
 		$TEST_USER_EMAIL );
-	
+
 	#EXECUTE
 	my $new_pass_for_test_user = 'BRAND_NEW_PASSWORD';
+
 	#$db_redis->update_user_password($TEST_USER, $new_pass_for_test_user );
-	my $is_pass_valid = $db_redis->is_user_password_valid($TEST_USER, $TEST_USER_PASSWORD);
-	my $is_new_pass_valid = $db_redis->is_user_password_valid($TEST_USER, $new_pass_for_test_user);
-	
+	my $is_pass_valid =
+	  $db_redis->is_user_password_valid( $TEST_USER, $TEST_USER_PASSWORD );
+	my $is_new_pass_valid =
+	  $db_redis->is_user_password_valid( $TEST_USER, $new_pass_for_test_user );
+
 	#CHECK
-	my $all_ok = $is_new_pass_valid  ? 0 
-				: $is_pass_valid     ? 1
-				:	                   0;
-	
+	my $all_ok =
+	    $is_new_pass_valid ? 0
+	  : $is_pass_valid     ? 1
+	  :                      0;
+
 	#CLEAN ENVIRONMENT
-	$db_redis->delete_user($TEST_USER);	
+	$db_redis->delete_user($TEST_USER);
 	close_connection();
 	return $all_ok;
 }
 
 sub check_update_user_email() {
-	my $redis    = open_connection();     #connect to local redis
+	my $redis    = open_connection();              #connect to local redis
 	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
-	
+
 	#PREPARE
 	$db_redis->add_new_user( $TEST_USER, $TEST_USER_PASSWORD,
 		$TEST_USER_EMAIL );
 	my $new_email_to_update = 'some@new.email';
-		
+
 	#EXECUTE
-	$db_redis->update_user_email($TEST_USER, $new_email_to_update);
-	
+	$db_redis->update_user_email( $TEST_USER, $new_email_to_update );
+
 	#CHECK
 	my $geted_email = $db_redis->get_user_email($TEST_USER);
-	my $all_ok = ($new_email_to_update eq $geted_email)   ? 1 : 0;
-	
+	my $all_ok = ( $new_email_to_update eq $geted_email ) ? 1 : 0;
+
 	#CLEAN ENVIRONMENT
-	$db_redis->delete_user($TEST_USER);	
+	$db_redis->delete_user($TEST_USER);
 	close_connection();
 	return $all_ok;
 }
 
 sub check_get_user_email() {
-	my $redis    = open_connection();     #connect to local redis
+	my $redis    = open_connection();              #connect to local redis
 	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
-	
+
 	#PREPARE
 	$db_redis->add_new_user( $TEST_USER, $TEST_USER_PASSWORD,
 		$TEST_USER_EMAIL );
-		
+
 	#EXECUTE
 	my $geted_email = $db_redis->get_user_email($TEST_USER);
-	
-	#CHECK	
-	my $all_ok = ($TEST_USER_EMAIL eq $geted_email)   ? 1 : 0;
-	
+
+	#CHECK
+	my $all_ok = ( $TEST_USER_EMAIL eq $geted_email ) ? 1 : 0;
+
 	#CLEAN ENVIRONMENT
-	$db_redis->delete_user($TEST_USER);	
+	$db_redis->delete_user($TEST_USER);
 	close_connection();
 	return $all_ok;
 }
 
 sub check_add_user_podcast() {
-	my $redis    = open_connection();     #connect to local redis
+	my $redis    = open_connection();              #connect to local redis
 	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
-	
+
 	#PREPARE
 	$db_redis->add_new_user( $TEST_USER, $TEST_USER_PASSWORD,
 		$TEST_USER_EMAIL );
 	my $podcast_label = "Some test podcast";
-	
+
 	#EXECUTE
-	$db_redis->add_user_podcast($TEST_USER, $podcast_label);
-	
+	$db_redis->add_user_podcast( $TEST_USER, $podcast_label );
+
 	#CHECK
-	my $all_ok =  !$redis->exists( $db_redis->USER_USER_ID_POD_NEXTID($user_id))     ? 0
-				: !$redis->exists( $db_redis->USER_USER_ID_POD_POD_ZSET($user_id))   ? 0				
-				:                                                                      1;
-	if($all_ok){
-		if(  $redis->exists( $db_redis->USER_USER_ID_POD_POD_NAME_ID($user_id))  ){
-			my $pod_id =  $redis->get($db_redis->USER_USER_ID_POD_POD_NAME_ID($user_id));
-			
-			$all_ok = !$redis->exists( $db_redis->USER_USER_ID_POD_POD_ID_RSS_ZSET($user_id, $pod_id))     ? 0
-				: !$redis->exists( $db_redis->USER_USER_ID_POD_POD_ID_RSS_NEXTID($user_id, $pod_id))   	   ? 0		
-				: !$redis->exists( $db_redis->USER_USER_ID_POD_POD_ID_LAST_CHK_TIME($user_id, $pod_id))    ? 0		
-				:                                                                      					     1;
+	my $all_ok =
+	    !$redis->exists( $db_redis->USER_USER_ID_POD_NEXTID($user_id) )   ? 0
+	  : !$redis->exists( $db_redis->USER_USER_ID_POD_POD_ZSET($user_id) ) ? 0
+	  :                                                                     1;
+	if ($all_ok) {
+		if ( $redis->exists( $db_redis->USER_USER_ID_POD_POD_NAME_ID($user_id) )
+		  )
+		{
+			my $pod_id =
+			  $redis->get( $db_redis->USER_USER_ID_POD_POD_NAME_ID($user_id) );
+
+			$all_ok = 
+			  !$redis->exists($db_redis->USER_USER_ID_POD_POD_ID_RSS_ZSET($user_id, $pod_id))        ? 0
+			  : !$redis->exists($db_redis->USER_USER_ID_POD_POD_ID_RSS_NEXTID($user_id, $pod_id))    ? 0
+			  : !$redis->exists($db_redis->USER_USER_ID_POD_POD_ID_LAST_CHK_TIME($user_id, $pod_id)) ? 0
+			  :   	                                                                                   1;
 		}
-		else{
+		else {
 			$all_ok = 0;
 		}
 	}
-	
+
 	#CLEAN ENVIRONMENT
-	$db_redis->delete_user($TEST_USER);		
+	$db_redis->delete_user($TEST_USER);
 	close_connection();
 	return $all_ok;
 }
 
 sub check_add_feed_id_to_user_feeds() {
-	my $redis    = open_connection();     #connect to local redis
+	my $redis    = open_connection();              #connect to local redis
 	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
-	
+
 	#PREPARE
 	$db_redis->add_new_user( $TEST_USER, $TEST_USER_PASSWORD,
 		$TEST_USER_EMAIL );
 	my $feed_id = "1";
-	
+
 	#EXECUTE
-	$db_redis->add_feed_id_to_user_feeds($TEST_USER, $feed_id);
-	
+	$db_redis->add_feed_id_to_user_feeds( $TEST_USER, $feed_id );
+
 	#CHECK
-	
+	my @user_feeds_ids = $dv_redis->get_user_podcast_feeds_ids();
+	my %user_feed_ids_hash;
+	@user_feed_ids_hash{@user_feeds_ids} = ();
+	my $all_ok = exists $user_feed_ids_hash{$feed_id} ? 1 : 0;
+
+	#CLEAN ENVIRONMENT
+	$db_redis->delete_user($TEST_USER);
 	close_connection();
 	return $all_ok;
 }
 
 sub check_get_user_podcasts_ids() {
-	my $redis    = open_connection();     #connect to local redis
+	my $redis    = open_connection();              #connect to local redis
 	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
 
+	#PREPARE
+	$db_redis->add_new_user( $TEST_USER, $TEST_USER_PASSWORD,
+		$TEST_USER_EMAIL );
+	my $podcast_label = "Some test podcast";
+	my @pod_ids_orig;
+	push @pod_ids_orig, $db_redis->add_user_podcast( $TEST_USER, $podcast_label );
+	push @pod_ids_orig, $db_redis->add_user_podcast( $TEST_USER, $podcast_label . '2' );
+	push @pod_ids_orig, $db_redis->add_user_podcast( $TEST_USER, $podcast_label . '3' );
+	my $number_of_podcasts = $#pod_ids_orig;
+	my %pod_ids_orig_hash;
+	@pod_ids_orig_hash{@pod_ids_orig} = ();
+
+	#EXECUTE
+	my @user_podcast_ids = $db_redis->get_user_podcasts_ids($TEST_USER);
+
+	#CHECK
+	$all_ok = 1;
+	if ( $#user_podcast_ids != $number_of_podcasts ) {
+		for my $pod_id (@pod_ids_orig) {
+			if ( !exists $pod_ids_orig_hash{$pod_id} ) {
+				$all_ok = 0;
+			}
+		}
+	}
+
+	#CLEAN ENVIRONMENT
+	$db_redis->delete_user($TEST_USER);
 	close_connection();
 	return $all_ok;
 }
 
 sub check_get_user_podcasts_id_title_map() {
-	my $redis    = open_connection();     #connect to local redis
+	my $redis    = open_connection();              #connect to local redis
 	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
+
+	#PREPARE
+	$db_redis->add_new_user( $TEST_USER, $TEST_USER_PASSWORD,
+		$TEST_USER_EMAIL );
+	my $podcast_label = "Some test podcast";
+
+	my %pod_id_lable_hash;
+	for my $add_pod_index ( 1 .. 3 ) {
+		my $new_pod_lable = $podcast_label . $add_pod_index;
+		my $pod_id = $db_redis->add_user_podcast( $TEST_USER, $new_pod_lable );
+		$pod_id_lable_hash{$pod_id} = $new_pod_lable;
+
+	}
+
+	#EXECUTE
+	my %user_podcast_id_lable_hash =
+	  $db_redis->get_user_podcasts_id_title_map($TEST_USER);
+
+	#CHECK
+	$all_ok = 1;
+	keys %pod_id_lable_hash;    #RESET HASH ITERATOR,
+	while ( my ( $pod_id_orig, $pod_lable_orig ) = each %pod_id_lable_hash ) {
+		my $elem_ok =  ( !exists $user_podcast_id_lable_hash{$pod_id} )  ? 0
+		  : !($user_podcast_id_lable_hash{$pod_} eq $pod_lable_orig)   ? 0
+		  : 														     1;
+		if(!$elem_ok){
+			$all_ok = 0;
+		}
+	}
+
+	#CLEAN ENVIRONMENT
+	$db_redis->delete_user($TEST_USER);
 
 	close_connection();
 	return $all_ok;
 }
 
 sub check_get_user_podcasts_titles() {
-	my $redis    = open_connection();     #connect to local redis
+	my $redis    = open_connection();              #connect to local redis
 	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
+	
+	#PREPARE
+	$db_redis->add_new_user( $TEST_USER, $TEST_USER_PASSWORD,
+		$TEST_USER_EMAIL );
+	my $podcast_label = "Some test podcast";
 
+	my %pod_id_lable_hash;
+	for my $add_pod_index ( 1 .. 3 ) {
+		my $new_pod_lable = $podcast_label . $add_pod_index;
+		my $pod_id = $db_redis->add_user_podcast( $TEST_USER, $new_pod_lable );
+		$pod_id_lable_hash{$pod_id} = $new_pod_lable;
+
+	}
+	
+	#EXECUTE
+	my @user_podcasts_titles = $db_redis->get_user_podcasts_titles($TEST_USER);
+	
+	#CHECK
+	my %user_podcasts_titles_hash;
+	@user_podcasts_titles_hash{@user_podcasts_titles} = ();
+	
+	$all_ok = 1;
+	keys %pod_id_lable_hash;    #RESET HASH ITERATOR,
+	for my  $pod_lable (values %pod_id_lable_hash)  {
+###################################################################################
+#				HERE I WANT TO CONTINUE NEXT
+###################################################################################		
+		my $elem_ok =  ( !exists $user_podcasts_titles_hash{$pod_lable} )  ? 0
+		  : !($user_podcast_id_lable_hash{$pod_} eq $pod_lable_orig)   ? 0
+		  : 														     1;
+		if(!$elem_ok){
+			$all_ok = 0;
+		}
+	}
+
+	#CLEAN ENVIRONMENT
+	$db_redis->delete_user($TEST_USER);
+		 
+	
 	close_connection();
 	return $all_ok;
 }
 
 sub check_get_user_podcast_feeds_ids() {
-	my $redis    = open_connection();     #connect to local redis
+	my $redis    = open_connection();              #connect to local redis
 	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
 
 	close_connection();
@@ -768,7 +882,7 @@ sub check_get_user_podcast_feeds_ids() {
 }
 
 sub check_get_user_podcast_feeds_id_title_map() {
-	my $redis    = open_connection();     #connect to local redis
+	my $redis    = open_connection();              #connect to local redis
 	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
 
 	close_connection();
@@ -776,7 +890,7 @@ sub check_get_user_podcast_feeds_id_title_map() {
 }
 
 sub check_get_user_feeds_ids() {
-	my $redis    = open_connection();     #connect to local redis
+	my $redis    = open_connection();              #connect to local redis
 	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
 
 	close_connection();
@@ -784,7 +898,7 @@ sub check_get_user_feeds_ids() {
 }
 
 sub check_del_user_podcast() {
-	my $redis    = open_connection();     #connect to local redis
+	my $redis    = open_connection();              #connect to local redis
 	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
 
 	close_connection();
@@ -792,7 +906,7 @@ sub check_del_user_podcast() {
 }
 
 sub check_set_new_podcast_item_ready_status() {
-	my $redis    = open_connection();     #connect to local redis
+	my $redis    = open_connection();              #connect to local redis
 	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
 
 	close_connection();
@@ -800,7 +914,7 @@ sub check_set_new_podcast_item_ready_status() {
 }
 
 sub check_get_new_podcast_item_ready_status() {
-	my $redis    = open_connection();     #connect to local redis
+	my $redis    = open_connection();              #connect to local redis
 	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
 
 	close_connection();
@@ -808,7 +922,7 @@ sub check_get_new_podcast_item_ready_status() {
 }
 
 sub check_add_pod_file_path_lable_to_podcast() {
-	my $redis    = open_connection();     #connect to local redis
+	my $redis    = open_connection();              #connect to local redis
 	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
 
 	close_connection();
@@ -816,7 +930,7 @@ sub check_add_pod_file_path_lable_to_podcast() {
 }
 
 sub check_get_user_podcast_files_paths() {
-	my $redis    = open_connection();     #connect to local redis
+	my $redis    = open_connection();              #connect to local redis
 	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
 
 	close_connection();
@@ -824,7 +938,7 @@ sub check_get_user_podcast_files_paths() {
 }
 
 sub check_get_user_podcast_files_lables() {
-	my $redis    = open_connection();     #connect to local redis
+	my $redis    = open_connection();              #connect to local redis
 	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
 
 	close_connection();
@@ -832,7 +946,7 @@ sub check_get_user_podcast_files_lables() {
 }
 
 sub check_get_amount_of_user_podcast_files() {
-	my $redis    = open_connection();     #connect to local redis
+	my $redis    = open_connection();              #connect to local redis
 	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
 
 	close_connection();
@@ -840,7 +954,7 @@ sub check_get_amount_of_user_podcast_files() {
 }
 
 sub check_del_and_get_old_podcasts_from_podlist() {
-	my $redis    = open_connection();     #connect to local redis
+	my $redis    = open_connection();              #connect to local redis
 	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
 
 	close_connection();
@@ -848,7 +962,7 @@ sub check_del_and_get_old_podcasts_from_podlist() {
 }
 
 sub check_get_podcast_last_check_time() {
-	my $redis    = open_connection();     #connect to local redis
+	my $redis    = open_connection();              #connect to local redis
 	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
 
 	close_connection();
@@ -856,7 +970,7 @@ sub check_get_podcast_last_check_time() {
 }
 
 sub check_set_podcast_last_check_time() {
-	my $redis    = open_connection();     #connect to local redis
+	my $redis    = open_connection();              #connect to local redis
 	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
 
 	close_connection();
@@ -864,7 +978,7 @@ sub check_set_podcast_last_check_time() {
 }
 
 sub check_get_users_feeds_new_items() {
-	my $redis    = open_connection();     #connect to local redis
+	my $redis    = open_connection();              #connect to local redis
 	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
 
 	close_connection();
@@ -872,7 +986,7 @@ sub check_get_users_feeds_new_items() {
 }
 
 sub check_set_feed_title() {
-	my $redis    = open_connection();     #connect to local redis
+	my $redis    = open_connection();              #connect to local redis
 	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
 
 	close_connection();
@@ -880,7 +994,7 @@ sub check_set_feed_title() {
 }
 
 sub check_is_feed_with_this_url_exists() {
-	my $redis    = open_connection();     #connect to local redis
+	my $redis    = open_connection();              #connect to local redis
 	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
 
 	close_connection();
@@ -888,7 +1002,7 @@ sub check_is_feed_with_this_url_exists() {
 }
 
 sub check_set_user_feed_last_checked_item_num() {
-	my $redis    = open_connection();     #connect to local redis
+	my $redis    = open_connection();              #connect to local redis
 	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
 
 	close_connection();
@@ -896,7 +1010,7 @@ sub check_set_user_feed_last_checked_item_num() {
 }
 
 sub check_add_feed_id_to_user_podcast() {
-	my $redis    = open_connection();     #connect to local redis
+	my $redis    = open_connection();              #connect to local redis
 	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
 
 	close_connection();
@@ -904,7 +1018,7 @@ sub check_add_feed_id_to_user_podcast() {
 }
 
 sub check_del_user_feed() {
-	my $redis    = open_connection();     #connect to local redis
+	my $redis    = open_connection();              #connect to local redis
 	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
 
 	close_connection();
@@ -912,7 +1026,7 @@ sub check_del_user_feed() {
 }
 
 sub check_del_feed_id_from_user_podcast() {
-	my $redis    = open_connection();     #connect to local redis
+	my $redis    = open_connection();              #connect to local redis
 	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
 
 	close_connection();
