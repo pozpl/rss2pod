@@ -67,7 +67,8 @@ sub _create_test_feed($) {
 	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
 
 	$db_redis->del_feed($feed_url);    #delete all feed related information
-	$db_redis->create_feed_for_url($feed_url);
+	my $feed_id = $db_redis->create_feed_for_url($feed_url);
+	return $feed_id;
 }
 
 ############################################
@@ -741,7 +742,7 @@ sub check_add_feed_id_to_user_feeds() {
 	$db_redis->add_feed_id_to_user_feeds( $TEST_USER, $feed_id );
 
 	#CHECK
-	my @user_feeds_ids = $dv_redis->get_user_podcast_feeds_ids();
+	my @user_feeds_ids = $dv_redis->get_user_feeds_ids($TEST_USER);
 	my %user_feed_ids_hash;
 	@user_feed_ids_hash{@user_feeds_ids} = ();
 	my $all_ok = exists $user_feed_ids_hash{$feed_id} ? 1 : 0;
@@ -854,13 +855,7 @@ sub check_get_user_podcasts_titles() {
 	$all_ok = 1;
 	keys %pod_id_lable_hash;    #RESET HASH ITERATOR,
 	for my  $pod_lable (values %pod_id_lable_hash)  {
-###################################################################################
-#				HERE I WANT TO CONTINUE NEXT
-###################################################################################		
-		my $elem_ok =  ( !exists $user_podcasts_titles_hash{$pod_lable} )  ? 0
-		  : !($user_podcast_id_lable_hash{$pod_} eq $pod_lable_orig)   ? 0
-		  : 														     1;
-		if(!$elem_ok){
+		if(! exists $user_podcasts_titels_hash{$pod_lable}){
 			$all_ok = 0;
 		}
 	}
@@ -876,15 +871,80 @@ sub check_get_user_podcasts_titles() {
 sub check_get_user_podcast_feeds_ids() {
 	my $redis    = open_connection();              #connect to local redis
 	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
+	
+	#PREPARE
+	$db_redis->add_new_user( $TEST_USER, $TEST_USER_PASSWORD,
+		$TEST_USER_EMAIL );
+		
+	my $podcast_label = "Some test podcast";
+	my $podcast_id = $db_redis->add_user_podcast( $TEST_USER, $podcast_label );
+	
+	my @feed_ids_orig;	
+	for my $feed_id (1..4){		 
+		$db_redis->add_feed_id_to_user_podcast( $TEST_USER, $podcast_id, $feed_id );
+		push @feed_ids_orig , $feed_id;	
+	}
+	
+	#EXECUTE
+    my @user_feeds_ids = $dv_redis->get_user_podcast_feeds_ids($TEST_USER, $podcast_id);
 
+	#CHECK	
+	my %user_feed_ids_hash;
+	@user_feed_ids_hash{@user_feeds_ids} = ();
+	my $all_ok = 1;
+	for my $feed_id (@feed_ids_orig){
+		if(!exists $user_feed_ids_hash{$feed_id}){
+			$all_ok = 0;
+		}	
+	}
+	
+
+	#CLEAN ENVIRONMENT
+	$db_redis->delete_user($TEST_USER);
 	close_connection();
-	return $all_ok;
+	return $all_ok;	
 }
 
-sub check_get_user_podcast_feeds_id_title_map() {
+sub check_get_feeds_id_title_map() {
 	my $redis    = open_connection();              #connect to local redis
 	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
+	
+	#PREPARE
+	my @urls_list = (
+		'http://url1.io', 'http://url2.io',
+		'http://url3.io', 'http://url4.io',
+		'http://url4.io',
+	);
 
+	my %id_feed_title_map_orig;
+	my @feeds_ids;
+	for my $single_url (@urls_list) {
+		my $feet_id = _create_feed($single_url);
+		$db_redis->set_feed_title($single_url);
+		$id_feed_title_map_orig{$feed_id} = $single_url;
+		push @feeds_ids, $feed_id;	
+	}
+
+	#EXECUTE
+	my %feeds_id_title_map = $db_redis->get_feeds_id_title_map(\@feeds_ids);
+	    
+	#CHECK	
+	my $all_ok = 1;
+	for my $feed_id (@feeds_ids){
+		$feed_ok = (! exists $feeds_id_title_map{$feed_id})                                ? 0
+		           : !($feeds_id_title_map{$feed_id} eq $id_feed_title_map_orig{$feed_id}) ? 0
+		           :                                                                         1;
+		if(! $feed_ok ){
+			$all_ok = 0;
+		}           
+	}
+
+	#CLEAN ENVIRONMENT
+	for my $single_url (@urls_list) {
+		 _delete_test_feed($single_url);			
+	}
+	
+	
 	close_connection();
 	return $all_ok;
 }
@@ -892,7 +952,34 @@ sub check_get_user_podcast_feeds_id_title_map() {
 sub check_get_user_feeds_ids() {
 	my $redis    = open_connection();              #connect to local redis
 	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
+	
+	#PREPARE
+	$db_redis->add_new_user( $TEST_USER, $TEST_USER_PASSWORD,
+		$TEST_USER_EMAIL );
+	my @feed_ids_orig;	
+	for my $feed_id (1..4){		 
+		$db_redis->add_feed_id_to_user_feeds( $TEST_USER, $feed_id );
+		push @feed_ids_orig , $feed_id;	
+	}
+	
+	#EXECUTE
+    my @user_feeds_ids = $dv_redis->get_user_feeds_ids($TEST_USER);
 
+	#CHECK	
+	my %user_feed_ids_hash;
+	@user_feed_ids_hash{@user_feeds_ids} = ();
+	my $all_ok = 1;
+	for my $feed_id (@feed_ids_orig){
+		if(!exists $user_feed_ids_hash{$feed_id}){
+			$all_ok = 0;
+		}	
+	}
+	
+
+	#CLEAN ENVIRONMENT
+	$db_redis->delete_user($TEST_USER);
+	
+	
 	close_connection();
 	return $all_ok;
 }

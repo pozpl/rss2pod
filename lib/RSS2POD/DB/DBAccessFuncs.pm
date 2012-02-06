@@ -20,6 +20,7 @@ requires (
 	'del_and_get_old_items_from_feed',#trim feed items list, and get all trimmed entities
 	'del_feed', #delete feed from database, it support even URL or feed ID
 	'set_feed_title', #set title for the feed with given id
+	'get_feeds_id_title_map', #get hash pod_feed{id} = feed_title
 	#'add_new_feed', #add feed url, title
 	'is_feed_with_this_url_exists', #check feed for url
 	
@@ -54,8 +55,7 @@ requires (
 	'get_user_podcasts_ids', #get list of all user podcasts
 	'get_user_podcasts_id_title_map', #get hash podcsast{id} = poscast_title
 	'get_user_podcasts_titles', #get list of podcast titles
-	'get_user_podcast_feeds_ids', #get all feeds that contained in the podcast
-	'get_user_podcast_feeds_id_title_map', #get hash pod_feed{id} = feed_title
+	'get_user_podcast_feeds_ids', #get all feeds that contained in the podcast	
 	'get_user_feeds_ids', #get user feeds ids
 	
 	
