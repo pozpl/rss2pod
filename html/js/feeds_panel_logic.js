@@ -158,13 +158,15 @@ function FeedPanel(){
             //console.log("FeedIndx " + feedIndx + " evtid " + evt.currentTarget);
             feedsPanObj.delFeedFromList(feedIndx);
         });
-        
+        /* TEMPRORARY DELETE THIS EVENT FROM PRODUCTION
+         * this code show read button but this function is still in development         
         dojo.query("[id^='fname_']").connect("onclick", function(evt){
             var feedIndx = evt.currentTarget.id.substring("fname_".length, evt.currentTarget.id.length);
             console.log("FeedIndx " + feedIndx + " evtid " + evt.currentTarget);
             var feedToManageNodeId = "fmanage_" + feedIndx;
             feedsPanObj.unfoldFeedManagEls(feedToManageNodeId, feedIndx);
         });
+        */
     };
     
     
@@ -182,7 +184,7 @@ function FeedPanel(){
             }
             feedsPanObj.lastUnfolded = feedIndx;
             var button = new dijit.form.Button({
-                label: "Читать RSS канал",
+                label: "Read RSS cahnnel",
                 onClick: function(){
                     //var rssReaderObj = new RssReaderPanel();
                     feedsPanObj.rssReaderObj.showRssReadWindow(feedId);
