@@ -1,4 +1,4 @@
-This is INSTALL file for RSS2POD product.
+﻿This is INSTALL file for RSS2POD.
 ==================
 REQUIREMENTS.
 ==================
@@ -17,22 +17,20 @@ enough time to deal with it, be patient.
 ------------------------
 Non Perl requirements.
 ------------------------
+Linux – the only operation system on which I try this product.
 Redis - NoSQL database server.
-gd - library to deal with graphic
-lame - library and stand alone application for mp3 encoding
-festival - text to speech engine
+gd - library to deal with graphics.
+lame - library and standalone application for mp3 encoding.
+festival - text to speech engine.
 festival voices - voices for festival to work (rss2pod now support only English and Russian)
 cut - terminal command :)
 -----------------------
 CPAN requirements
 -----------------------
-In ideal world this requirements would be downloaded automatically.
+In ideal world these requirements would be downloaded automatically.
 The process of installation would be described below.
-For installation itself, we need App::Build packet if we would install rss2pod 
-with root credentials. We will provide this module within core installation archive,
-but if you can install it yourself it would lead to less work during the installation process.
-For installation without root credentials again you wold need nothing, but it
-if you wold install Carton module it would save your time.
+For installation itself, we need App::Build packet if we would install rss2pod with root credentials. 
+We will provide this module within core installation archive, but if you can install it yourself it would lead to less work during the installation process. For installation without root credentials again you wold need nothing, but it if you wold install Carton module it would save your time.
 
 ===========================
 INSTALLATION PROCESS
@@ -45,8 +43,7 @@ cd ./rss2pod
 INSTALLING SYSTEM WIDE
 ---------------------------------
 (This part now is deprecated, so go to the next section)
-This part of the installation process requires root privileges, if you do not 
-have ones go to the next section, where standalone installation would be described.
+This part of the installation process requires root privileges, if you do not have it go to the next section, where standalone installation would be described.
 If you do not have App::Builder installed  on the your machine, than edit 
 Build.PL and add this line 
 use lib qw(/path/to/rss2pod/folder/local/lib/perl5); #$path_to_this_folder + /local/lib/perl5
@@ -62,9 +59,50 @@ This will create Build script. Run it
 STANDALONE INSTALLATION
 ---------------------------------------
 Standalone installation will be performed by means of the Carton tool.
-This meant that all necessary modules would be stored in project folder within 
-local directory.
+This meant that all necessary modules would be stored in project folder within local directory.
 
-NOTE!!! In current state installation process is very raw, and need some axiomatization.
-So this section will be accomplished when I will implement script for automatic install.
+For the beginning let as choose a directory for rss2pod. Something like /var/ww/rss2pod will suffice. Put all files into this directory. Go there and run install_dep_carton.pl script. This script will automatically install all CPAN in ./local folder by means of Carton.
+
+cd /var/www/rss2pod/
+perl ./install_dep_carton.pl
+---------------------------
+OS Specific steps
+-----------------------------
+The next step is to put start scripts for rss2pod daemons into /etc/init.d/ directory
+
+cp ./misc/rss2pod_start_script /etc/init.d/rss2pod
+
+Then put start script conf file into /etc/conf.d directory
+
+cp ./misc/rss2pod_conf /etc/conf.d/rss2pod
+
+Edit /etc/conf.d/rss2pod file
+
+RSS2POD_HOME="/var/www/rss2pod"
+RSS2POD_LOCAL_LIB="/var/www/rss2pod/local/lib/perl5"
+RSS2POD_LOCAL_ARCH_SPECIFIC_LIB="/var/www/rss2pod/local/lib/perl5/x86_64-linux-thread-debug-multi"
+
+The last part  of path (x86_64-linux-thread-debug-multi) is depends on you perl installation and can be gained via perl -v command.
+
+Install festival server run script. Since version of 1.9 in Gentoo and some other distros festival is shipped without server mode. To fix this copy start script for festival into /etc/init.d/ directory and server.scm into /etc/festival directory. 
+This files can be found in ./misc/festival  directory. 
+
+----------------------------------
+APACHE  MOD_PERL configuration.
+----------------------------------
+
+
+ <Perl>
+      $ENV{APP_HOME} = '/var/www/rss2pod/html';
+</Perl>
+PerlRequire /var/www/rss2pod/misc/add_lib_path.pl
+Alias /rss2pod  /var/www/rss2pod/html/
+<Location /rss2pod>
+           DirectoryIndex index.cgi
+           AddHandler perl-script .cgi
+           PerlResponseHandler ModPerl::Registry
+           PerlOptions +ParseHeaders
+           Options +ExecCGI
+           allow from all
+</Location>
 
