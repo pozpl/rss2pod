@@ -181,13 +181,9 @@ function SinglePodPanel(){
             timeout: 15000, // Time in milliseconds
             // The LOAD function will be called on a successful response.
             load: function(response, ioArgs){
-                //alert(dojo.toJson(userProfileHandl));
                 dojo.mixin(userProfileHandl, response);
-                //alert(dojo.toJson(userProfileHandl));
-                //alert("get update call show");            
                 podPanelObj.showUserPodcasts();
                 
-                alert("jast before the show ");
                 singlePodPanObj.showSinglePodData(userProfileHandl.pod_info['first_pod_id']);
                 
                 return response;
