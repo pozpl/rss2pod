@@ -1,13 +1,23 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html lang="en">
 	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<title>RSS2POD</title>
-		<style type="text/css">
-			@import "css/style.css";
-		</style>
+		<meta charset="utf-8">
+		<title>RSS2POD title</title>
+		<meta name="description" content="rss2pod index page">
+		<meta name="author" content="pozpl">
+		<!--[if lt IE 9]>
+		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+		<!-- Le styles -->
+		<link href="./css/style.css" rel="stylesheet">
+		<link href="./css/bootstrap/css/bootstrap.css" rel="stylesheet">
+		<!--<style>
+		body {
+		padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+		}
+		</style>-->
+		<link href="./css/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
 		<link rel="icon" type="image/png" href="images/favicon.png">
-		<!--TMPL_IF NAME="APP_PAGE"--><!--TMPL_INCLUDE NAME="script_load_rss2pod.tmpl.html"--><!--/TMPL_IF--><!--TMPL_IF NAME="INDEX_PAGE"--><!--TMPL_INCLUDE NAME="script_load_index.tmpl.html"--><!--/TMPL_IF--><!--TMPL_IF NAME="AUTH_PAGE"--><!--TMPL_INCLUDE NAME="script_load_auth.tmpl.html"--><!--/TMPL_IF-->
 		<script type="text/javascript">
 			var _gaq = _gaq || [];
 			_gaq.push(['_setAccount', 'UA-21948074-2']);
@@ -21,75 +31,98 @@
 			})();
 
 		</script>
+		<!--TMPL_IF NAME="APP_PAGE"-->
+		   <!--TMPL_INCLUDE NAME="script_load_rss2pod.tmpl.html"-->
+		<!--/TMPL_IF-->
+		<!--TMPL_IF NAME="INDEX_PAGE"-->
+		   <!--TMPL_INCLUDE NAME="script_load_index.tmpl.html"-->
+		<!--/TMPL_IF-->
+		<!--TMPL_IF NAME="AUTH_PAGE"-->
+		   <!--TMPL_INCLUDE NAME="script_load_auth.tmpl.html"-->
+		<!--/TMPL_IF-->
 	</head>
 	<body class="tundra">
-		<div id="container">
-			<div id="header">
-				<div id="header_logo">
-					<div id="logo_image">
-						<h1><a href="./index.cgi"><img src="images/logo.png" alt="RSS2POD" width="140" /></a></h1>
-					</div>
-					<div id="fork_me" align="left">
-						<p id="fork_me_figure"><a href="https://github.com/pozpl/rss2pod"><img src="images/ForkMe_Blk.png" alt="FORKME" width="140"/>
-						</p>
-					</div>
+		<div id="header">
+			<div id="header_logo">
+				<div id="logo_image">
+					<h1><a href="./index.cgi"><img src="images/logo.png" alt="RSS2POD" width="140" /></a></h1>
 				</div>
-				<div align="center" class="navbar">
-					<ul class="hr">
-						<!--TMPL_UNLESS NAME="INDEX_PAGE"-->
-						<li>
-							<a href="./index.cgi">HOME</a>
-						</li>
-						<!--/TMPL_UNLESS-->
-						<!--TMPL_IF NAME="APP_PAGE"-->
-						<li>
-							<a href="./index.cgi">HELP</a>
-						</li>
-						<li>
-							<a href="./selfservice.cgi">SELF SERVICE</a>
-						</li>
-						<li>
-							<a href="./run_auth.cgi?rm=logout">EXIT</a>
-						</li>
-						<!--TMPL_ELSE-->
-						<li>
-							<a href="./podmanager.cgi">START RSS => PODCAST </a>
-						</li>
-						<li>
-							<a href="./index.cgi">HELP</a>
-						</li>
-						<!--/TMPL_IF-->
-					</ul>
+				<div id="fork_me" align="left">
+					<p id="fork_me_figure">
+						<a href="https://github.com/pozpl/rss2pod"><img src="images/ForkMe_Blk.png" alt="FORKME" width="140"/>
+					</p>
 				</div>
 			</div>
-			<div id="content_area">
-				<!--TMPL_IF NAME="APP_PAGE"-->
-				<!--TMPL_INCLUDE NAME="rss2pod.tmpl.html"-->
-				<!--/TMPL_IF-->
-				<!--TMPL_IF NAME="AUTH_PAGE"-->
-				<!--TMPL_INCLUDE NAME="auth.tmpl.html"-->
-				<!--/TMPL_IF-->
-				<!--TMPL_IF NAME="SELFSERVICE_PAGE"-->
-				<!--TMPL_INCLUDE NAME="selfservice.tmpl.html"-->
-				<!--/TMPL_IF-->
+			<div class="navbar">
+				<div class="navbar-inner">
+					<div class="container">
+						<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </a>
+						<a class="brand" href="./index.cgi">RSS2POD</a>
+						<div class="nav-collapse">
+							<ul class="nav">
+								<!--TMPL_IF NAME="INDEX_PAGE"-->
+								<li class="active">
+									<a href="./index.cgi">Home</a>
+								</li>
+								<!--TMPL_ELSE-->
+								<li>
+									<a href="./index.cgi">Home</a>
+								</li>
+								<!--/TMPL_IF-->
+								<!--TMPL_IF NAME="APP_PAGE"-->
+								<li>
+									<a href="./index.cgi">Help</a>
+								</li>
+								<li class="active">
+									<a href="./selfservice.cgi">Self Service</a>
+								</li>
+								<li>
+									<a href="./run_auth.cgi?rm=logout">Exit</a>
+								</li>
+								<!--TMPL_ELSE-->
+								<li>
+									<a href="./podmanager.cgi">START</a>
+								</li>
+								<li>
+									<a href="./index.cgi">Help</a>
+								</li>
+								<!--/TMPL_IF-->
+							</ul>
+						</div><!--/.nav-collapse -->
+					</div>
+				</div>
+			</div>
+			<div class="container">
+				<div id="content_area">
+					<!--TMPL_IF NAME="APP_PAGE"-->
+					<!--TMPL_INCLUDE NAME="rss2pod.tmpl.html"-->
+					<!--/TMPL_IF-->
+					<!--TMPL_IF NAME="AUTH_PAGE"-->
+					<!--TMPL_INCLUDE NAME="auth.tmpl.html"-->
+					<!--/TMPL_IF-->
+					<!--TMPL_IF NAME="SELFSERVICE_PAGE"-->
+					<!--TMPL_INCLUDE NAME="selfservice.tmpl.html"-->
+					<!--/TMPL_IF-->
+					<!--TMPL_IF NAME="INDEX_PAGE"-->
+					<div id="info_frame">
+						<div id="sidebar">
+							<!--TMPL_INCLUDE NAME="index_sidebar_content.tmpl.html"-->
+						</div>
+						<div id="content">
+							<!--TMPL_INCLUDE NAME="index_main_content.tmpl.html"-->
+						</div>
+					</div>
+					<!--/TMPL_IF-->
+				</div>
 				<!--TMPL_IF NAME="INDEX_PAGE"-->
-				<div id="info_frame">
-					<div id="sidebar">
-						<!--TMPL_INCLUDE NAME="index_sidebar_content.tmpl.html"-->
-					</div>
-					<div id="content">
-						<!--TMPL_INCLUDE NAME="index_main_content.tmpl.html"-->
+				<div id="footer">
+					<div id="footer_content">
+						&copy; pozpl
 					</div>
 				</div>
 				<!--/TMPL_IF-->
-			</div>
-			<!--TMPL_IF NAME="INDEX_PAGE"-->
-			<div id="footer">
-				<div id="footer_content">
-					&copy; pozpl
-				</div>
-			</div>
-			<!--/TMPL_IF-->
+			</div><!--content area-->
 		</div>
+		<!-- /container -->
 	</body>
 </html>
