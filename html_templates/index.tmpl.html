@@ -29,16 +29,16 @@
 				var s = document.getElementsByTagName('script')[0];
 				s.parentNode.insertBefore(ga, s);
 			})();
- 
+
 		</script>
 		<!--TMPL_IF NAME="APP_PAGE"-->
-		   <!--TMPL_INCLUDE NAME="script_load_rss2pod.tmpl.html"-->
+		<!--TMPL_INCLUDE NAME="script_load_rss2pod.tmpl.html"-->
 		<!--/TMPL_IF-->
 		<!--TMPL_IF NAME="INDEX_PAGE"-->
-		   <!--TMPL_INCLUDE NAME="script_load_index.tmpl.html"-->
+		<!--TMPL_INCLUDE NAME="script_load_index.tmpl.html"-->
 		<!--/TMPL_IF-->
 		<!--TMPL_IF NAME="AUTH_PAGE"-->
-		   <!--TMPL_INCLUDE NAME="script_load_auth.tmpl.html"-->
+		<!--TMPL_INCLUDE NAME="script_load_auth.tmpl.html"-->
 		<!--/TMPL_IF-->
 	</head>
 	<body class="tundra">
@@ -53,76 +53,81 @@
 					</p>
 				</div>
 			</div>
-			<div class="navbar">
-				<div class="navbar-inner">
-					<div class="container">
-						<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </a>
-						<a class="brand" href="./index.cgi">RSS2POD</a>
-						<div class="nav-collapse">
-							<ul class="nav">
-								<!--TMPL_IF NAME="INDEX_PAGE"-->
-								<li class="active">
-									<a href="./index.cgi">Home</a>
-								</li>
-								<!--TMPL_ELSE-->
-								<li>
-									<a href="./index.cgi">Home</a>
-								</li>
-								<!--/TMPL_IF-->
-								<!--TMPL_IF NAME="APP_PAGE"-->
-								<li>
-									<a href="./index.cgi">Help</a>
-								</li>
-								<li class="active">
-									<a href="./selfservice.cgi">Self Service</a>
-								</li>
-								<li>
-									<a href="./run_auth.cgi?rm=logout">Exit</a>
-								</li>
-								<!--TMPL_ELSE-->
-								<li>
-									<a href="./podmanager.cgi">START</a>
-								</li>
-								<li>
-									<a href="./index.cgi">Help</a>
-								</li>
-								<!--/TMPL_IF-->
-							</ul>
-						</div><!--/.nav-collapse -->
-					</div>
+		</div>
+		<div class="navbar">
+			<div class="navbar-inner">
+				<div class="container">
+					<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </a>
+					<a class="brand" href="./index.cgi">RSS2POD</a>
+					<div class="nav-collapse">
+						<ul class="nav">
+							<!--TMPL_IF NAME="INDEX_PAGE"-->
+							<li class="active">
+								<a href="./index.cgi">Home</a>
+							</li>
+							<!--TMPL_ELSE-->
+							<li>
+								<a href="./index.cgi">Home</a>
+							</li>
+							<!--/TMPL_IF-->
+							<!--TMPL_IF NAME="APP_PAGE"-->
+							<li>
+								<a href="./index.cgi">Help</a>
+							</li>
+							<li class="active">
+								<a href="./selfservice.cgi">Self Service</a>
+							</li>
+							<li>
+								<a href="./run_auth.cgi?rm=logout">Exit</a>
+							</li>
+							<!--TMPL_ELSE-->
+							<li>
+								<a href="./podmanager.cgi">START</a>
+							</li>
+							<li>
+								<a href="./index.cgi">Help</a>
+							</li>
+							<!--/TMPL_IF-->
+						</ul>
+					</div><!--/.nav-collapse -->
 				</div>
 			</div>
-			<div class="container">
-				<div id="content_area">
-					<!--TMPL_IF NAME="APP_PAGE"-->
-					<!--TMPL_INCLUDE NAME="rss2pod.tmpl.html"-->
-					<!--/TMPL_IF-->
-					<!--TMPL_IF NAME="AUTH_PAGE"-->
-					<!--TMPL_INCLUDE NAME="auth.tmpl.html"-->
-					<!--/TMPL_IF-->
-					<!--TMPL_IF NAME="SELFSERVICE_PAGE"-->
-					<!--TMPL_INCLUDE NAME="selfservice.tmpl.html"-->
-					<!--/TMPL_IF-->
-					<!--TMPL_IF NAME="INDEX_PAGE"-->
-					<div id="info_frame">
-						<div id="sidebar">
-							<!--TMPL_INCLUDE NAME="index_sidebar_content.tmpl.html"-->
-						</div>
-						<div id="content">
-							<!--TMPL_INCLUDE NAME="index_main_content.tmpl.html"-->
-						</div>
-					</div>
-					<!--/TMPL_IF-->
-				</div>
+		</div>
+		
+		<!--TMPL_IF NAME="APP_PAGE"-->
+		<div id="container">
+			<div id="content_area">
+				<!--TMPL_INCLUDE NAME="rss2pod.tmpl.html"-->
+		    </div>
+		</div>	
+		<!--TMPL_ELSE-->
+		<div class="container">
+			<div id="content_area">				
+				<!--TMPL_IF NAME="AUTH_PAGE"-->
+				    <!--TMPL_INCLUDE NAME="auth.tmpl.html"-->
+				<!--/TMPL_IF-->
+				<!--TMPL_IF NAME="SELFSERVICE_PAGE"-->
+				    <!--TMPL_INCLUDE NAME="selfservice.tmpl.html"-->
+				<!--/TMPL_IF-->
 				<!--TMPL_IF NAME="INDEX_PAGE"-->
-				<div id="footer">
-					<div id="footer_content">
-						&copy; pozpl
+				<div id="info_frame">
+					<div id="sidebar">
+						<!--TMPL_INCLUDE NAME="index_sidebar_content.tmpl.html"-->
+					</div>
+					<div id="content">
+						<!--TMPL_INCLUDE NAME="index_main_content.tmpl.html"-->
 					</div>
 				</div>
 				<!--/TMPL_IF-->
+				
+				
 			</div><!--content area-->
+		</div><!-- /container -->
+		<!--/TMPL_IF-->
+		<div id="footer">
+			<div id="footer_content">
+				&copy; pozpl
+			</div>
 		</div>
-		<!-- /container -->
 	</body>
 </html>
