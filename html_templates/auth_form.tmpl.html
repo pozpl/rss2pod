@@ -1,35 +1,52 @@
-<form name="loginform" method="post" action="./run_auth.cgi">
-    <div class="login">
-        <div class="login_header">
-            ENTER
-        </div>
-        <div class="login_content">
-            <ul class="message">
-                <li>
-                    Type your login and password please
-                </li>
-            </ul>
-            <fieldset>
-                <label for="authen_username">
-                    Login
-                </label>
-                <input id="authen_loginfield" tabindex="1" type="text" name="authen_username" size="20" value="" />
-                <br/>
-                <label for="authen_password">
-                    Password
-                </label>
-                <input id="authen_passwordfield" tabindex="2" type="password" name="authen_password" size="20" />
-                <br/>
-                <input id="authen_rememberuserfield" tabindex="3" type="checkbox" name="authen_rememberuser" value="1" />Remember Me
-                <br/>
-                </br/>
-            </fieldset>
-        </div>
-        <div class="login_footer">
-            <div class="buttons">
-                <input id="authen_loginbutton" tabindex="4" type="submit" name="authen_loginbutton" value="Login" class="button" /><a href="run_auth.cgi?rm=start_reg" id="authen_registerlink" tabindex="5">Register now!</a>
-            </div>
-        </div>
-    </div>
-    <input type="hidden" name="destination" value="./run_auth.cgi" /><input type="hidden" name="rm" value="start" />
+<!--<form name="loginform" method="post" action="./run_auth.cgi">
+	<div class="login">
+		<div class="login_header">
+			ENTER
+		</div>
+		<div class="login_content">
+			<ul class="message">
+				<li>
+					Type your login and password please
+				</li>
+			</ul>
+			<fieldset>
+				<label for="authen_username"> Login </label>
+				<input id="authen_loginfield" tabindex="1" type="text" name="authen_username" size="20" value="" />
+				<br/>
+				<label for="authen_password"> Password </label>
+				<input id="authen_passwordfield" tabindex="2" type="password" name="authen_password" size="20" />
+				<br/>
+				<input id="authen_rememberuserfield" tabindex="3" type="checkbox" name="authen_rememberuser" value="1" />
+				Remember Me
+				<br/>
+				</br/>
+			</fieldset>
+		</div>
+		<div class="login_footer">
+			<div class="buttons">
+				<input id="authen_loginbutton" tabindex="4" type="submit" name="authen_loginbutton" value="Login" class="button" />
+				<a href="run_auth.cgi?rm=start_reg" id="authen_registerlink" tabindex="5">Register now!</a>
+			</div>
+		</div>
+	</div>
+	<input type="hidden" name="destination" value="./run_auth.cgi" />
+	<input type="hidden" name="rm" value="start" />
+</form>
+-->
+
+<form class="well span3 offset4" method="post" action="./run_auth.cgi">
+	<label>ENTER</label>
+	<input class="span3" type="text" placeholder="login"  id="authen_loginfield"  name="authen_username">
+	<br />
+	<input class="span3" type="password" placeholder="password" id="authen_passwordfield" name="authen_password" >
+	<label class="checkbox">
+		<input type="checkbox" id="authen_rememberuserfield" name="authen_rememberuser">
+		Remember me</label>
+	<button class="btn" type="submit">
+		Login
+	</button>
+	
+	<br/>
+	<a href="run_auth.cgi?rm=start_reg" id="authen_registerlink" class="offset1">Register now!</a>
+	
 </form>
