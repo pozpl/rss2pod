@@ -95,7 +95,10 @@ function PodPanel(singlePodPan){
         dojo.empty("podcastsListPane");
         podPanObj.podNames = new Array();
         var userProfileHandl = this.userProfileHandl;
-        var podItemTmplCont = dojo.cache("", "../templates/pod_item.html");
+        var podItemTmplCont;
+        require("dojo/text", function(){
+  			podItemTmplCont = dojo.cache(new dojo._Url("../templates/pod_item.html"));
+		});
         var template = new dojox.dtl.Template(podItemTmplCont);
         dojo.forEach(userProfileHandl.pod_list, function(podcast_id, i){
             var spodBackColor = "white";

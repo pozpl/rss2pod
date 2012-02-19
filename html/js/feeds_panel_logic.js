@@ -91,7 +91,14 @@ function FeedPanel(){
     }
     
     this.showUserFeeds = function(){
-        var feedItemTmplCont = dojo.cache("", "../templates/feed_item.html");
+        //var feedItemTmplCont = dojo.cache("", "../templates/feed_item.html");
+        var feedItemTmplCont;
+        require("dojo/text", function(){
+  			feedItemTmplCont = dojo.cache(new dojo._Url("./templates/feed_item.html"), {sanitize: true});
+  			alert(feedItemTmplCont);
+		});
+		//alert(feedItemTmplCont);
+        
         var template = new dojox.dtl.Template(feedItemTmplCont);
         var feedsPanObj = this;
         var userProfileHandl = this.userProfileHandl;
@@ -227,12 +234,17 @@ function FeedPanel(){
                 else {
                     //fire dialog that we cant do somthing
                     if (response == "url_is_not_available") {
+                        var feedNotFoundDial = dijit.byId("addFeedDialog");
+                		if (feedNotFoundDial) {
+                    		feedNotFoundDial.show();
+                		}
+                        /*
                         var feedNotFoundDial = new dijit.Dialog({
                             title: "Error during feed addition",
                             content: "Sorry, but we can not find RSS channel for this URL.",
                             style: "width: 300px"
                         });
-                        feedNotFoundDial.show();
+                        feedNotFoundDial.show();*/
                     }
                 }
                 return response;

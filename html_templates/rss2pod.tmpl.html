@@ -1,9 +1,9 @@
 <div id="JsUIConteiner" class="tundra" role="application">
-    <div dojoType="dijit.layout.BorderContainer" design="sidebar" gutters="true" liveSplitters="true" id="borderContainer" persist="true" >
+    <div data-dojo-type="dijit.layout.BorderContainer" data-dojo-props="design:'sidebar', gutters:true, liveSplitters:true" id="borderContainer" persist="true" >
         <!--<div id="readerZone">
         </div>-->
-        <div id="podcastsPane" dojoType="dijit.layout.ContentPane" splitter="true" region="left" style="width: 20%; overflow:auto;">
-            <!--<button dojoType=dijit.form.Button id="addPodcastButton" name="addPodcastButton">
+        <div id="podcastsPane" data-dojo-type="dijit.layout.ContentPane" data-dojo-props="splitter:true, region:'left', style:[width: '20%', overflow:auto]">
+            <!--<button data-dojo-type=dijit.form.Button id="addPodcastButton" name="addPodcastButton">
             ADD PODCAST
             </button>--><b>Your podcasts:</b>
             <div id="podcastsAddButton">
@@ -11,7 +11,7 @@
             <div id="podcastsListPane">
             </div>
         </div>
-        <div id="singlePodPane" dojoType="dijit.layout.ContentPane" splitter="true" region="center" style="overflow:auto;">
+        <div id="singlePodPane" data-dojo-type="dijit.layout.ContentPane" data-dojo-props="splitter:true, region:'center', style:[overflow:auto]">
             <b>Current podcast name: <span id="singlePodNameArea"></span></b>
             <div id="delPodcastButtonArea">
             </div>
@@ -25,7 +25,7 @@
             <div id="podRssList">
             </div>
         </div>
-        <div id="rssPane" dojoType="dijit.layout.ContentPane" splitter="true" region="right" style="width: 30%; overflow:auto;">
+        <div id="rssPane" data-dojo-type="dijit.layout.ContentPane" data-dojo-props="splitter:true, region:'right', style:[width: '30%', overflow:auto]">
             <b>Your RSS  channels:</b>
             <div id="addFeedButtonArea">
             </div>
@@ -36,7 +36,7 @@
         </div>
     </div>
     <br>
-    <div dojoType="dijit.Dialog" id="addPodcastDialog" title="Add podcast" execute="podPanelObj.addNewPodcast(arguments[0]);">
+    <div data-dojo-type="dijit.Dialog" id="addPodcastDialog" title="Add podcast" execute="podPanelObj.addNewPodcast(arguments[0]);">
         <table>
             <tr>
                 <td>
@@ -45,15 +45,15 @@
                     </label>
                 </td>
                 <td>
-                    <input id="podcast_name_input" type="text" name="podcast_name_input" dojoType="dijit.form.ValidationTextBox" required="true" invalidMessage="Please provide podcast name.">
+                    <input id="podcast_name_input" type="text" name="podcast_name_input" data-dojo-type="dijit.form.ValidationTextBox" required="true" invalidMessage="Please provide podcast name.">
                 </td>
             </tr>
             <tr>
                 <td colspan="2" align="center">
-                    <button dojoType=dijit.form.Button type="submit" onClick="return dijit.byId('addPodcastDialog').isValid();">
+                    <button data-dojo-type=dijit.form.Button type="submit" onClick="return dijit.byId('addPodcastDialog').isValid();">
                         Add podcast
                     </button>
-                    <button dojoType="dijit.form.Button" type="button" onClick="dijit.byId('addPodcastDialog').hide();">
+                    <button data-dojo-type="dijit.form.Button" type="button" onClick="dijit.byId('addPodcastDialog').hide();">
                         Cancel
                     </button>
                 </td>
@@ -61,7 +61,7 @@
         </table>
     </div>
     <!--ADD FEED DIALOG-->
-    <div dojoType="dijit.Dialog" id="addFeedDialog" title="Add RSS channel" execute="feedPanelObj.addNewFeed(arguments[0]);">
+    <div data-dojo-type="dijit.Dialog" id="addFeedDialog" title="Add RSS channel" execute="feedPanelObj.addNewFeed(arguments[0]);">
         <table>
             <tr>
                 <td>
@@ -70,20 +70,40 @@
                     </label>
                 </td>
                 <td>
-                    <!--<input id="feed_url" type="text" name="feed_url" dojoType="dijit.form.ValidationTextBox" required="true" invalidMessage="Please provide valid feed URL." regExpGen="dojox.validate.regexp.url">-->
-                    <input id="feed_url_input" type="text" name="feed_url_input" dojoType="dijit.form.ValidationTextBox" required="true">
+                    <!--<input id="feed_url" type="text" name="feed_url" data-dojo-type="dijit.form.ValidationTextBox" required="true" invalidMessage="Please provide valid feed URL." regExpGen="dojox.validate.regexp.url">-->
+                    <input id="feed_url_input" type="text" name="feed_url_input" data-dojo-type="dijit.form.ValidationTextBox" required="true">
                 </td>
             </tr>
             <tr>
                 <td colspan="2" align="center">
-                    <button dojoType=dijit.form.Button type="submit" onClick="return dijit.byId('addFeedDialog').isValid();">
+                    <button data-dojo-type=dijit.form.Button type="submit" onClick="return dijit.byId('addFeedDialog').isValid();">
                         Add RSS channel
                     </button>
-                    <button dojoType="dijit.form.Button" type="button" onClick="dijit.byId('addFeedDialog').hide();">
+                    <button data-dojo-type="dijit.form.Button" type="button" onClick="dijit.byId('addFeedDialog').hide();">
                         Cancel 
                     </button>
                 </td>
             </tr>
         </table>
     </div>
+    <!--DIALOG For the URL NOT Found -->
+    <div data-dojo-type="dijit.Dialog" id="urlNotFoundDialog" title="Error during feed addition">
+        <table>
+            <tr>
+                <td>
+                    <label for="desc">
+                        Sorry, but we can not find RSS channel for this URL.
+                    </label>
+                </td>                
+            </tr>
+            <tr>
+                <td colspan="2" align="center">                    
+                    <button data-dojo-type="dijit.form.Button" type="button" onClick="dijit.byId('urlNotFoundDialog').hide();">
+                        Cancel 
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </div>
+    
 </div>

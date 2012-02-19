@@ -119,7 +119,11 @@ function SinglePodPanel(){
         singlePod.innerHTML = userProfileHandl.pod_info[podId].name;
         
         //show rss list for this podcast
-        var feedItemTmplCont = dojo.cache("", "../templates/feed_item.html");
+        var feedItemTmplCont;
+        require("dojo/text", function(){
+  			feedItemTmplCont = dojo.cache(new dojo._Url("../templates/feed_item.html"));
+		});
+        
         var feedTemplate = new dojox.dtl.Template(feedItemTmplCont);
         dojo.empty("podRssList");
         var feedIdTitleMap = userProfileHandl.feeds_title_mapping;
@@ -152,8 +156,9 @@ function SinglePodPanel(){
             
         });
         //Update border container
-        dijit.byId("borderContainer").resize();
-        
+        require('dojo/dom', function(dom){
+        	dom.byId("borderContainer").resize();
+        });
         dojo.forEach(singlePod.feedsNodesConn, dojo.disconnect);
         
         singlePod.feedsNodesConn = dojo.query("[id^='singlePodDelFeed_']").connect("onclick", function(evt){
