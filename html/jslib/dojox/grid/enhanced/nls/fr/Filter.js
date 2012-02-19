@@ -1,1 +1,90 @@
-({"conditionBefore":"avant","filterBarDefButton":"Définir le filtre","filterBarMsgNoFilterTemplate":"Aucun filtre appliqué","conditionContains":"contient","clearFilterMsg":"Le filtre sera supprimé et tous les enregistrements disponibles affichés.","all":"tout","waiValueBoxTemplate":"Entrez une valeur pour filtrer la règle ${0}","conditionRange":"plage","waiCancelButton":"Annuler cette boîte de dialogue","relationAll":"toutes les règles","conditionLarger":"supérieur à","valueBoxLabel":"Valeur","statusTipMsg":"Cliquez sur cette barre de filtre pour filtrer les valeurs de ${0}.","waiRelAll":"Répondre à toutes les règles suivantes :","closeFilterBarBtn":"Fermer la barre de filtre","a11yFilterBarDefButton":"Filtrer...","trueLabel":"Vrai","conditionIsNot":"n'est pas","conditionIs":"est","ruleTitleTemplate":"Règle ${0}","waiRemoveRuleButtonTemplate":"Supprimer la règle ${0}","and":"et","conditionLess":"inférieur à","waiColumnSelectTemplate":"Colonne pour la règle ${0}","anycolumn":"toute colonne","filterDefDialogTitle":"Filtrer","waiConditionSelectTemplate":"Condition pour la règle ${0}","waiFilterButton":"Soumettre le filtre","statusTipTitle":"Barre de filtre","statusTipRelPre":"Correspondance","anyColumnOption":"Toute colonne","conditionSelectLabel":"Condition","cancelButton":"Annuler","conditionNotStartWith":"ne commence pas par","conditionEndWith":"se termine par","statusTipTitleNoFilter":"Barre de filtre","columnSelectLabel":"Colonne","conditionNotContain":"ne contient pas","clearButton":"Effacer","conditionLargerEqual":"supérieur ou égal à","any":"n'importe lequel","relationMsgFront":"Répondre à","statusTipHeaderColumn":"Colonne","defaultItemsName":"éléments","conditionEqual":"égal à","relationAny":"n'importe quelle règle","trueLabelEditable":"Vérifié","or":"ou","filterBarMsgHasFilterTemplate":"${0} sur ${1} ${2} montrés.","rangeTo":"à","conditionStartsWith":"commence par","waiRelAny":"Répondre à l'une des règles suivantes :","statusTipRelPost":"règles.","relationMsgTail":"","filterBarClearButton":"Effacer le filtre","incompleteRuleTip":"Cette règle n'est pas complète.","conditionLessEqual":"inférieur ou égal à","waiFilterBarClearButton":"Effacer le filtre","conditionAfter":"après","statusTipHeaderCondition":"Règles","falseLabel":"Faux","filterButton":"Filtrer","clearFilterDialogTitle":"Effacer le filtre","statusTipTitleHasFilter":"Filtrer","addRuleButton":"Ajouter une règle","waiAddRuleButton":"Ajouter une nouvelle règle","waiClearButton":"Effacer ce filtre","conditionNotEqual":"différent de","conditionNotEndWith":"ne se termine pas","rangeTemplate":"de ${0} à ${1}","removeRuleButton":"Supprimer une règle","waiFilterBarDefButton":"Filtrer la table","conditionIsEmpty":"is empty"})
+//>>built
+﻿define(
+//begin v1.x content
+({
+	"clearFilterDialogTitle": "Effacer le filtre",
+	"filterDefDialogTitle": "Filtrer",
+	"ruleTitleTemplate": "Règle ${0}",
+	
+	"conditionEqual": "égal",
+	"conditionNotEqual": "est différent de",
+	"conditionLess": "est inférieur à",
+	"conditionLessEqual": "inférieur ou égal",
+	"conditionLarger": "est supérieur à",
+	"conditionLargerEqual": "supérieur ou égal",
+	"conditionContains": "contient",
+	"conditionIs": "est",
+	"conditionStartsWith": "commence par",
+	"conditionEndWith": "se termine par",
+	"conditionNotContain": "ne contient pas",
+	"conditionIsNot": "n'est pas",
+	"conditionNotStartWith": "ne commence pas par",
+	"conditionNotEndWith": "ne se termine pas par",
+	"conditionBefore": "avant",
+	"conditionAfter": "après",
+	"conditionRange": "plage",
+	"conditionIsEmpty": "est vide",
+	
+	"all": "tout",
+	"any": "n'importe quelle",
+	"relationAll": "toutes les règles",
+	"waiRelAll": "Satisfaire à toutes les règles suivantes :",
+	"relationAny": "n'importe quelles règles",
+	"waiRelAny": "Satisfaire à une quelconque des règles suivantes :",
+	"relationMsgFront": "Satisfaire",
+	"relationMsgTail": "",
+	"and": "et",
+	"or": "ou",
+	
+	"addRuleButton": "Ajouter une règle",
+	"waiAddRuleButton": "Ajouter une nouvelle règle",
+	"removeRuleButton": "Supprimer la règle",
+	"waiRemoveRuleButtonTemplate": "Supprimer la règle ${0}",
+	
+	"cancelButton": "Annuler",
+	"waiCancelButton": "Annuler cette boîte de dialogue",
+	"clearButton": "Effacer",
+	"waiClearButton": "Effacer le filtre",
+	"filterButton": "Filtrer",
+	"waiFilterButton": "Soumettre le filtre",
+	
+	"columnSelectLabel": "Colonne",
+	"waiColumnSelectTemplate": "Colonne pour la règle ${0}",
+	"conditionSelectLabel": "Condition",
+	"waiConditionSelectTemplate": "Condition pour la règle ${0}",
+	"valueBoxLabel": "Valeur",
+	"waiValueBoxTemplate": "Saisir la valeur à filtrer pour la règle ${0}",
+	
+	"rangeTo": "à",
+	"rangeTemplate": "de ${0} à ${1}",
+	
+	"statusTipHeaderColumn": "Colonne",
+	"statusTipHeaderCondition": "Règles",
+	"statusTipTitle": "Barre de filtre",
+	"statusTipMsg": "Cliquer sur la barre de filtre ici pour filtrer sur les valeurs de ${0}.",
+	"anycolumn": "n'importe quelle colonne",
+	"statusTipTitleNoFilter": "Barre de filtre",
+	"statusTipTitleHasFilter": "Filtrer",
+	
+	"defaultItemsName": "éléments",
+	"filterBarMsgHasFilterTemplate": "${0} sur ${1} ${2} affichés.",
+	"filterBarMsgNoFilterTemplate": "Aucun filtre appliqué",
+	
+	"filterBarDefButton": "Définir le filtre",
+	"waiFilterBarDefButton": "Filtrer le tableau",
+	"a11yFilterBarDefButton": "Filtrer...",
+	"filterBarClearButton": "Effacer le filtre",
+	"waiFilterBarClearButton": "Effacer le filtre",
+	"closeFilterBarBtn": "Fermer la barre de filtre",
+	
+	"clearFilterMsg": "Cela supprimera le filtre et affichera tous les enregistrements disponibles.",
+	"anyColumnOption": "N'importe quelle colonne",
+	
+	"trueLabel": "Vrai",
+	"falseLabel": "Faux"
+})
+//end v1.x content
+);
+
+
+

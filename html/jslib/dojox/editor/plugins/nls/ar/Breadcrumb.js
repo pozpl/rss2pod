@@ -1,1 +1,15 @@
-({"selectContents":"تحديد المحتويات","deleteElement":"حذف عنصر","moveEnd":"نقل المؤشر للنهاية","deleteContents":"حذف محتويات","nodeActions":"${nodeName} تصرفات","selectElement":"تحديد عنصر","moveStart":"نقل المؤشر للبداية"})
+//>>built
+define(
+//begin v1.x content
+({
+	"nodeActions": "${nodeName} تصرفات",
+	"selectContents": "تحديد المحتويات",
+	"selectElement": "تحديد عنصر",
+	"deleteElement": "حذف عنصر",
+	"deleteContents": "حذف محتويات",
+	"moveStart": "نقل المؤشر للبداية",
+	"moveEnd": "نقل المؤشر للنهاية"
+})
+
+//end v1.x content
+);

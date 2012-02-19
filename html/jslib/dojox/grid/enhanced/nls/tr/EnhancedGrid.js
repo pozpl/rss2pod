@@ -1,1 +1,17 @@
-({"descending":"Azalan","ascending":"Artan","nestedSort":"İç İçe Sıralama","unsorted":"Bu sütunu sıralama","singleSort":"Tek Sıralama","indirectSelectionRadio":"Row ${0}, single selection, radio box","indirectSelectionCheckBox":"Row ${0}, multiple selection, check box","selectAll":"Select all","sortingState":"${0} - ${1}"})
+//>>built
+define(
+//begin v1.x content
+({
+	singleSort: "Tekli Sıralama",
+	nestedSort: "İç İçe Sıralama",
+	ascending: "Artan Düzende",
+	descending: "Azalan Düzende",
+	sortingState: "${0} - ${1}",
+	unsorted: "Bu sütunu sıralama",
+	indirectSelectionRadio: "Satır ${0}, tek seçimli, radyo düğmesi",
+	indirectSelectionCheckBox: "Satır ${0}, çok seçimli, radyo düğmesi",
+	selectAll: "Tümünü seç"
+})
+//end v1.x content
+);
+

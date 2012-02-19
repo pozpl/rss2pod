@@ -1,1 +1,9 @@
-({"save":"저장"})
+//>>built
+define(
+//begin v1.x content
+({
+	"save": "저장"
+})
+
+//end v1.x content
+);

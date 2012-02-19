@@ -1,1 +1,24 @@
-({"gotoButtonTitle":"מעבר לעמוד מסוים ","prevTip":"העמוד הקודם  ","pageCountIndication":" (${0} עמודים)","pageStepLabelTemplate":"עמוד ${0}","descTemplate":"${2} - ${3} מתוך ${1} ${0}","lastTip":"עמוד אחרון ","nextTip":"העמוד הבא ","pageSizeLabelTemplate":"${0} פריטים בעמוד  ","dialogCancel":"ביטול","itemTitle":"פריטים","dialogConfirm":"ביצוע","firstTip":"עמוד ראשון ","allItemsLabelTemplate":"כל הפריטים ","dialogIndication":"ציינו מספר עמוד ","dialogTitle":"מעבר לעמוד "})
+//>>built
+define(
+//begin v1.x content
+({
+	"descTemplate": "${2} - ${3} מתוך ${1} ${0}",
+	"firstTip": "עמוד ראשון",
+	"lastTip": "עמוד אחרון",
+	"nextTip": "העמוד הבא",
+	"prevTip": "העמוד הקודם",
+	"itemTitle": "פריטים",
+	"pageStepLabelTemplate": "עמוד ${0}",
+	"pageSizeLabelTemplate": "${0} פריטים לעמוד",
+	"allItemsLabelTemplate": "כל הפריטים",
+	"gotoButtonTitle": "מעבר לעמוד ספציפי",
+	"dialogTitle": "מעבר לעמוד",
+	"dialogIndication": "ציון מספר העמוד",
+	"pageCountIndication": " (${0} עמודים)",
+	"dialogConfirm": "ביצוע",
+	"dialogCancel": "ביטול",
+	"all": "הכל"
+})
+//end v1.x content
+);
+

@@ -1,1 +1,10 @@
-({"badPasswordMessage":"Ongeldig wachtwoord.","nomatchMessage":"Wachtwoorden komen niet overeen."})
+//>>built
+define(
+//begin v1.x content
+({
+        nomatchMessage: "Wachtwoorden komen niet overeen.",
+		badPasswordMessage: "Ongeldig wachtwoord."
+})
+
+//end v1.x content
+);

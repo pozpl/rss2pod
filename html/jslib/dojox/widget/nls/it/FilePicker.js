@@ -1,1 +1,9 @@
-({"name":"Nome","size":"Dimensione (in byte)","path":"Percorso"})
+//>>built
+define(
+({
+name: "Nome",
+path: "Percorso",
+size: "Dimensione (in byte)"
+})
+
+);

@@ -37,21 +37,18 @@
 	background-color: @unselected-background-color;	/* gray, for closed pane */
 	border:solid 1px @border-color;
 	margin-bottom:1px;
-	-webkit-transition-property:background-color,border;
- 	-webkit-transition-duration:.3s;
-	-webkit-transition-timing-function:linear;
+	.transition-property(background-color,border);
+ 	.transition-duration(.3s);
+	.transition-timing-function(linear);
 }
 .claro .dijitAccordionTitle {
 	background-color: transparent;	/* pick up color from dijitAccordionInnerContainer */
-	background-image: url("images/accordion.png");
+	background-image: url("../@{image-layout-accordion}");
 	background-position:0 0;
 	background-repeat:repeat-x;
 	padding: 5px 7px 2px 7px;
 	min-height:17px;
 	color:@unselected-text-color;
-}
-.claro .dijitAccordionTitleHover {
-	color:@hovered-text-color;
 }
 .dj_ie6 .claro .dijitAccordionTitle {
 	background-image: none;
@@ -75,7 +72,7 @@
 .claro .dijitAccordionInnerContainerActive {
 	border:1px solid @selected-border-color;
 	background-color:@pressed-background-color;
-	-webkit-transition-duration:.1s;
+	.transition-duration(.1s);
 }
 .claro .dijitAccordionInnerContainerActive .dijitAccordionTitle {
 	background-position:0 -136px;
@@ -95,7 +92,7 @@
 
 /* Hovering open or closed pane */
 
-.claro .dijitAccordionInnerContainerHover dijitAccordionTitle {
+.claro .dijitAccordionInnerContainerHover .dijitAccordionTitle {
 	/* both open and closed */
 	color:@hovered-text-color;
 }
@@ -105,7 +102,7 @@
 	/* note: clicking the currently selected Accordion pane should have no effect, so treating same as hover. */
 	border:1px solid @hovered-border-color;
 	background-color:@hovered-background-color;
-	-webkit-transition-duration:.2s;
+	.transition-duration(.2s);
 }
 
 .claro .dijitAccordionInnerContainerSelectedHover .dijitAccordionChildWrapper,

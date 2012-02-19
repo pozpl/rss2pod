@@ -1,1 +1,9 @@
-({"name":"Név","size":"Méret (byte)","path":"Elérési út"})
+//>>built
+define(
+({
+name: "Név",
+path: "Elérési út",
+size: "Méret (byte)"
+})
+
+);

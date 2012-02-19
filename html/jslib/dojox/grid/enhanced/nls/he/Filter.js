@@ -1,1 +1,90 @@
-({"conditionBefore":"לפני ","filterBarDefButton":"הגדרת מסנן ","filterBarMsgNoFilterTemplate":"לא הוחל מסנן. ","conditionContains":"מכיל ","clearFilterMsg":"פעולה זו תסלק את המסנן ותציג את כל הרשומות הזמינות. ","all":"הכל","waiValueBoxTemplate":"ציינו ערך לסינון עבור הכלל ${0}","conditionRange":"טווח ","waiCancelButton":"ביטול דו-שיח זה ","relationAll":"כל הכללים ","conditionLarger":"גדול מ-","valueBoxLabel":"ערך ","statusTipMsg":"לחצנו על סרגל הסינון כאן כדי לסנן לפי ערכים בתוך ${0}.","waiRelAll":"התאמה לכל הכללים שלהלן: ","closeFilterBarBtn":"סגירת סרגל הסינון","a11yFilterBarDefButton":"סינון...‏","trueLabel":"אמיתי","conditionIsNot":"אינו ","conditionIs":"הוא","ruleTitleTemplate":"כלל ${0}","waiRemoveRuleButtonTemplate":"סילוק הכלל ${0}","and":"וגם","conditionLess":"קטן מ-","waiColumnSelectTemplate":"עמודה עבור הכלל ${0}","anycolumn":"עמודה כלשהי","filterDefDialogTitle":"מסנן","waiConditionSelectTemplate":"תנאי עבור הכלל ${0}","waiFilterButton":"הגשת המסנן","statusTipTitle":"סרגל סינון ","statusTipRelPre":"התאמה","anyColumnOption":"עמודה כלשהי","conditionSelectLabel":"תנאי ","cancelButton":"ביטול","conditionNotStartWith":"אינו מתחיל עם ","conditionEndWith":"מסתיים עם ","statusTipTitleNoFilter":"סרגל סינון","columnSelectLabel":"עמודה ","conditionNotContain":"אינו מכיל ","clearButton":"ניקוי ","conditionLargerEqual":"גדול או שווה ","any":"כלשהו","relationMsgFront":"התאמה ","statusTipHeaderColumn":"עמודה","defaultItemsName":"פריטים ","conditionEqual":"שווה ","relationAny":"כללים כלשהם","trueLabelEditable":"נבדק","or":"או","filterBarMsgHasFilterTemplate":"מוצגים ${0} מתוך ${1} ${2}.‏ ","rangeTo":"עד","conditionStartsWith":"מתחיל עם ","waiRelAny":"התאמה לכלל כלשהו הכללים שלהלן:","statusTipRelPost":"כללים.","relationMsgTail":"","filterBarClearButton":"ניקוי מסנן","incompleteRuleTip":"הכלל אינו שלם. ","conditionLessEqual":"קטן או שווה ","waiFilterBarClearButton":"ניקוי המסנן","conditionAfter":"אחרי ","statusTipHeaderCondition":"כללים ","falseLabel":"שקרי ","filterButton":"מסנן","clearFilterDialogTitle":"ניקוי מסנן ","statusTipTitleHasFilter":"מסנן","addRuleButton":"הוספת כלל","waiAddRuleButton":"הוספת כלל חדש ","waiClearButton":"ניקוי המסנן ","conditionNotEqual":"אינו שווה ","conditionNotEndWith":"אינו מסתיים עם","rangeTemplate":"מ-${0} עד ${1}","removeRuleButton":"סילוק כלל  ","waiFilterBarDefButton":"סינון הטבלה ","conditionIsEmpty":"is empty"})
+//>>built
+define(
+//begin v1.x content
+({
+	"clearFilterDialogTitle": "ניקוי מסנן",
+	"filterDefDialogTitle": "מסנן",
+	"ruleTitleTemplate": "כלל ${0}",
+	
+	"conditionEqual": "שווה",
+	"conditionNotEqual": "לא שווה",
+	"conditionLess": "קטן מ",
+	"conditionLessEqual": "קטן או שווה",
+	"conditionLarger": "גדול מ",
+	"conditionLargerEqual": "גדול או שווה",
+	"conditionContains": "מכיל",
+	"conditionIs": "הוא",
+	"conditionStartsWith": "מתחיל ב",
+	"conditionEndWith": "מסתיים ב",
+	"conditionNotContain": "לא מכיל",
+	"conditionIsNot": "אינו",
+	"conditionNotStartWith": "לא מתחיל ב",
+	"conditionNotEndWith": "לא מסתיים ב",
+	"conditionBefore": "לפני",
+	"conditionAfter": "אחרי",
+	"conditionRange": "טווח",
+	"conditionIsEmpty": "ריק",
+	
+	"all": "הכל",
+	"any": "כל",
+	"relationAll": "כל הכללים",
+	"waiRelAll": "התאמה לכל הכללים הבאים:",
+	"relationAny": "כל כלל שהוא",
+	"waiRelAny": "התאמה לכל אחד מהכללים הבאים:",
+	"relationMsgFront": "התאמה",
+	"relationMsgTail": "",
+	"and": "ו",
+	"or": "או",
+	
+	"addRuleButton": "הוספת כלל",
+	"waiAddRuleButton": "הוספת כלל חדש",
+	"removeRuleButton": "סילוק כלל",
+	"waiRemoveRuleButtonTemplate": "סילוק כלל ${0}",
+	
+	"cancelButton": "ביטול",
+	"waiCancelButton": "ביטול תיבת דו-שיח זו",
+	"clearButton": "ניקוי",
+	"waiClearButton": "ניקוי המסנן",
+	"filterButton": "מסנן",
+	"waiFilterButton": "הגשת המסנן",
+	
+	"columnSelectLabel": "עמודה",
+	"waiColumnSelectTemplate": "עמודה עבור כלל ${0}",
+	"conditionSelectLabel": "תנאי",
+	"waiConditionSelectTemplate": "תנאי עבור כלל ${0}",
+	"valueBoxLabel": "ערך",
+	"waiValueBoxTemplate": "ציון ערך לסינון עבור כלל ${0}",
+	
+	"rangeTo": "עד",
+	"rangeTemplate": "מ-${0} עד ${1}",
+	
+	"statusTipHeaderColumn": "עמודה",
+	"statusTipHeaderCondition": "כללים",
+	"statusTipTitle": "סרגל סינון",
+	"statusTipMsg": "לחצו על סרגל הסינון כאן כדי לסנן ערכים ב-${0}.",
+	"anycolumn": "כל עמודה",
+	"statusTipTitleNoFilter": "סרגל סינון",
+	"statusTipTitleHasFilter": "מסנן",
+	
+	"defaultItemsName": "פריטים",
+	"filterBarMsgHasFilterTemplate": "מוצג ${0} מתוך ${1} ${2}.",
+	"filterBarMsgNoFilterTemplate": "לא הוחל מסנן",
+	
+	"filterBarDefButton": "הגדרת מסנן",
+	"waiFilterBarDefButton": "סינון הטבלה",
+	"a11yFilterBarDefButton": "מסנן...",
+	"filterBarClearButton": "ניקוי מסנן",
+	"waiFilterBarClearButton": "ניקוי המסנן",
+	"closeFilterBarBtn": "סגירת סרגל סינון",
+	
+	"clearFilterMsg": "פעולה זו תגרום לסילוק המסנן ולהצגת כל הרשומות הזמינות.",
+	"anyColumnOption": "כל עמודה",
+	
+	"trueLabel": "True",
+	"falseLabel": "False"
+})
+//end v1.x content
+);
+
+
+

@@ -1,1 +1,10 @@
-({"next":"ถัดไป","done":"เสร็จสิ้น","previous":"ก่อนหน้า"})
+//>>built
+define(
+//begin v1.x content
+({
+next: "ถัดไป",
+previous: "ก่อนหน้า",
+done: "เสร็จสิ้น"
+})
+//end v1.x content
+);

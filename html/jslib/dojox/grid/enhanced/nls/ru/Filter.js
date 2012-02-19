@@ -1,1 +1,90 @@
-({"conditionBefore":"до","filterBarDefButton":"Определить фильтр","filterBarMsgNoFilterTemplate":"Фильтры не используются","conditionContains":"содержит","clearFilterMsg":"Эта опция удалит фильтр и будут показаны все доступные записи.","all":"все","waiValueBoxTemplate":"Введите значение в фильтр правила ${0}","conditionRange":"диапазон","waiCancelButton":"Отменить этот диалог","relationAll":"все правила","conditionLarger":"больше чем","valueBoxLabel":"Значение","statusTipMsg":"Нажмите на панель фильтров для фильтрации по значениям в ${0}.","waiRelAll":"Соответствует всем следующим правилам:","closeFilterBarBtn":"Закрыть панель фильтров","a11yFilterBarDefButton":"Фильтровать...","trueLabel":"Истина","conditionIsNot":"не соответствует","conditionIs":"-","ruleTitleTemplate":"Правило ${0}","waiRemoveRuleButtonTemplate":"Удалить правило ${0}","and":"и","conditionLess":"меньше чем","waiColumnSelectTemplate":"Столбец правила ${0}","anycolumn":"любой столбец","filterDefDialogTitle":"Фильтр","waiConditionSelectTemplate":"Условие правила ${0}","waiFilterButton":"Применить фильтр","statusTipTitle":"Панель фильтров","statusTipRelPre":"Соответствует","anyColumnOption":"Любой столбец","conditionSelectLabel":"Условие","cancelButton":"Отменить","conditionNotStartWith":"не начинается с","conditionEndWith":"заканчивается","statusTipTitleNoFilter":"Панель фильтров","columnSelectLabel":"Столбец","conditionNotContain":"не содержит","clearButton":"Очистить","conditionLargerEqual":"не больше чем","any":"любое","relationMsgFront":"Соответствует","statusTipHeaderColumn":"Столбец","defaultItemsName":"элементов","conditionEqual":"равно","relationAny":"любые правила","trueLabelEditable":"Отмечено","or":"или","filterBarMsgHasFilterTemplate":"Показано ${0} из ${1} ${2}.","rangeTo":"к","conditionStartsWith":"начинается с","waiRelAny":"Соответствует любому из следующих правил:","statusTipRelPost":"правила.","relationMsgTail":"","filterBarClearButton":"Очистить фильтр","incompleteRuleTip":"Это правило не выполнено.","conditionLessEqual":"не меньше чем","waiFilterBarClearButton":"Очистить фильтр","conditionAfter":"после","statusTipHeaderCondition":"Правила","falseLabel":"Ложь","filterButton":"Фильтр","clearFilterDialogTitle":"Очистить фильтр","statusTipTitleHasFilter":"Фильтр","addRuleButton":"Добавить правило","waiAddRuleButton":"Добавить новое правило","waiClearButton":"Очистить фильтр","conditionNotEqual":"не равно","conditionNotEndWith":"не заканчивается","rangeTemplate":"от ${0} до ${1}","removeRuleButton":"Удалить правило","waiFilterBarDefButton":"Фильтровать таблицу","conditionIsEmpty":"is empty"})
+//>>built
+define(
+//begin v1.x content
+({
+	"clearFilterDialogTitle": "Удалить фильтр",
+	"filterDefDialogTitle": "Фильтр",
+	"ruleTitleTemplate": "Правило ${0}",
+	
+	"conditionEqual": "равно",
+	"conditionNotEqual": "не равно",
+	"conditionLess": "меньше, чем",
+	"conditionLessEqual": "меньше или равно",
+	"conditionLarger": "больше, чем",
+	"conditionLargerEqual": "больше или равно",
+	"conditionContains": "содержит",
+	"conditionIs": "является",
+	"conditionStartsWith": "начинается с",
+	"conditionEndWith": "заканчивается на",
+	"conditionNotContain": "не содержит",
+	"conditionIsNot": "не является",
+	"conditionNotStartWith": "не начинается с",
+	"conditionNotEndWith": "не заканчивается на",
+	"conditionBefore": "до",
+	"conditionAfter": "после",
+	"conditionRange": "диапазон",
+	"conditionIsEmpty": "пустое",
+	
+	"all": "все",
+	"any": "любое",
+	"relationAll": "все правила",
+	"waiRelAll": "Соответствие всем следующим правилам:",
+	"relationAny": "любое правило",
+	"waiRelAny": "Соответствие любому из следующих правил:",
+	"relationMsgFront": "Соответствие",
+	"relationMsgTail": "",
+	"and": "и",
+	"or": "или",
+	
+	"addRuleButton": "Добавить правило",
+	"waiAddRuleButton": "Добавить новое правило",
+	"removeRuleButton": "Удалить правило",
+	"waiRemoveRuleButtonTemplate": "Удалить правило ${0}",
+	
+	"cancelButton": "Отмена",
+	"waiCancelButton": "Отменить этот диалог",
+	"clearButton": "Удалить",
+	"waiClearButton": "Удалить фильтр",
+	"filterButton": "Фильтр",
+	"waiFilterButton": "Передать фильтр",
+	
+	"columnSelectLabel": "Столбец",
+	"waiColumnSelectTemplate": "Столбец для правила ${0}",
+	"conditionSelectLabel": "Условие",
+	"waiConditionSelectTemplate": "Условие для правила ${0}",
+	"valueBoxLabel": "Значение",
+	"waiValueBoxTemplate": "Задайте значение фильтра для правила ${0}",
+	
+	"rangeTo": "до",
+	"rangeTemplate": "от ${0} до ${1}",
+	
+	"statusTipHeaderColumn": "Столбец",
+	"statusTipHeaderCondition": "Правила",
+	"statusTipTitle": "Панель фильтра",
+	"statusTipMsg": "Щелкните по панели фильтра, чтобы применить фильтр к значениям в ${0}.",
+	"anycolumn": "любой столбец",
+	"statusTipTitleNoFilter": "Панель фильтра",
+	"statusTipTitleHasFilter": "Фильтр",
+	
+	"defaultItemsName": "элементов",
+	"filterBarMsgHasFilterTemplate": "Показано ${0} из ${1} ${2}.",
+	"filterBarMsgNoFilterTemplate": "Фильтр не применен",
+	
+	"filterBarDefButton": "Задать фильтр",
+	"waiFilterBarDefButton": "Применить фильтр к таблице",
+	"a11yFilterBarDefButton": "Фильтр...",
+	"filterBarClearButton": "Удалить фильтр",
+	"waiFilterBarClearButton": "Удалить фильтр",
+	"closeFilterBarBtn": "Закрыть панель фильтра",
+	
+	"clearFilterMsg": "Фильтр будет удален, и будут показаны все записи.",
+	"anyColumnOption": "Любой столбец",
+	
+	"trueLabel": "True",
+	"falseLabel": "False"
+})
+//end v1.x content
+);
+
+
+

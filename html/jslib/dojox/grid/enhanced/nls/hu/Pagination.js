@@ -1,1 +1,25 @@
-({"gotoButtonTitle":"Ugrás adott oldalra","prevTip":"Előző oldal","pageCountIndication":" (${0} oldal)","pageStepLabelTemplate":"${0} oldal","descTemplate":"${2} - ${3}, összesen ${1} ${0}","lastTip":"Utolsó oldal","nextTip":"Következő oldal","pageSizeLabelTemplate":"${0} elem oldalanként","dialogCancel":"Mégse","itemTitle":"elem","dialogConfirm":"Ugrás","firstTip":"Első oldal","allItemsLabelTemplate":"Minden elem","dialogIndication":"Adja meg az oldalszámot","dialogTitle":"Oldalszámhoz ugrás"})
+//>>built
+define(
+//begin v1.x content
+({
+	"descTemplate": "${2} - ${3} / ${1} ${0}",
+	"firstTip": "Első oldal",
+	"lastTip": "Utolsó oldal",
+	"nextTip": "Következő oldal",
+	"prevTip": "Előző oldal",
+	"itemTitle": "elemek",
+	"singularItemTitle": "elem",
+	"pageStepLabelTemplate": "${0}. oldal",
+	"pageSizeLabelTemplate": "${0} elem oldalanként",
+	"allItemsLabelTemplate": "Összes elem",
+	"gotoButtonTitle": "Ugrás adott oldalra",
+	"dialogTitle": "Ugrás adott oldalra",
+	"dialogIndication": "Adja meg az oldalszámot",
+	"pageCountIndication": " (${0} oldal)",
+	"dialogConfirm": "Mehet",
+	"dialogCancel": "Mégse",
+	"all": "mind"
+})
+//end v1.x content
+);
+

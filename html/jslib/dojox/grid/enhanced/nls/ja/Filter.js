@@ -1,1 +1,88 @@
-({"conditionBefore":"次の値より前","filterBarDefButton":"フィルターの定義","filterBarMsgNoFilterTemplate":"フィルターが適用されていません","conditionContains":"次の値を含む","clearFilterMsg":"これにより、フィルターが削除され、使用可能なすべてのレコードが表示されます。","all":"すべて","waiValueBoxTemplate":"ルール ${0} のフィルターの値を入力","conditionRange":"次の範囲","waiCancelButton":"このダイアログのキャンセル","relationAll":"すべてのルール","conditionLarger":"次の値より大きい","valueBoxLabel":"値","statusTipMsg":"${0} の値をフィルターに掛けるには、ここのフィルター・バーをクリックしてください。","waiRelAll":"次のすべてのルールを突き合わせ:","closeFilterBarBtn":"フィルター・バーを閉じる","a11yFilterBarDefButton":"フィルター...","trueLabel":"True","conditionIsNot":" が  ではありません","conditionIs":"は","ruleTitleTemplate":"ルール ${0}","waiRemoveRuleButtonTemplate":"ルール ${0} の削除","and":" および ","conditionLess":"次の値より小さい","waiColumnSelectTemplate":"ルール ${0} の列","anycolumn":"任意の列","filterDefDialogTitle":"フィルター","waiConditionSelectTemplate":"ルール ${0} の条件","waiFilterButton":"フィルターの送信","statusTipTitle":"フィルター・バー","statusTipRelPre":"次を突き合わせ","anyColumnOption":"任意の列","conditionSelectLabel":"条件","cancelButton":"キャンセル","conditionNotStartWith":"次の値で始まらない","conditionEndWith":"次の値で終わる","statusTipTitleNoFilter":"フィルター・バー","columnSelectLabel":"列","conditionNotContain":"次の値を含まない","clearButton":"クリア","conditionLargerEqual":"次の値以上","any":"任意","relationMsgFront":"次を突き合わせ","statusTipHeaderColumn":"列","defaultItemsName":"項目","conditionEqual":"次の値と等しい","relationAny":"任意のルール","trueLabelEditable":"チェックマークが付いている","or":"または","filterBarMsgHasFilterTemplate":"${1} ${2} 中 ${0} が表示されています。","rangeTo":"比較基準","conditionStartsWith":"次の値で始まる","waiRelAny":"次の任意のルールを突き合わせ:","statusTipRelPost":"ルール。","relationMsgTail":"","filterBarClearButton":"フィルターのクリア","incompleteRuleTip":"このルールは未完成です。","conditionLessEqual":"次の値以下","waiFilterBarClearButton":"フィルターのクリア","conditionAfter":"次の値より後","statusTipHeaderCondition":"ルール","falseLabel":"False","filterButton":"フィルター","clearFilterDialogTitle":"フィルターのクリア","statusTipTitleHasFilter":"フィルター","addRuleButton":"ルールの追加","waiAddRuleButton":"新規ルールの追加","waiClearButton":"フィルターのクリア","conditionNotEqual":"次の値と等しくない","conditionNotEndWith":"次の値で終わらない","rangeTemplate":"${0} から ${1} まで","removeRuleButton":"ルールの削除","waiFilterBarDefButton":"表のフィルター","conditionIsEmpty":"is empty"})
+//>>built
+define(
+//begin v1.x content
+({
+	"clearFilterDialogTitle": "フィルターのクリア",
+	"filterDefDialogTitle": "フィルター",
+	"ruleTitleTemplate": "ルール ${0}",
+	
+	"conditionEqual": "等しい",
+	"conditionNotEqual": "等しくない",
+	"conditionLess": "より小",
+	"conditionLessEqual": "より小または等しい",
+	"conditionLarger": "より大",
+	"conditionLargerEqual": "より大または等しい",
+	"conditionContains": "含む",
+	"conditionIs": "該当する",
+	"conditionStartsWith": "先頭",
+	"conditionEndWith": "末尾",
+	"conditionNotContain": "含まない",
+	"conditionIsNot": "該当しない",
+	"conditionNotStartWith": "先頭が異なる",
+	"conditionNotEndWith": "末尾が異なる",
+	"conditionBefore": "より前",
+	"conditionAfter": "より後",
+	"conditionRange": "範囲",
+	"conditionIsEmpty": "空である",
+	
+	"all": "すべて",
+	"any": "いずれか",
+	"relationAll": "すべてのルール",
+	"waiRelAll": "次のルールのすべてに一致:",
+	"relationAny": "いずれかのルール",
+	"waiRelAny": "次のルールのいずれかに一致:",
+	"relationMsgFront": "一致",
+	"relationMsgTail": "",
+	"and": "かつ",
+	"or": "または",
+	
+	"addRuleButton": "ルールの追加",
+	"waiAddRuleButton": "新規ルールの追加",
+	"removeRuleButton": "ルールの削除",
+	"waiRemoveRuleButtonTemplate": "ルール ${0} の削除",
+	
+	"cancelButton": "キャンセル",
+	"waiCancelButton": "このダイアログをキャンセル",
+	"clearButton": "クリア",
+	"waiClearButton": "フィルターのクリア",
+	"filterButton": "フィルター",
+	"waiFilterButton": "フィルターの実行依頼",
+	
+	"columnSelectLabel": "列",
+	"waiColumnSelectTemplate": "ルール ${0} の列",
+	"conditionSelectLabel": "条件",
+	"waiConditionSelectTemplate": "ルール ${0} の条件",
+	"valueBoxLabel": "値",
+	"waiValueBoxTemplate": "ルール ${0} を検出するフィルター操作のための値を入力",
+	
+	"rangeTo": "範囲",
+	"rangeTemplate": "${0} から ${1} まで",
+	
+	"statusTipHeaderColumn": "列",
+	"statusTipHeaderCondition": "ルール",
+	"statusTipTitle": "フィルター・バー",
+	"statusTipMsg": "このフィルター・バーをクリックして、${0} の値にフィルターを適用します。",
+	"anycolumn": "いずれかの列",
+	"statusTipTitleNoFilter": "フィルター・バー",
+	"statusTipTitleHasFilter": "フィルター",
+	
+	"defaultItemsName": "項目",
+	"filterBarMsgHasFilterTemplate": "${0}/${1} ${2} が表示されました。",
+	"filterBarMsgNoFilterTemplate": "フィルターが適用されていません",
+	
+	"filterBarDefButton": "フィルターの定義",
+	"waiFilterBarDefButton": "表のフィルタリング",
+	"a11yFilterBarDefButton": "フィルター...",
+	"filterBarClearButton": "フィルターのクリア",
+	"waiFilterBarClearButton": "フィルターのクリア",
+	"closeFilterBarBtn": "フィルター・バーを閉じる",
+	
+	"clearFilterMsg": "これによりフィルターが解除され、使用可能なレコードがすべて表示されます。",
+	"anyColumnOption": "いずれかの列",
+	
+	"trueLabel": "True",
+	"falseLabel": "False"
+})
+//end v1.x content
+);
+

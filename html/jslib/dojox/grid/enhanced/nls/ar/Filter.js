@@ -1,1 +1,90 @@
-({"conditionBefore":"قبل","filterBarDefButton":"تعريف ترشيح البيانات","filterBarMsgNoFilterTemplate":"لم يتم تطبيق ترشيح البيانات","conditionContains":"يحتوي","clearFilterMsg":"سيقوم هذا بازالة مرشح البيانات وعرض كل السجلات المتاحة.","all":"كل","waiValueBoxTemplate":"ادخال قيمة لترشيح بيانات القاعدة ${0}","conditionRange":"مدى","waiCancelButton":"الغاء هذا الحوار","relationAll":"كل القواعد","conditionLarger":"‏أكبر من‏","valueBoxLabel":"قيمة","statusTipMsg":"اضغط خط ترشيح البيانات هنا لترشيح بيانات القيم في ${0}.","waiRelAll":"مطابقة الكل للقواعد التالية:","closeFilterBarBtn":"اغلاق خط ترشيح البيانات","a11yFilterBarDefButton":"ترشيح بيانات...","trueLabel":"True","conditionIsNot":"ليس","conditionIs":"يكون","ruleTitleTemplate":"قاعدة ${0}","waiRemoveRuleButtonTemplate":"ازالة قاعدة ${0}","and":"and","conditionLess":"‏أقل من‏","waiColumnSelectTemplate":"العمود للقاعدة ${0}","anycolumn":"أي عمود","filterDefDialogTitle":"‏ترشيح البيانات‏","waiConditionSelectTemplate":"الشرط للعمود ${0}","waiFilterButton":"احالة ترشيح البيانات","statusTipTitle":"خط ترشيح البيانات","statusTipRelPre":"مطابقة","anyColumnOption":"أي عمود","conditionSelectLabel":"الشرط","cancelButton":"الغاء","conditionNotStartWith":"لا يبدأ بـ","conditionEndWith":"ينتهي بالحروف","statusTipTitleNoFilter":"خط ترشيح البيانات","columnSelectLabel":"العمود","conditionNotContain":"لا يتضمن","clearButton":"محو","conditionLargerEqual":"أكبر من أو يساوي","any":"أي","relationMsgFront":"مطابقة","statusTipHeaderColumn":"العمود","defaultItemsName":"البنود","conditionEqual":"يساوي","relationAny":"أي قواعد","trueLabelEditable":"تم الفحص","or":"أو","filterBarMsgHasFilterTemplate":"${0} من ${1} ${2} عرض.","rangeTo":"الى","conditionStartsWith":"يبدأ بالحروف","waiRelAny":"مطابقة أي من القواعد التالية:","statusTipRelPost":"قواعد.","relationMsgTail":"","filterBarClearButton":"محو ترشيح البيانات","incompleteRuleTip":"هذه القاعدة غير تامة.","conditionLessEqual":"أقل من أو يساوي","waiFilterBarClearButton":"محو ترشيح البيانات","conditionAfter":"بعد","statusTipHeaderCondition":"قواعد","falseLabel":"خطأ","filterButton":"‏ترشيح البيانات‏","clearFilterDialogTitle":"محو ترشيح البيانات","statusTipTitleHasFilter":"‏ترشيح البيانات‏","addRuleButton":"اضافة قاعدة","waiAddRuleButton":"اضافة قاعدة جديدة","waiClearButton":"محو ترشيح البيانات","conditionNotEqual":"غير مساوي الى","conditionNotEndWith":"لا ينتهي بـ","rangeTemplate":"من ${0} الى ${1}","removeRuleButton":"ازالة قاعدة","waiFilterBarDefButton":"ترشيح بيانات الجدول","conditionIsEmpty":"is empty"})
+//>>built
+define(
+//begin v1.x content
+({
+	"clearFilterDialogTitle": "محو ترشيح البيانات",
+	"filterDefDialogTitle": "ترشيح البيانات",
+	"ruleTitleTemplate": "القاعدة ${0}",
+	
+	"conditionEqual": "يساوي",
+	"conditionNotEqual": "لا يساوي",
+	"conditionLess": "أصغر من",
+	"conditionLessEqual": "أصغر من أو يساوي",
+	"conditionLarger": "أكبر من",
+	"conditionLargerEqual": "أكبر من أو يساوي",
+	"conditionContains": "يتضمن",
+	"conditionIs": "هو",
+	"conditionStartsWith": "يبدأ بالحروف",
+	"conditionEndWith": "ينتهي بالحروف",
+	"conditionNotContain": "لا يتضمن",
+	"conditionIsNot": "ليس",
+	"conditionNotStartWith": "لا يبدأ بالحروف",
+	"conditionNotEndWith": "لا ينتهي بالحروف",
+	"conditionBefore": "قبل",
+	"conditionAfter": "بعد",
+	"conditionRange": "المدى",
+	"conditionIsEmpty": "خالي",
+	
+	"all": "كل",
+	"any": "أي",
+	"relationAll": "كل القواعد",
+	"waiRelAll": "مطابقة كل القواعد التالية:",
+	"relationAny": "أية قواعد",
+	"waiRelAny": "مطابقة أي من القواعد التالية:",
+	"relationMsgFront": "مطابقة",
+	"relationMsgTail": "",
+	"and": "and",
+	"or": "or",
+	
+	"addRuleButton": "اضافة قاعدة",
+	"waiAddRuleButton": "اضافة قاعدة جديدة",
+	"removeRuleButton": "ازالة قاعدة",
+	"waiRemoveRuleButtonTemplate": "ازالة القاعدة ${0}",
+	
+	"cancelButton": "الغاء",
+	"waiCancelButton": "الغاء مربع الحوار هذا",
+	"clearButton": "محو",
+	"waiClearButton": "محو ترشيح البيانات",
+	"filterButton": "ترشيح البيانات",
+	"waiFilterButton": "احالة ترشيح البيانات",
+	
+	"columnSelectLabel": "العمود",
+	"waiColumnSelectTemplate": "العمود للقاعدة ${0}",
+	"conditionSelectLabel": "الشرط",
+	"waiConditionSelectTemplate": "الشرط للقاعدة ${0}",
+	"valueBoxLabel": "القيمة",
+	"waiValueBoxTemplate": "أدخل قيمة لترشيح البيانات للقاعدة ${0}",
+	
+	"rangeTo": "الى",
+	"rangeTemplate": "من ${0} الى ${1}",
+	
+	"statusTipHeaderColumn": "العمود",
+	"statusTipHeaderCondition": "القواعد",
+	"statusTipTitle": "خط ترشيح البيانات",
+	"statusTipMsg": "اضغط على خط ترشيح البيانات هنا لترشيح البيانات بناءا على القيم التي توجد في ${0}.",
+	"anycolumn": "أي عمود",
+	"statusTipTitleNoFilter": "خط ترشيح البيانات",
+	"statusTipTitleHasFilter": "ترشيح البيانات",
+	
+	"defaultItemsName": "بنود",
+	"filterBarMsgHasFilterTemplate": "يتم عرض ${0} من ${1} ${2}.",
+	"filterBarMsgNoFilterTemplate": "لم يتم تطبيق أي ترشيح للبيانات.",
+	
+	"filterBarDefButton": "تعريف ترشيح البيانات",
+	"waiFilterBarDefButton": "ترشيح بيانات الجدول",
+	"a11yFilterBarDefButton": "ترشيح البيانات...",
+	"filterBarClearButton": "محو ترشيح البيانات",
+	"waiFilterBarClearButton": "محو ترشيح البيانات",
+	"closeFilterBarBtn": "اغلاق خط ترشيح البيانات",
+	
+	"clearFilterMsg": "سيؤدي هذا الى ازالة ترشيح البيانات وعرض كل السجلات المتاحة.",
+	"anyColumnOption": "أي عمود",
+	
+	"trueLabel": "متحقق",
+	"falseLabel": "غير متحقق"
+})
+//end v1.x content
+);
+
+
+

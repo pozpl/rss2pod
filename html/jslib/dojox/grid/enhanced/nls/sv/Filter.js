@@ -1,1 +1,90 @@
-({"conditionBefore":"före","filterBarDefButton":"Definiera filter","filterBarMsgNoFilterTemplate":"Inga filter har använts","conditionContains":"innehåller","clearFilterMsg":"Filtret kommer att tas bort och alla tillgängliga poster kommer att visas.","all":"alla","waiValueBoxTemplate":"Ange värdet för regeln ${0}","conditionRange":"intervall","waiCancelButton":"Stäng den här dialogrutan","relationAll":"alla regler","conditionLarger":"är större än","valueBoxLabel":"Värde","statusTipMsg":"Om du vill filtret efter värden i ${0} klickar du på filterfältet.","waiRelAll":"Matcha följande regler:","closeFilterBarBtn":"Stäng filterfältet","a11yFilterBarDefButton":"Filter...","trueLabel":"Sant","conditionIsNot":"är inte","conditionIs":"är","ruleTitleTemplate":"Regeln ${0}","waiRemoveRuleButtonTemplate":"Ta bort regeln ${0}","and":"och","conditionLess":"är mindre än","waiColumnSelectTemplate":"Kolumn för regeln ${0}","anycolumn":"någon kolumn","filterDefDialogTitle":"Filter","waiConditionSelectTemplate":"Villkor för regeln ${0}","waiFilterButton":"Lämna in filtret","statusTipTitle":"Filterfält","statusTipRelPre":"Matchar","anyColumnOption":"Någon kolumn","conditionSelectLabel":"Villkor","cancelButton":"Avbryt","conditionNotStartWith":"börjar inte med","conditionEndWith":"slutar med","statusTipTitleNoFilter":"Filterfält","columnSelectLabel":"Kolumn","conditionNotContain":"innehåller inte","clearButton":"Rensa","conditionLargerEqual":"är större än eller lika med","any":"någon","relationMsgFront":"Matcha","statusTipHeaderColumn":"Kolumn","defaultItemsName":"objekt","conditionEqual":"är lika med","relationAny":"någon regel","trueLabelEditable":"Markerat","or":"eller","filterBarMsgHasFilterTemplate":"${0} av ${1} ${2} visas","rangeTo":"till","conditionStartsWith":"börjar med","waiRelAny":"Matcha någon av följande regler:","statusTipRelPost":"regler.","relationMsgTail":"","filterBarClearButton":"Rensa filtret","incompleteRuleTip":"Den här regeln är inte fullständig","conditionLessEqual":"är mindre än eller lika med","waiFilterBarClearButton":"Rensa filtret","conditionAfter":"efter","statusTipHeaderCondition":"Regler","falseLabel":"Falskt","filterButton":"Filter","clearFilterDialogTitle":"Rensa filtret","statusTipTitleHasFilter":"Filter","addRuleButton":"Lägg till regel","waiAddRuleButton":"Lägg till en ny regel","waiClearButton":"Rensa filtret","conditionNotEqual":"är inte lika med","conditionNotEndWith":"slutar inte med","rangeTemplate":"från ${0} till ${1}","removeRuleButton":"Ta bort regel","waiFilterBarDefButton":"Filtrera tabellen","conditionIsEmpty":"is empty"})
+//>>built
+define(
+//begin v1.x content
+({
+	"clearFilterDialogTitle": "Rensa filter",
+	"filterDefDialogTitle": "Filter",
+	"ruleTitleTemplate": "Regel ${0}",
+	
+	"conditionEqual": "lika med",
+	"conditionNotEqual": "inte lika med",
+	"conditionLess": "är mindre än",
+	"conditionLessEqual": "mindre eller lika med",
+	"conditionLarger": "är större än",
+	"conditionLargerEqual": "större än eller lika med",
+	"conditionContains": "innehåller",
+	"conditionIs": "är",
+	"conditionStartsWith": "börjar med",
+	"conditionEndWith": "slutar med",
+	"conditionNotContain": "innehåller inte",
+	"conditionIsNot": "är inte",
+	"conditionNotStartWith": "börjar inte med",
+	"conditionNotEndWith": "slutar inte med",
+	"conditionBefore": "före",
+	"conditionAfter": "efter",
+	"conditionRange": "intervall",
+	"conditionIsEmpty": "är tom",
+	
+	"all": "alla",
+	"any": "någon",
+	"relationAll": "alla regler",
+	"waiRelAll": "Matcha alla följande regler:",
+	"relationAny": "någon regel",
+	"waiRelAny": "Matcha någon av följande regler:",
+	"relationMsgFront": "Matcha",
+	"relationMsgTail": "",
+	"and": "och",
+	"or": "eller",
+	
+	"addRuleButton": "Lägg till regel",
+	"waiAddRuleButton": "Lägg till en ny regel",
+	"removeRuleButton": "Ta bort regel",
+	"waiRemoveRuleButtonTemplate": "Ta bort regel ${0}",
+	
+	"cancelButton": "Avbryt",
+	"waiCancelButton": "Avbryt dialogen",
+	"clearButton": "Rensa",
+	"waiClearButton": "Rensa filtret",
+	"filterButton": "Filtrera",
+	"waiFilterButton": "Filtrera",
+	
+	"columnSelectLabel": "Kolumn",
+	"waiColumnSelectTemplate": "Kolumn för regel ${0}",
+	"conditionSelectLabel": "Villkor",
+	"waiConditionSelectTemplate": "Villkor för regel ${0}",
+	"valueBoxLabel": "Värde",
+	"waiValueBoxTemplate": "Ange värde för filtrering efter regeln ${0}",
+	
+	"rangeTo": "till",
+	"rangeTemplate": "från ${0} till ${1}",
+	
+	"statusTipHeaderColumn": "Kolumn",
+	"statusTipHeaderCondition": "Regler",
+	"statusTipTitle": "Filterfält",
+	"statusTipMsg": "Klicka på filterfältet om du vill filtrera värden i ${0}.",
+	"anycolumn": "alla kolumner",
+	"statusTipTitleNoFilter": "Filterfält",
+	"statusTipTitleHasFilter": "Filter",
+	
+	"defaultItemsName": "objekt",
+	"filterBarMsgHasFilterTemplate": "${0} av ${1} ${2} visas.",
+	"filterBarMsgNoFilterTemplate": "Inget filter tillämpat",
+	
+	"filterBarDefButton": "Definiera filter",
+	"waiFilterBarDefButton": "Filtrera tabellen",
+	"a11yFilterBarDefButton": "Filter...",
+	"filterBarClearButton": "Rensa filter",
+	"waiFilterBarClearButton": "Rensa filtret",
+	"closeFilterBarBtn": "Stäng filterfält",
+	
+	"clearFilterMsg": "Tar bort filtret och visar alla tillgängliga poster.",
+	"anyColumnOption": "Alla kolumner",
+	
+	"trueLabel": "Sant",
+	"falseLabel": "Falskt"
+})
+//end v1.x content
+);
+
+
+

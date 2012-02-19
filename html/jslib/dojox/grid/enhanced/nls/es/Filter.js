@@ -1,1 +1,90 @@
-({"conditionBefore":"antes","filterBarDefButton":"Definir filtro","filterBarMsgNoFilterTemplate":"No se aplica ningún filtro","conditionContains":"contiene","clearFilterMsg":"Eliminará el filtro y mostrará todos los registros disponibles.","all":"todas","waiValueBoxTemplate":"Especifique un valor para el filtro para la regla ${0}","conditionRange":"rango","waiCancelButton":"Cancelar este diálogo","relationAll":"todas las reglas","conditionLarger":"es superior que","valueBoxLabel":"Valor","statusTipMsg":"Pulse la barra de filtros para filtrar los valores de ${0}.","waiRelAll":"Coincide con todas las reglas siguientes:","closeFilterBarBtn":"Cerrar la barra de filtros","a11yFilterBarDefButton":"Filtrar...","trueLabel":"Verdadero","conditionIsNot":"no es","conditionIs":"es","ruleTitleTemplate":"Regla ${0}","waiRemoveRuleButtonTemplate":"Eliminar regla ${0}","and":"y","conditionLess":"es menor que","waiColumnSelectTemplate":"Columna para la regla ${0}","anycolumn":"cualquier columna","filterDefDialogTitle":"Filtro","waiConditionSelectTemplate":"Condición para la regla ${0}","waiFilterButton":"Enviar el filtro","statusTipTitle":"Barra de filtros","statusTipRelPre":"Coincide","anyColumnOption":"Cualquier columna","conditionSelectLabel":"Condición","cancelButton":"Cancelar","conditionNotStartWith":"no empieza por","conditionEndWith":"termina por","statusTipTitleNoFilter":"Barra de filtros","columnSelectLabel":"Columna","conditionNotContain":"no contiene","clearButton":"Borrar","conditionLargerEqual":"superior o igual que","any":"cualquiera","relationMsgFront":"Coincide","statusTipHeaderColumn":"Columna","defaultItemsName":"elementos","conditionEqual":"igual","relationAny":"cualquier regla","trueLabelEditable":"Marcado","or":"o","filterBarMsgHasFilterTemplate":"Se muestran ${0} de ${1} ${2}.","rangeTo":"a","conditionStartsWith":"empieza por","waiRelAny":"Coincide con cualquiera de las reglas siguientes:","statusTipRelPost":"reglas.","relationMsgTail":"","filterBarClearButton":"Borrar filtro","incompleteRuleTip":"Esta regla no está completa.","conditionLessEqual":"es menor o igual que","waiFilterBarClearButton":"Borrar el filtro","conditionAfter":"después","statusTipHeaderCondition":"Reglas","falseLabel":"Falso","filterButton":"Filtro","clearFilterDialogTitle":"Limpiar filtro","statusTipTitleHasFilter":"Filtro","addRuleButton":"Añadir regla","waiAddRuleButton":"Añadir una regla nueva","waiClearButton":"Borrar el filtro","conditionNotEqual":"no es igual","conditionNotEndWith":"no termina por","rangeTemplate":"de ${0} a ${1}","removeRuleButton":"Eliminar regla","waiFilterBarDefButton":"Filtrar la tabla","conditionIsEmpty":"is empty"})
+//>>built
+define(
+//begin v1.x content
+({
+	"clearFilterDialogTitle": "Borrar filtro",
+	"filterDefDialogTitle": "Filtro",
+	"ruleTitleTemplate": "Regla ${0}",
+	
+	"conditionEqual": "es igual a",
+	"conditionNotEqual": "no es igual a",
+	"conditionLess": "es menor que",
+	"conditionLessEqual": "es menor o igual que",
+	"conditionLarger": "es mayor que",
+	"conditionLargerEqual": "es mayor o igual que",
+	"conditionContains": "contiene",
+	"conditionIs": "es",
+	"conditionStartsWith": "empieza por",
+	"conditionEndWith": "acaba por",
+	"conditionNotContain": "no contiene",
+	"conditionIsNot": "no es",
+	"conditionNotStartWith": "no empieza por",
+	"conditionNotEndWith": "no acaba por",
+	"conditionBefore": "antes",
+	"conditionAfter": "después",
+	"conditionRange": "rango",
+	"conditionIsEmpty": "está vacío",
+	
+	"all": "todas",
+	"any": "cualquiera",
+	"relationAll": "todas las reglas",
+	"waiRelAll": "Coincidir con todas las reglas siguientes:",
+	"relationAny": "cualquier regla",
+	"waiRelAny": "Coincidir con cualquiera de las reglas siguientes:",
+	"relationMsgFront": "Coincidir",
+	"relationMsgTail": "",
+	"and": "y",
+	"or": "o",
+	
+	"addRuleButton": "Añadir regla",
+	"waiAddRuleButton": "Añadir una regla nueva",
+	"removeRuleButton": "Eliminar regla",
+	"waiRemoveRuleButtonTemplate": "Eliminar la regla ${0}",
+	
+	"cancelButton": "Cancelar",
+	"waiCancelButton": "Cancelar este diálogo",
+	"clearButton": "Borrar",
+	"waiClearButton": "Borrar el filtro",
+	"filterButton": "Filtrar",
+	"waiFilterButton": "Enviar el filtro",
+	
+	"columnSelectLabel": "Columna",
+	"waiColumnSelectTemplate": "Columna para la regla ${0}",
+	"conditionSelectLabel": "Condición",
+	"waiConditionSelectTemplate": "Condición para la regla ${0}",
+	"valueBoxLabel": "Valor",
+	"waiValueBoxTemplate": "Escriba el valor que se debe filtrar para la regla ${0}",
+	
+	"rangeTo": "a",
+	"rangeTemplate": "de ${0} a ${1}",
+	
+	"statusTipHeaderColumn": "Columna",
+	"statusTipHeaderCondition": "Reglas",
+	"statusTipTitle": "Barra de filtro",
+	"statusTipMsg": "Pulse aquí en la barra de filtro para filtrar por los valores de ${0}.",
+	"anycolumn": "cualquier columna",
+	"statusTipTitleNoFilter": "Barra de filtro",
+	"statusTipTitleHasFilter": "Filtro",
+	
+	"defaultItemsName": "elementos",
+	"filterBarMsgHasFilterTemplate": "${0} de ${1} ${2} mostrados.",
+	"filterBarMsgNoFilterTemplate": "Ningún filtro aplicado",
+	
+	"filterBarDefButton": "Definir filtro",
+	"waiFilterBarDefButton": "Filtrar la tabla",
+	"a11yFilterBarDefButton": "Filtrar...",
+	"filterBarClearButton": "Borrar filtro",
+	"waiFilterBarClearButton": "Borrar el filtro",
+	"closeFilterBarBtn": "Cerrar barra de filtro",
+	
+	"clearFilterMsg": "Esto eliminará el filtro y mostrará todos los registros disponibles.",
+	"anyColumnOption": "Cualquier columna",
+	
+	"trueLabel": "Verdadero",
+	"falseLabel": "Falso"
+})
+//end v1.x content
+);
+
+
+

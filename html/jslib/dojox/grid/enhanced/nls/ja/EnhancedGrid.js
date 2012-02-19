@@ -1,1 +1,16 @@
-({"descending":"降順","ascending":"昇順","nestedSort":"ネストされたソート","unsorted":"この列はソートしないでください","singleSort":"単一ソート","indirectSelectionRadio":"Row ${0}, single selection, radio box","indirectSelectionCheckBox":"Row ${0}, multiple selection, check box","selectAll":"Select all","sortingState":"${0} - ${1}"})
+//>>built
+define(
+//begin v1.x content
+({
+	singleSort: "単一ソート",
+	nestedSort: "ネスト・ソート",
+	ascending: "昇順",
+	descending: "降順",
+	sortingState: "${0} - ${1}",
+	unsorted: "この列をソートしない",
+	indirectSelectionRadio: "行 ${0}、単一選択、ラジオ・ボックス",
+	indirectSelectionCheckBox: "行 ${0}、複数選択、チェック・ボックス",
+	selectAll: "すべてを選択"
+})
+//end v1.x content
+);
