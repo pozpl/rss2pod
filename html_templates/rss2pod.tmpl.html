@@ -1,8 +1,8 @@
-<div id="JsUIConteiner" class="tundra" role="application">
-    <div data-dojo-type="dijit.layout.BorderContainer" data-dojo-props="design:'sidebar', gutters:true, liveSplitters:true" id="borderContainer" persist="true" >
+<div id="JsUIConteiner" class="tundra" >
+    <div data-dojo-type="dijit.layout.BorderContainer" data-dojo-props=" design: 'headline',gutters:true, liveSplitters:true, persist:true"  id="borderContainer"  >
         <!--<div id="readerZone">
         </div>-->
-        <div id="podcastsPane" data-dojo-type="dijit.layout.ContentPane" data-dojo-props="splitter:true, region:'left', style:[width: '20%', overflow:auto]">
+        <div id="podcastsPane" data-dojo-type="dijit.layout.ContentPane" data-dojo-props="splitter:true, region:'left'" style= "width: 20%; overflow:auto">
             <!--<button data-dojo-type=dijit.form.Button id="addPodcastButton" name="addPodcastButton">
             ADD PODCAST
             </button>--><b>Your podcasts:</b>
@@ -11,7 +11,7 @@
             <div id="podcastsListPane">
             </div>
         </div>
-        <div id="singlePodPane" data-dojo-type="dijit.layout.ContentPane" data-dojo-props="splitter:true, region:'center', style:[overflow:auto]">
+        <div id="singlePodPane" data-dojo-type="dijit.layout.ContentPane" data-dojo-props="splitter:true, region:'center'" style="overflow:auto">
             <b>Current podcast name: <span id="singlePodNameArea"></span></b>
             <div id="delPodcastButtonArea">
             </div>
@@ -25,7 +25,7 @@
             <div id="podRssList">
             </div>
         </div>
-        <div id="rssPane" data-dojo-type="dijit.layout.ContentPane" data-dojo-props="splitter:true, region:'right', style:[width: '30%', overflow:auto]">
+        <div id="rssPane" data-dojo-type="dijit.layout.ContentPane" data-dojo-props="splitter:true, region:'right'" style="width: 30%; overflow:auto">
             <b>Your RSS  channels:</b>
             <div id="addFeedButtonArea">
             </div>
@@ -106,4 +106,39 @@
         </table>
     </div>
     
+    <!-- TEMPLATES FOR FEED AND PODCASTS PANELS -->
+    <div id="podTemplateField" style="display:none; visibility:hidden;">
+		<table width="100%">
+			<tr>
+				<td>
+				<div id="{{pod_name_id}}">
+					{{pod_name}}
+				</div><div id="{{pod_manage_id}}"></div></td>
+			</tr>
+		</table>
+	</div>
+    <!--FEED ITEM TEMPLATE-->
+    <div id="feedTemplateField" style="display:none; visibility:hidden;">
+		<table width="100%">
+			<tr>
+				<!--{% if show_add_button%} -->
+				<td width="10%">
+				<div id="{{add_id}}">
+					<img src="images/add_feed.png" width="24" alt="add" />
+				</div></td><!-- {% endif %} -->
+				<!--{%if show_faid %}-->
+				<td>
+				<div id="{{feed_name_id}}">
+					{{feed_name}}
+				</div><div id="{{feed_manage_id}}"></div></td>
+				<!--{%else%}-->
+				<td> {{feed_name}} </td>
+				<!-- {% endif %} -->
+				<td width="10%">
+				<div id="{{del_id}}" class="del_feed">
+					<!--{%if show_faid %}--><img src="images/del_feed.png" width="24" alt="del" /><!--{%else%}--><img src="images/rem_feed.png" width="24" alt="del" /><!--{% endif %} -->
+				</div></td>
+			</tr>
+		</table>
+	</div>
 </div>
