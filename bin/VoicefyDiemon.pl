@@ -81,7 +81,7 @@ sub voicefy_via_server() {
 
 	my $text_wave       = "";
 	my $can_use_threads = eval 'use threads; 1';
-	if ($can_use_threads) {
+	if ($can_use_threads && $config->param('general.max_voicefy_threads > 1') ) {
 		my $work_thread = threads->create(
 			sub {
 				 $SIG{'KILL'} = sub { threads->exit(); };
