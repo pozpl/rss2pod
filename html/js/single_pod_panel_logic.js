@@ -1,8 +1,8 @@
 /**
  * @author pozpl
  */
-define(["dojo/dom", 'dojo/_base/declare', "dojo/on","dojo/mouse", "dojo/query",
-		"dojox/widget/Standby", 'dijit/form/Button'], function(dom, declare, on, mouse, query) {
+define(["dojo/dom", 'dojo/_base/declare', "dojo/on","dojo/mouse", "dojo/query", 'dojo/_base/lang',  "dojo/dom-construct",
+		"dojox/widget/Standby", 'dijit/form/Button'], function(dom, declare, on, mouse, query, lang, domConstruct) {
 	//require(['dojo/_base/declare'], function(declare) {
 	declare("SinglePodPanel", null, {
 		//function SinglePodPanel(){
@@ -52,9 +52,10 @@ define(["dojo/dom", 'dojo/_base/declare', "dojo/on","dojo/mouse", "dojo/query",
 			document.body.appendChild(this.addDownloadStandby.domNode);
 			this.addDownloadStandby.startup();
 
-			var downlNode = dojo.byId("getPodArea");
-			//dojo.byId("getPodHref");
-			dojo.connect(downlNode, "onclick", this, this.genAudioPod);
+			var downlNode = dom.byId("getPodArea");
+			on(downlNode,  "click", lang.hitch(this, "genAudioPod"));
+			
+			//dojo.connect(downlNode, "onclick", this, this.genAudioPod);
 
 			//dojo.connect(dijit.byId("delCurrentPodcastButton"), "onClick", this, this.deletePodcast);
 		},
@@ -112,7 +113,7 @@ define(["dojo/dom", 'dojo/_base/declare', "dojo/on","dojo/mouse", "dojo/query",
 			var singlePodPad = this;
 			var feedsPanelHandle = this.feedsPanelHandle;
 			var userProfileHandl = this.userProfileHandl;
-			var singlePod = dojo.byId("singlePodNameArea");
+			var singlePod = dom.byId("singlePodNameArea");
 
 			singlePodPad.podId = podId;
 
@@ -121,7 +122,7 @@ define(["dojo/dom", 'dojo/_base/declare', "dojo/on","dojo/mouse", "dojo/query",
 			//show rss list for this podcast
 			var	feedItemTmplCont = dom.byId("feedTemplateField").innerHTML;
 			var feedTemplate = new dojox.dtl.Template(feedItemTmplCont);
-			dojo.empty("podRssList");
+			domConstruct.empty("podRssList");
 			var feedIdTitleMap = userProfileHandl.feeds_title_mapping;
 			dojo.forEach(userProfileHandl.pod_info[podId].pod_feeds, function(feed_id, i) {
 				var spodBackColor = "white";
@@ -139,7 +140,7 @@ define(["dojo/dom", 'dojo/_base/declare', "dojo/on","dojo/mouse", "dojo/query",
 
 				singlePodPad.feedsNames = feedIdTitleMap[feed_id];
 
-				var singlePod = dojo.create("div", {
+				var singlePod = domConstruct.create("div", {
 					innerHTML : feedTemplate.render(context),
 					id : "podFeedPane_" + feed_id,
 					dojoType : "dijit.layout.ContentPane",
@@ -149,22 +150,20 @@ define(["dojo/dom", 'dojo/_base/declare', "dojo/on","dojo/mouse", "dojo/query",
 				}, "podRssList");
 
 			});
-			//Update border container
-			require('dojo/dom', function(dom) {
-				dom.byId("borderContainer").resize();
-			});
 			
+			//dom.byId("borderContainer").resize();
+						
 			//dojo.forEach(singlePod.feedsNodesConn, dojo.disconnect);
 			if(singlePodPad.feedsParentEvtHdlr){
 				singlePodPad.feedsParentEvtHdlr.remove();
 			}
-			singlePodPad.feedsParentEvtHdlr = dom.byId("podRssList");
-			on(singlePodPad.feedsParentEvtHdlr, 
+			var podRssList= dom.byId("podRssList");
+			singlePodPad.feedsParentEvtHdlr = on(podRssList, 
 				".del_feed:click", 
 				function(evt) {
 					
 					var feedIndx = this.id.substring("singlePodDelFeed_".length, this.id.length);
-					alert(feedIndx);
+					//alert(feedIndx);
 					singlePodPad.delFeedFromActivPod(feedIndx, singlePodPad.getPodId())
 				}
 			);

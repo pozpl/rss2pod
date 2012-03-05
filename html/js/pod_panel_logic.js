@@ -2,9 +2,9 @@
  * @author pozpl
  */
 //function PodPanel(singlePodPan){
-define(["dojo/dom", 'dojo/_base/declare', "dojo/on","dojo/mouse", "dojo/query", 
-"dojox/widget/Standby"], 
-function(dom, declare, on, mouse, query) {
+define(["dojo/dom", 'dojo/_base/declare', "dojo/on","dojo/mouse", "dojo/query", "dojo/dom-construct",
+"dojox/widget/Standby", "dojox/dtl", "dojox/dtl/Context"], 
+function(dom, declare, on, mouse, query, domConstruct) {
 	declare("PodPanel", null, {
 		podNames : new Array(),
 		addPodStandby : new dojox.widget.Standby({
@@ -13,7 +13,7 @@ function(dom, declare, on, mouse, query) {
 		userProfileHandl : null,
 		lastUnfolded : 0,
 		singlePodPanel : null,
-		eventConnections : new Array(),
+		podClickHndlr : null,
 		
 		constructor: function(args){
      	 //declare.safeMixin(this, args);
@@ -95,7 +95,7 @@ function(dom, declare, on, mouse, query) {
 		},
 		showUserPodcasts : function() {
 			var podPanObj = this;
-			dojo.empty("podcastsListPane");
+			domConstruct.empty("podcastsListPane");
 			podPanObj.podNames = new Array();
 			var userProfileHandl = this.userProfileHandl;
 			var podItemTmplCont;
@@ -116,7 +116,7 @@ function(dom, declare, on, mouse, query) {
 					pod_manage_id : "podcastmanage_" + podcast_id
 				});
 
-				var singlePod = dojo.create("div", {
+				var singlePod = domConstruct.create("div", {
 					innerHTML : template.render(context),
 					id : "podcastPane_" + podcast_id,
 					dojoType : "dijit.layout.ContentPane",
@@ -127,13 +127,30 @@ function(dom, declare, on, mouse, query) {
 				}, "podcastsListPane");
 
 			});
-			//
-			dojo.forEach(podPanObj.eventConnections, dojo.disconnect);
-
-			podPanObj.eventConnections = dojo.query("[id^='podcastname_']").connect("onclick", function(evt) {
+			
+			
+			if(podPanObj.podClickHndlr){
+				podPanObj.podClickHndlr.remove();
+			}
+			
+			var podcastsList= dom.byId("podcastsListPane");
+			
+			
+			podPanObj.podClickHndlr = on(podcastsList, 
+				".pod_choise:click", 
+				function(evt) {
+					
+					var podIndx = this.id.substring("podcastname_".length, this.id.length);
+					//alert(feedIndx);
+					podPanObj.singlePodPanel.showSinglePodData(podIndx);
+				}
+			);
+			
+			/*dojo.forEach(podPanObj.eventConnections, dojo.disconnect);
+			podPanObj.eventConnections = query("[id^='podcastname_']").connect("onclick", function(evt) {
 				var podIndx = evt.target.id.substring("podcastPane_".length, evt.target.id.length);
 				podPanObj.singlePodPanel.showSinglePodData(podIndx);
-			});
+			});*/
 			/*
 			 var tmp_event_array = dojo.query("[id^='podcastname_']").connect("onclick", function(evt){
 			 var podIndx = evt.currentTarget.id.substring("podcastPane_".length, evt.currentTarget.id.length);

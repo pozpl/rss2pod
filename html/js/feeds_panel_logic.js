@@ -1,7 +1,9 @@
 /**
  * @author pozpl
  */
-define(["dojo/dom", 'dojo/_base/declare', "dojox/widget/Standby"], function(dom, declare) {
+define(["dojo/dom", 'dojo/_base/declare',  "dojo/on","dojo/mouse", "dojo/query", "dojo/dom-construct",
+  "dojox/widget/Standby", 'dijit/form/Button', "dojox/dtl", "dojox/dtl/Context"], 
+	   function(dom, declare, on, mouse, query, domConstruct) {
 	declare("FeedPanel", null, {
 		//function FeedPanel(){
 
@@ -11,6 +13,10 @@ define(["dojo/dom", 'dojo/_base/declare', "dojox/widget/Standby"], function(dom,
 		userProfileHandl : null, //refferal to user profile struct
 		lastUnfolded : 0,
 		rssReaderObj : null,
+		
+		feedsAddHdlr: null,//handler for add events dor feed list
+		feedsDelHdlr: null,//handler for delete events for feed list
+		
 		
 		constructor: function(args){
      	 //declare.safeMixin(this, args);
@@ -29,9 +35,9 @@ define(["dojo/dom", 'dojo/_base/declare', "dojox/widget/Standby"], function(dom,
 				label : "Add RSS channel",
 				onClick : function() {
 					// Do something:
-					var addFeedDlg = dijit.byId("addFeedDialog");
+					var addFeedDlg = dom.byId("addFeedDialog");
 					if(addFeedDlg) {
-						dojo.byId("feed_url_input").value = "http://";
+						dom.byId("feed_url_input").value = "http://";
 						addFeedDlg.show();
 					}
 				},
@@ -102,7 +108,7 @@ define(["dojo/dom", 'dojo/_base/declare', "dojox/widget/Standby"], function(dom,
 			var activPodHandler = this.podConrtrolHandler;
 			var podControlObj = this.podConrtrolHandler;
 			var rssPanObjHandl = this;
-			dojo.empty("feedsListPane");
+			domConstruct.empty("feedsListPane");
 			feedsPanObj.feedsNames = new Array();
 
 			var podFeedsArray = userProfileHandl.pod_info[activPodHandler.getPodId()].pod_feeds;
@@ -136,7 +142,7 @@ define(["dojo/dom", 'dojo/_base/declare', "dojox/widget/Standby"], function(dom,
 					});
 				}
 
-				var singlePod = dojo.create("div", {
+				var singlePod = domConstruct.create("div", {
 					innerHTML : template.render(context),
 					id : "feedPane_" + feed_id,
 					dojoType : "dijit.layout.ContentPane",
@@ -148,8 +154,34 @@ define(["dojo/dom", 'dojo/_base/declare', "dojox/widget/Standby"], function(dom,
 				feedsPanObj.feedsNames[i] = userProfileHandl.feeds_title_mapping[feed_id];
 
 			});
-
-			dojo.query("[id^='add_feed_']").connect("onclick", function(evt) {
+			
+			
+			
+			if(feedsPanObj.feedsDelHdlr){
+				feedsPanObj.feedsDelHdlr.remove();
+			}
+			var feedsList= dom.byId("feedsListPane");
+			
+			feedsPanObj.feedsDelHdlr = on(feedsList, 
+				".del_feed:click", 
+				function(evt) {
+					
+					var feedIndx = this.id.substring("del_feed_".length, this.id.length);
+					feedsPanObj.delFeedFromList(feedIndx);
+				}
+			);
+			
+			
+			feedsPanObj.feedsAddHdlr = on(feedsList, 
+				".add_feed:click", 
+				function(evt) {
+					
+					var feedIndx = this.id.substring("add_feed_".length, this.id.length);
+					feedsPanObj.addFeedToActivPodcast(feedIndx);
+				}
+			);
+			
+			/*dojo.query("[id^='add_feed_']").connect("onclick", function(evt) {
 				var feedIndx = evt.currentTarget.id.substring("add_feed_".length, evt.currentTarget.id.length);
 				//console.log("FeedIndx " + feedIndx + " evtid " + evt.currentTarget);
 				feedsPanObj.addFeedToActivPodcast(feedIndx);
@@ -159,7 +191,7 @@ define(["dojo/dom", 'dojo/_base/declare', "dojox/widget/Standby"], function(dom,
 				var feedIndx = evt.currentTarget.id.substring("del_feed_".length, evt.currentTarget.id.length);
 				//console.log("FeedIndx " + feedIndx + " evtid " + evt.currentTarget);
 				feedsPanObj.delFeedFromList(feedIndx);
-			});
+			});*/
 			/* TEMPRORARY DELETE THIS EVENT FROM PRODUCTION
 			 * this code show read button but this function is still in development
 			 dojo.query("[id^='fname_']").connect("onclick", function(evt){
