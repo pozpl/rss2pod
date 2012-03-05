@@ -160,6 +160,9 @@ define(["dojo/dom", 'dojo/_base/declare',  "dojo/on","dojo/mouse", "dojo/query",
 			if(feedsPanObj.feedsDelHdlr){
 				feedsPanObj.feedsDelHdlr.remove();
 			}
+			if(feedsPanObj.feedsAddHdlr){
+				feedsPanObj.feedsAddHdlr.remove();
+			}
 			var feedsList= dom.byId("feedsListPane");
 			
 			feedsPanObj.feedsDelHdlr = on(feedsList, 
