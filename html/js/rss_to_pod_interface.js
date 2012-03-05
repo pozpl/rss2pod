@@ -2,7 +2,8 @@
  * @author pozpl
  */
 
-
+podPanelObj = null;
+feedPanelObj = null;
 
 require(["dojo/dom", 'dojo/_base/xhr', 'dojo/_base/declare', 'dojo/dom-style',
 'rss2pod/pod_panel_logic', 'rss2pod/feeds_panel_logic', 'rss2pod/single_pod_panel_logic', 'rss2pod/rss_reader_panel', 
@@ -84,10 +85,22 @@ require(["dojo/dom", 'dojo/_base/xhr', 'dojo/_base/declare', 'dojo/dom-style',
 				}
 			});
 		},
+		
+		getPodPanelObjRef: function(){
+			return this.podPanelObj;
+		},
+		
+		getFeedPanelObjRef: function(){
+			return this.feedPanelObj;
+		},		
+		
 	});
 	
 	
 	var rss2podManagerObj = new Rss2PodManager();
 	rss2podManagerObj.load();
 	
+	podPanelObj = rss2podManagerObj.getPodPanelObjRef();
+	feedPanelObj = rss2podManagerObj.getFeedPanelObjRef();	
 });
+

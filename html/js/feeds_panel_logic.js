@@ -35,7 +35,7 @@ define(["dojo/dom", 'dojo/_base/declare',  "dojo/on","dojo/mouse", "dojo/query",
 				label : "Add RSS channel",
 				onClick : function() {
 					// Do something:
-					var addFeedDlg = dom.byId("addFeedDialog");
+					var addFeedDlg = dijit.byId("addFeedDialog");
 					if(addFeedDlg) {
 						dom.byId("feed_url_input").value = "http://";
 						addFeedDlg.show();
