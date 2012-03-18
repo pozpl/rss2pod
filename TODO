@@ -11,3 +11,4 @@ tasks to be done.
 5. Make configuration more easy. Some system parameters should be got on the fly instead of by the hands.
 6. Write better database access level.
 7. Find solid Perl CMS for project instead of this ugly handmaid page that it has now.
+8. Write config option for google analytics
