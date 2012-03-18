@@ -2,3 +2,6 @@ local
 Build
 .carton
 html/dojo_layouts_test.html
+html/jslib/dijit
+html/jslib/dojo
+html/jslib/dojox
