@@ -6,9 +6,16 @@
 
 /* 'dijitTextBox' refers to 'dijit(TextBox|DateTextBox|CurrencyTextBox|...)' */
 
+.claro .dijitTextBox,
+.claro .dijitInputInner {
+    // .dijitInputInner selector needed for ValidationTextBox on IE6 because <input> doesn't inherit
+    // the color setting from the ancestor div.dijitTextBox
+	color: @text-color;
+}
+
 .claro .dijitTextBoxError .dijitValidationContainer {
 	background-color: @erroricon-background-color;
-	background-image: url('images/error.png');
+	background-image: url("../@{image-form-error}");
 	background-position: top center;
 	border: solid @erroricon-background-color 0;
 	border-left-width: 1px;
@@ -45,8 +52,8 @@
 .claro .dijitTextBox .dijitButtonNode {
 	/* color for (outer) border on *TextBox widgets, and border between input and buttons on ComboBox and Spinner */
 	border-color: @border-color;
-	-webkit-transition-property:background-color, border;
- 	-webkit-transition-duration:.35s;
+	.transition-property(background-color, border);
+ 	.transition-duration(.35s);
 }
 .claro .dijitTextBox {
 	background-color: @textbox-background-color;
@@ -56,11 +63,11 @@
 .claro .dijitTextBoxHover,
 .claro .dijitTextBoxHover .dijitButtonNode {
 	border-color: @hovered-border-color;
- 	-webkit-transition-duration:.25s;
+ 	.transition-duration(.25s);
 }
 .claro .dijitTextBoxHover {
 	background-color: @textbox-hovered-background-color;
-	background-image: url('images/textBox_back.png');
+	background-image: url("../@{image-form-textbox-background}");
 	background-repeat: repeat-x;
 }
 
@@ -78,11 +85,11 @@
 .claro .dijitTextBoxFocused,
 .claro .dijitTextBoxFocused .dijitButtonNode {
 	border-color:@focused-border-color;
- 	-webkit-transition-duration:.1s;
+ 	.transition-duration(.1s);
 }
 .claro .dijitTextBoxFocused {
 	background-color: @textbox-focused-background-color;
-	background-image: url('images/textBox_back.png');
+	background-image: url("../@{image-form-textbox-background}");
 	background-repeat: repeat-x;
 }
 .claro .dijitTextBoxFocused .dijitInputContainer {
@@ -103,7 +110,18 @@
 .claro .dijitTextBoxDisabled .dijitInputContainer {
 	background-color: @textbox-disabled-background-color;
 	background-image: none;
+}
+.claro .dijitTextBoxDisabled,
+.claro .dijitTextBoxDisabled .dijitInputInner {
 	color: @disabled-text-color;
+}
+.dj_webkit .claro .dijitTextBoxDisabled input {
+    /* because WebKit lightens disabled input/textarea no matter what color you specify */
+	color: darken(@disabled-text-color, 5%)
+}
+.dj_webkit .claro textarea.dijitTextAreaDisabled {
+    /* because WebKit lightens disabled input/textarea no matter what color you specify */
+	color: darken(@disabled-text-color, 40%)
 }
 
 /*========================= for special widgets =========================*/
@@ -111,7 +129,7 @@
 /* Input boxes with an arrow (for a drop down) */
 
 .claro .dijitComboBox .dijitArrowButtonInner {
-	background-image: url("images/commonFormArrows.png");
+	background-image: url("../@{image-form-common-arrows}");
 	background-position:-35px 53%;
 	background-repeat: no-repeat;
 	margin: 0;
@@ -136,7 +154,7 @@
 
 .claro .dijitComboBox .dijitButtonNode {
 	background-color: @arrowbutton-background-color;
-	background-image: url("images/formHighlight.png");
+	background-image: url("../@{image-form-highlight}");
 	background-repeat:repeat-x;
 }
 

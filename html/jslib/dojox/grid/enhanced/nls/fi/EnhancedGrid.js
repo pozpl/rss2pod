@@ -1,1 +1,17 @@
-({"descending":"Laskeva","ascending":"Nouseva","nestedSort":"Sisäkkäinen lajittelu","unsorted":"Älä lajittele tätä saraketta","singleSort":"Yksinkertainen lajittelu","indirectSelectionRadio":"Row ${0}, single selection, radio box","indirectSelectionCheckBox":"Row ${0}, multiple selection, check box","selectAll":"Select all","sortingState":"${0} - ${1}"})
+//>>built
+define(
+//begin v1.x content
+({
+	singleSort: "Yksinkertainen lajittelu",
+	nestedSort: "Sisäkkäinen lajittelu",
+	ascending: "Nouseva",
+	descending: "Laskeva",
+	sortingState: "${0} - ${1}",
+	unsorted: "Älä lajittele tätä saraketta",
+	indirectSelectionRadio: "Rivi ${0}, yksittäisvalinta, ruutu",
+	indirectSelectionCheckBox: "Rivi ${0}, monivalinta, valintaruutu",
+	selectAll: "Valitse kaikki"
+})
+//end v1.x content
+);
+

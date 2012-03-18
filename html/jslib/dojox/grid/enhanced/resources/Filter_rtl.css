@@ -1,11 +1,17 @@
 
+.dojoxGridRtl .dojoxGridFBarDefFilterBtnIcon {
+	background: url("images/sprite_icons.png") no-repeat;
+	background-position: -180px -18px;
+}
 .dojoxGridRtl .dojoxGridFBarStatus {
 	margin-left: 0;
 	margin-right: 9px;
+	float: right;
 }
 .dojoxGridRtl .dojoxGridFBarClearFilterBtn {
 	margin-left: 0;
 	margin-right: 10px;
+	float: right;
 }
 .dojoxGridRtl .dojoxGridFBarCloseBtn {
 	margin: 0 0 0 4px;

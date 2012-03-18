@@ -1,17 +1,6 @@
-/*
-	Copyright (c) 2004-2011, The Dojo Foundation All Rights Reserved.
-	Available via Academic Free License >= 2.1 OR the modified BSD license.
-	see: http://dojotoolkit.org/license for details
-*/
-
-
-if(!dojo._hasResource["dojox.html.ellipsis"]){
-dojo._hasResource["dojox.html.ellipsis"]=true;
-dojo.provide("dojox.html.ellipsis");
-dojo.deprecated("dojox.html.ellipsis","Does not work with Firefox>4.  There is no replacement.  Use text-overflow:ellipsis for other browsers.");
-(function(d){
-try{
-if(d.isMoz){
+//>>built
+define("dojox/html/ellipsis",["dojo/_base/kernel","dojo/_base/lang","dojo/_base/array","dojo/_base/Color","dojo/colors"],function(d){
+if(d.isFF<7){
 var _1=1;
 if("dojoxFFEllipsisDelay" in d.config){
 _1=Number(d.config.dojoxFFEllipsisDelay);
@@ -19,17 +8,23 @@ if(isNaN(_1)){
 _1=1;
 }
 }
-var _2="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
-var _3=document.createElementNS(_2,"window");
-var _4=document.createElementNS(_2,"description");
-_4.setAttribute("crop","end");
-_3.appendChild(_4);
-var _5=function(n){
-var x=_3.cloneNode(true);
+try{
+var _2=(function(){
+var _3="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
+var _4=document.createElementNS(_3,"window");
+var _5=document.createElementNS(_3,"description");
+_5.setAttribute("crop","end");
+_4.appendChild(_5);
+return function(n){
+var x=_4.cloneNode(true);
 x.firstChild.setAttribute("value",n.textContent);
 n.innerHTML="";
 n.appendChild(x);
 };
+})();
+}
+catch(e){
+}
 var _6=d.create;
 var dd=d.doc;
 var dp=d.place;
@@ -139,8 +134,8 @@ if(!n||n._djx_ellipsis_done){
 return;
 }
 n._djx_ellipsis_done=true;
-if(n.textContent==n.innerHTML&&!hc(n,"dojoxEllipsisSelectable")){
-_5(n);
+if(_2&&n.textContent==n.innerHTML&&!hc(n,"dojoxEllipsisSelectable")){
+_2(n);
 }else{
 _b(n);
 }
@@ -166,9 +161,4 @@ c=d.connect(d.body(),"DOMSubtreeModified",_10);
 _10();
 });
 }
-}
-catch(e){
-console.warn("dojox.html.ellipsis does not work with Firefox >= 4");
-}
-})(dojo);
-}
+});

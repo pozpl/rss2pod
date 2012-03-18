@@ -1,25 +1,38 @@
-<script type="text/javascript" src="jslib/dojo/dojo.js" djconfig="parseOnLoad:true, isDebug:false">
+<script>
+dojoConfig= {
+	async: true, 
+	parseOnLoad: true,	
+	packages: [{
+		name: "rss2pod",
+		//location: "../../js",
+		location: location.pathname.replace(/\/[^/]+$/, "") + "/js",
+	}]
+};
 </script>
-<script type="text/javascript" src="js/pod_panel_logic.js">
+
+<script src="http://ajax.googleapis.com/ajax/libs/dojo/1.7.2/dojo/dojo.js" data-dojo-config="async: true">	
 </script>
-<script type="text/javascript" src="js/single_pod_panel_logic.js">
+<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/dojo/1.7.2/dijit/themes/tundra/tundra.css"> 
+<script>
+typeof(dojo) == "undefined" && document.write(unescape('%3Cscript src="jslib/dojo/dojo.js" djconfig="parseOnLoad:true, isDebug:false" %3E%3C/script%3E %3Cstyle style type="text/css" %3E @import "jslib/dijit/themes/tundra/tundra.css"; %3C/style%3E '));
 </script>
-<script type="text/javascript" src="js/feeds_panel_logic.js">
+
+<script>
+    require(["dijit/layout/BorderContainer", "dijit/layout/TabContainer",
+        "dijit/layout/ContentPane", "dijit/layout/AccordionContainer", "dijit/TooltipDialog",
+        "dijit/form/Button", "dijit/form/TextBox", "dijit/Dialog", "dijit/form/ValidationTextBox",
+        "dojo/parser"]);    
 </script>
+
+
 <script type="text/javascript" src="js/rss_to_pod_interface.js">
 </script>
-<script type="text/javascript" src="js/rss_reader_panel.js">
-</script>
+
+
 <!--
-<script src="jslib/audiojs/audio.min.js">
-</script>
-<style type="text/css">
-    @import "css/audio.css";
-</style>-->
 <style type="text/css">
     @import "jslib/dijit/themes/tundra/tundra.css";
 </style>
-
-
+-->
 
 

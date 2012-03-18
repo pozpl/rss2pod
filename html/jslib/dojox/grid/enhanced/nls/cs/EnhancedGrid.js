@@ -1,1 +1,17 @@
-({"descending":"Sestupně","ascending":"Vzestupně","nestedSort":"Vnořené řazení","unsorted":"Tento sloupec neřadit","singleSort":"Jednoduché řazení","indirectSelectionRadio":"Row ${0}, single selection, radio box","indirectSelectionCheckBox":"Row ${0}, multiple selection, check box","selectAll":"Select all","sortingState":"${0} - ${1}"})
+//>>built
+define(
+//begin v1.x content
+({
+	singleSort: "Jednotlivé řazení",
+	nestedSort: "Vnořené řazení",
+	ascending: "Vzestupně",
+	descending: "Sestupně",
+	sortingState: "${0} - ${1}",
+	unsorted: "Neřadit tento sloupec",
+	indirectSelectionRadio: "Řádek ${0}, jednotlivý výběr, přepínač",
+	indirectSelectionCheckBox: "Řádek ${0}, vícenásobný výběr, zaškrtávací políčko",
+	selectAll: "Vybrat vše"
+})
+//end v1.x content
+);
+

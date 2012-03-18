@@ -1,1 +1,9 @@
-({"name":"Ad","size":"Boyut (bayt cinsinden)","path":"Yol"})
+//>>built
+define(
+({
+name: "Ad",
+path: "Yol",
+size: "Boyut (bayt cinsinden)"
+})
+
+);

@@ -1,1 +1,90 @@
-({"conditionBefore":"pred ","filterBarDefButton":"Definiraj filter ","filterBarMsgNoFilterTemplate":"Ni uveljavljenih filtrov ","conditionContains":"vsebuje ","clearFilterMsg":"S tem boste odstranili filter in prikazali vse razpoložljive zapise. ","all":"vse","waiValueBoxTemplate":"Vnesite vrednost za filtriranje za pravilo ${0}","conditionRange":"obseg","waiCancelButton":"Prekliči to pogovorno okno ","relationAll":"vsa pravila ","conditionLarger":"je večje kot ","valueBoxLabel":"Vrednost ","statusTipMsg":"Kliknite to vrstico filtra, da filtrirate vrednosti v ${0}.","waiRelAll":"Ujemanje z vsemi naslednjimi pravilo:","closeFilterBarBtn":"Zapri vrstico filtra ","a11yFilterBarDefButton":"Filter...","trueLabel":"True","conditionIsNot":"ni ","conditionIs":"je","ruleTitleTemplate":"Pravilo ${0}","waiRemoveRuleButtonTemplate":"Odstrani pravilo ${0}","and":"in ","conditionLess":"je manjše kot ","waiColumnSelectTemplate":"Stolpec za pravilo ${0}","anycolumn":"katerikoli stolpec ","filterDefDialogTitle":"Filter","waiConditionSelectTemplate":"Pogoj za pravilo ${0}","waiFilterButton":"Predloži filter ","statusTipTitle":"Vrstica filtra ","statusTipRelPre":"Ujemanje ","anyColumnOption":"Katerikoli stolpec ","conditionSelectLabel":"Pogoj ","cancelButton":"Prekliči","conditionNotStartWith":"se ne začne z ","conditionEndWith":"konča se z ","statusTipTitleNoFilter":"Vrstica filtra ","columnSelectLabel":"Stolpec ","conditionNotContain":"ne vsebuje","clearButton":"Počisti ","conditionLargerEqual":"večje ali enako ","any":"karkoli","relationMsgFront":"Ujemanje ","statusTipHeaderColumn":"Stolpec ","defaultItemsName":"postavke ","conditionEqual":"je enako kot ","relationAny":"katerakoli pravila ","trueLabelEditable":"Označeno ","or":"ali ","filterBarMsgHasFilterTemplate":"${0} od ${1} prikazanih ${2} ","rangeTo":"do","conditionStartsWith":"začne se z ","waiRelAny":"Ujemanje s katerimkoli od naslednjih pravil: ","statusTipRelPost":"pravila. ","relationMsgTail":"","filterBarClearButton":"Počisti filter","incompleteRuleTip":"To pravilo ni dokončano.","conditionLessEqual":"manjše ali enako kot ","waiFilterBarClearButton":"Počisti filter ","conditionAfter":"za ","statusTipHeaderCondition":"Pravila ","falseLabel":"False","filterButton":"Filter","clearFilterDialogTitle":"Počisti filter ","statusTipTitleHasFilter":"Filter","addRuleButton":"Dodaj pravilo ","waiAddRuleButton":"Dodaj novo pravilo ","waiClearButton":"Počisti filter ","conditionNotEqual":"ni enako ","conditionNotEndWith":"se ne konča z ","rangeTemplate":"od ${0} do ${1}","removeRuleButton":"Odstrani pravilo ","waiFilterBarDefButton":"Filtriraj tabelo ","conditionIsEmpty":"is empty"})
+//>>built
+define(
+//begin v1.x content
+({
+	"clearFilterDialogTitle": "Počisti filter",
+	"filterDefDialogTitle": "Filter",
+	"ruleTitleTemplate": "Pravilo ${0}",
+	
+	"conditionEqual": "je enako",
+	"conditionNotEqual": "ni enako",
+	"conditionLess": "je manjše kot",
+	"conditionLessEqual": "je manjše kot ali enako",
+	"conditionLarger": "je večje kot",
+	"conditionLargerEqual": "je večje kot ali enako",
+	"conditionContains": "vsebuje",
+	"conditionIs": "je",
+	"conditionStartsWith": "se začne s",
+	"conditionEndWith": "se konča s",
+	"conditionNotContain": "ne vsebuje",
+	"conditionIsNot": "ni",
+	"conditionNotStartWith": "se ne začne s",
+	"conditionNotEndWith": "se ne konča s",
+	"conditionBefore": "pred",
+	"conditionAfter": "za",
+	"conditionRange": "obseg",
+	"conditionIsEmpty": "je prazno",
+	
+	"all": "vse",
+	"any": "karkoli",
+	"relationAll": "vsa pravila",
+	"waiRelAll": "Ujema se z vsemi od naslednjih pravil:",
+	"relationAny": "katerakoli pravila",
+	"waiRelAny": "Ujema se s katerimkoli od naslednjih pravil:",
+	"relationMsgFront": "Ujemanje",
+	"relationMsgTail": "",
+	"and": "in",
+	"or": "ali",
+	
+	"addRuleButton": "Dodaj pravilo",
+	"waiAddRuleButton": "Dodaj novo pravilo",
+	"removeRuleButton": "Odstrani pravilo",
+	"waiRemoveRuleButtonTemplate": "Odstrani pravilo ${0}",
+	
+	"cancelButton": "Prekliči",
+	"waiCancelButton": "Prekliči to pogovorno okno",
+	"clearButton": "Počisti",
+	"waiClearButton": "Počisti filter",
+	"filterButton": "Filter",
+	"waiFilterButton": "Predloži filter",
+	
+	"columnSelectLabel": "Stolpec",
+	"waiColumnSelectTemplate": "Stolpec za pravilo ${0}",
+	"conditionSelectLabel": "Pogoj",
+	"waiConditionSelectTemplate": "Pogoj za pravilo ${0}",
+	"valueBoxLabel": "Vrednost",
+	"waiValueBoxTemplate": "Vnesite vrednost za filter pravila ${0}",
+	
+	"rangeTo": "do",
+	"rangeTemplate": "od ${0} do ${1}",
+	
+	"statusTipHeaderColumn": "Stolpec",
+	"statusTipHeaderCondition": "Pravila",
+	"statusTipTitle": "Vrstica za filtriranje",
+	"statusTipMsg": "Kliknite vrstico za filtriranje tukaj, da prefiltrirate vrednosti v ${0}.",
+	"anycolumn": "katerikoli stolpec",
+	"statusTipTitleNoFilter": "Vrstica za filtriranje",
+	"statusTipTitleHasFilter": "Filter",
+	
+	"defaultItemsName": "postavke",
+	"filterBarMsgHasFilterTemplate": "Prikazanih je ${0} od ${1} ${2}.",
+	"filterBarMsgNoFilterTemplate": "Uveljavljen ni noben filter.",
+	
+	"filterBarDefButton": "Definiraj filter",
+	"waiFilterBarDefButton": "Filtriraj tabelo",
+	"a11yFilterBarDefButton": "Filtriraj ...",
+	"filterBarClearButton": "Počisti filter",
+	"waiFilterBarClearButton": "Počisti filter",
+	"closeFilterBarBtn": "Zapri vrstico za filtriranje",
+	
+	"clearFilterMsg": "S tem boste odstranili filter in prikazali se bodo vsi razpoložljivi zapisi.",
+	"anyColumnOption": "Katerikoli stolpec",
+	
+	"trueLabel": "True",
+	"falseLabel": "False"
+})
+//end v1.x content
+);
+
+
+

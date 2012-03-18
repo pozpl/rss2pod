@@ -1,1 +1,15 @@
-({"selectContents":"Мазмұнын таңдау","deleteElement":"Элементті жою","moveEnd":"Жүгіргіні аяғына жылжыту","deleteContents":"Мазмұнын жою","nodeActions":"${nodeName} Әрекеттер","selectElement":"Элементті таңдау","moveStart":"Жүгіргіні басына жылжыту"})
+//>>built
+define(
+//begin v1.x content
+({
+	"nodeActions": "${nodeName} Әрекеттер",
+	"selectContents": "Мазмұнын таңдау",
+	"selectElement": "Элементті таңдау",
+	"deleteElement": "Элементті жою",
+	"deleteContents": "Мазмұнын жою",
+	"moveStart": "Жүгіргіні басына жылжыту",
+	"moveEnd": "Жүгіргіні аяғына жылжыту"
+})
+
+//end v1.x content
+);

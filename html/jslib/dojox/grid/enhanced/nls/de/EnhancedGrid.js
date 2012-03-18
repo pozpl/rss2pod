@@ -1,1 +1,17 @@
-({"descending":"Absteigend","ascending":"Aufsteigend","nestedSort":"Verschachtelte Sortierung","unsorted":"Spalte nicht sortieren","singleSort":"Einfache Sortierung","indirectSelectionRadio":"Row ${0}, single selection, radio box","indirectSelectionCheckBox":"Row ${0}, multiple selection, check box","selectAll":"Select all","sortingState":"${0} - ${1}"})
+//>>built
+define(
+//begin v1.x content
+({
+	singleSort: "Einzelne Sortierung",
+	nestedSort: "Verschachtelte Sortierung",
+	ascending: "Aufsteigend",
+	descending: "Absteigend",
+	sortingState: "${0} - ${1}",
+	unsorted: "Diese Spalte nicht sortieren",
+	indirectSelectionRadio: "Zeile ${0}, einzelne Auswahl, Optionsfeld",
+	indirectSelectionCheckBox: "Zeile ${0}, Mehrfachauswahl, Kontrollkästchen",
+	selectAll: "Alles auswählen"
+})
+//end v1.x content
+);
+

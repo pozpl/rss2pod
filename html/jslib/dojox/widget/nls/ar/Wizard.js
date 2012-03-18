@@ -1,1 +1,10 @@
-({"next":"تالي","done":"اتمام","previous":"‏سابق‏"})
+//>>built
+define(
+//begin v1.x content
+({
+next: "تالي",
+previous: "‏سابق‏",
+done: "اتمام"
+})
+//end v1.x content
+);

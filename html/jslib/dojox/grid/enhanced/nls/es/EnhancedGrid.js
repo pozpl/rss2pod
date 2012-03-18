@@ -1,1 +1,17 @@
-({"descending":"Descendente","ascending":"Ascendente","nestedSort":"Orden anidado","unsorted":"No ordenar esta columna","singleSort":"Orden único","indirectSelectionRadio":"Row ${0}, single selection, radio box","indirectSelectionCheckBox":"Row ${0}, multiple selection, check box","selectAll":"Select all","sortingState":"${0} - ${1}"})
+//>>built
+define(
+//begin v1.x content
+({
+	singleSort: "Orden único",
+	nestedSort: "Orden anidado",
+	ascending: "Ascendente",
+	descending: "Descendente",
+	sortingState: "${0} - ${1}",
+	unsorted: "No ordenar esta columna",
+	indirectSelectionRadio: "Fila ${0}, selección única, botón de selección",
+	indirectSelectionCheckBox: "Fila ${0}, selección múltiple, recuadro de selección",
+	selectAll: "Seleccionar todo"
+})
+//end v1.x content
+);
+

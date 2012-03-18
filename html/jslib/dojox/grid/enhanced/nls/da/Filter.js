@@ -1,1 +1,90 @@
-({"conditionBefore":"før","filterBarDefButton":"Definér filter","filterBarMsgNoFilterTemplate":"Intet filter anvendt","conditionContains":"indeholder","clearFilterMsg":"Denne funktion fjerner filtret og viser alle tilgængelige records.","all":"alle","waiValueBoxTemplate":"Angiv værdi for filtrering for regel ${0}","conditionRange":"område","waiCancelButton":"Annullér denne dialogboks","relationAll":"alle regler","conditionLarger":"er større end","valueBoxLabel":"Værdi","statusTipMsg":"Klik på filterlinjen for at filtrere efter værdier i ${0}.","waiRelAll":"Skal matche følgende regler:","closeFilterBarBtn":"Luk filterlinjen","a11yFilterBarDefButton":"Filtrér...","trueLabel":"Sand","conditionIsNot":"er ikke","conditionIs":"er","ruleTitleTemplate":"Regel ${0}","waiRemoveRuleButtonTemplate":"Fjern reglel ${0}","and":"og","conditionLess":"er mindre end","waiColumnSelectTemplate":"Kolonne for regel ${0}","anycolumn":"vilkårlig kolonne","filterDefDialogTitle":"Filtrér","waiConditionSelectTemplate":"Betingelse for regel ${0}","waiFilterButton":"Afsend filtret","statusTipTitle":"Filterlinje","statusTipRelPre":"Match","anyColumnOption":"Vilkårlig kolonne","conditionSelectLabel":"Betingelse","cancelButton":"Annullér","conditionNotStartWith":"begynder ikke med","conditionEndWith":"slutter med","statusTipTitleNoFilter":"Filterlinje","columnSelectLabel":"Kolonne","conditionNotContain":"indeholder ikke","clearButton":"Ryd","conditionLargerEqual":"større end eller lig med","any":"nogle af","relationMsgFront":"Match","statusTipHeaderColumn":"Kolonne","defaultItemsName":"elementer","conditionEqual":"er lig med","relationAny":"nogle regler","trueLabelEditable":"Markeret","or":"eller","filterBarMsgHasFilterTemplate":"${0} af ${1} ${2} vist.","rangeTo":"til","conditionStartsWith":"begynder med","waiRelAny":"Skal matche nogle af følgende regler:","statusTipRelPost":"regler.","relationMsgTail":"","filterBarClearButton":"Ryd filter","incompleteRuleTip":"Reglen er ikke komplet.","conditionLessEqual":"mindre end eller lig med","waiFilterBarClearButton":"Ryd filtret","conditionAfter":"efter","statusTipHeaderCondition":"Regler","falseLabel":"Falsk","filterButton":"Filtrér","clearFilterDialogTitle":"Ryd filter","statusTipTitleHasFilter":"Filtrér","addRuleButton":"Tilføj regel","waiAddRuleButton":"Tilføj en ny regel","waiClearButton":"Ryd filtret","conditionNotEqual":"er ikke lig med","conditionNotEndWith":"slutter ikke med","rangeTemplate":"fra ${0} til ${1}","removeRuleButton":"Fjern regel","waiFilterBarDefButton":"Filtrér tabellen","conditionIsEmpty":"is empty"})
+//>>built
+define(
+//begin v1.x content
+({
+	"clearFilterDialogTitle": "Ryd filter",
+	"filterDefDialogTitle": "Filter",
+	"ruleTitleTemplate": "Regel ${0}",
+	
+	"conditionEqual": "lig med",
+	"conditionNotEqual": "er forskellig fra",
+	"conditionLess": "er mindre end",
+	"conditionLessEqual": "mindre end eller lig med",
+	"conditionLarger": "er større end",
+	"conditionLargerEqual": "større end eller lig med",
+	"conditionContains": "indeholder",
+	"conditionIs": "er",
+	"conditionStartsWith": "begynder med",
+	"conditionEndWith": "slutter med",
+	"conditionNotContain": "indeholder ikke",
+	"conditionIsNot": "er ikke",
+	"conditionNotStartWith": "begynder ikke med",
+	"conditionNotEndWith": "slutter ikke med",
+	"conditionBefore": "før",
+	"conditionAfter": "efter",
+	"conditionRange": "interval",
+	"conditionIsEmpty": "er tom",
+	
+	"all": "alle",
+	"any": "vilkårlig",
+	"relationAll": "alle regler",
+	"waiRelAll": "Matcher alle følgende regler:",
+	"relationAny": "vilkårlige regler",
+	"waiRelAny": "Matcher en eller flere af følgende regler:",
+	"relationMsgFront": "Match",
+	"relationMsgTail": "",
+	"and": "og",
+	"or": "eller",
+	
+	"addRuleButton": "Tilføj regel",
+	"waiAddRuleButton": "Tilføj en ny regel",
+	"removeRuleButton": "Fjern regel",
+	"waiRemoveRuleButtonTemplate": "Fjern reglen ${0}",
+	
+	"cancelButton": "Annullér",
+	"waiCancelButton": "Annullér denne dialogboks",
+	"clearButton": "Ryd",
+	"waiClearButton": "Ryd filtret",
+	"filterButton": "Filter",
+	"waiFilterButton": "Send filtret",
+	
+	"columnSelectLabel": "Kolonne",
+	"waiColumnSelectTemplate": "Kolonne for reglen ${0}",
+	"conditionSelectLabel": "Betingelse",
+	"waiConditionSelectTemplate": "Betingelse for reglen ${0}",
+	"valueBoxLabel": "Værdi",
+	"waiValueBoxTemplate": "Angiv værdi, der skal filtreres efter for reglen ${0}",
+	
+	"rangeTo": "til",
+	"rangeTemplate": "fra ${0} til ${1}",
+	
+	"statusTipHeaderColumn": "Kolonne",
+	"statusTipHeaderCondition": "Regler",
+	"statusTipTitle": "Filterlinje",
+	"statusTipMsg": "Klik på filterlinjen for at filtrere efter værdier i ${0}.",
+	"anycolumn": "vilkårlig kolonne",
+	"statusTipTitleNoFilter": "Filterlinje",
+	"statusTipTitleHasFilter": "Filter",
+	
+	"defaultItemsName": "elementer",
+	"filterBarMsgHasFilterTemplate": "${0} af ${1} ${2} vist.",
+	"filterBarMsgNoFilterTemplate": "Intet filter anvendt",
+	
+	"filterBarDefButton": "Definér filter",
+	"waiFilterBarDefButton": "Filtrér tabellen",
+	"a11yFilterBarDefButton": "Filtrér...",
+	"filterBarClearButton": "Ryd filter",
+	"waiFilterBarClearButton": "Ryd filtret",
+	"closeFilterBarBtn": "Luk filterlinje",
+	
+	"clearFilterMsg": "Denne funktion fjerner filtret og viser alle tilgængelige records.",
+	"anyColumnOption": "Vilkårlig kolonne",
+	
+	"trueLabel": "Sand",
+	"falseLabel": "Falsk"
+})
+//end v1.x content
+);
+
+
+

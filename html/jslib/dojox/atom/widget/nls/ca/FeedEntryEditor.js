@@ -1,1 +1,11 @@
-({"edit":"[edita]","save":"[desa]","cancel":"[cancel·la]","doNew":"[nou]"})
+//>>built
+define(
+//begin v1.x content
+({
+	doNew: "[nou]",
+	edit: "[edita]",
+	save: "[desa]",
+	cancel: "[cancel·la]"
+})
+//end v1.x content
+);

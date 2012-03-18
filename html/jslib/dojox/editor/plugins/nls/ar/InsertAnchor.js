@@ -1,1 +1,14 @@
-({"set":"تحديد","insertAnchor":"ادراج نقطة التثبيت","title":"خصائص نقطة التثبيت","text":"الوصف:","cancel":"الغاء","anchor":"الاسم:"})
+//>>built
+define(
+//begin v1.x content
+({
+	insertAnchor: "ادراج نقطة التثبيت",
+	title: "خصائص نقطة التثبيت",
+	anchor: "الاسم:",
+	text: "الوصف:",
+	set: "تحديد",
+	cancel: "الغاء"
+})
+
+//end v1.x content
+);

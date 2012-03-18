@@ -1,1 +1,17 @@
-({"descending":"Synkende","ascending":"Stigende","nestedSort":"Nestet sortering","unsorted":"Ikke sorter denne kolonnen","singleSort":"Enkel sortering","indirectSelectionRadio":"Row ${0}, single selection, radio box","indirectSelectionCheckBox":"Row ${0}, multiple selection, check box","selectAll":"Select all","sortingState":"${0} - ${1}"})
+//>>built
+define(
+//begin v1.x content
+({
+	singleSort: "Enkeltsortering",
+	nestedSort: "Nestet sortering",
+	ascending: "Stigende",
+	descending: "Synkende",
+	sortingState: "${0} - ${1}",
+	unsorted: "Ikke sorter denne kolonnen",
+	indirectSelectionRadio: "Rad ${0}, enkeltvalg, valgknapp",
+	indirectSelectionCheckBox: "Rad ${0}, flervalg, avmerkingsboks",
+	selectAll: "Velg alle"
+})
+//end v1.x content
+);
+
