@@ -2,6 +2,9 @@ package RSS2POD::DB::DBRedis;
 
 use Moose;
 use Redis;
+use Digest::MD5 qw(md5 md5_hex md5_base64);
+
+with 'RSS2POD::DB::DBAccessFuncs';
 
 =begin Redis_database_key_rules
 Redis database key rules
@@ -38,5 +41,23 @@ feeds:set:url            - set of all feeds url's in system
 feeds:addurlqueue:set - set of new feeds that need to be added to working process
 feeds:vqueuelist - list queue of tasks to voicefy the task is json object wirh fileds: file_name, feed_id, text, lang
 =cut
+
+has 'redis_handl' => (
+	is => 'rw',
+	isa => 'Any'
+);
+
+sub connect(){
+	my ($redis_handl) = @_;
+	
+	
+	my $redis = Redis->new( encoding => undef );
+	return $redis;
+}
+
+sub ID_LOGIN(){
+	my ($login) = @_;
+	
+}
 
 1;
