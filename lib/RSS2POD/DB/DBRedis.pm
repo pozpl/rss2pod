@@ -3,6 +3,7 @@ package RSS2POD::DB::DBRedis;
 use Moose;
 use Redis;
 use Digest::MD5 qw(md5 md5_hex md5_base64);
+use Template::Tiny;
 
 with 'RSS2POD::DB::DBAccessFuncs';
 
@@ -42,22 +43,132 @@ feeds:addurlqueue:set - set of new feeds that need to be added to working proces
 feeds:vqueuelist - list queue of tasks to voicefy the task is json object wirh fileds: file_name, feed_id, text, lang
 =cut
 
-has 'redis_handl' => (
+my %redis_keys_templates_hash = (
+	"sdfs" => "sdfsdf",
+);
+
+#redis connections
+has 'redis_connection' => (
 	is => 'rw',
 	isa => 'Any'
 );
 
-sub connect(){
-	my ($redis_handl) = @_;
+#NAMESPACE of redis database to use
+has 'db_namespace' => (
+	is => 'rw',
+	isa => 'Str'
+);
+
+sub get_filled_key(){
+	my ($self, $key_name, $key_args_hash_ref) = @_;
 	
+	my $key_template = $self->redis_keys_templates_hash{$key_name};
 	
-	my $redis = Redis->new( encoding => undef );
-	return $redis;
 }
 
+############################################
+# Usage      : $dbRedis->ID_LOGIN("pozpl");
+# Purpose    : get user id for login
+# Returns    : integer id
+# Parameters : $login string
+# Throws     : no exceptions
+# Comments   : ???
+# See Also   : n/a
 sub ID_LOGIN(){
-	my ($login) = @_;
+	my ($self, $login) = @_;
 	
+	my $login_hash = md5_hex($login);
+	my $id = $self->redis_connection->get("id:$login_hash");
+	
+	return $id;	
 }
+
+############################################
+# Usage      : $dbRedis->USER_USER_ID_PASS(3);
+# Purpose    : get user password hash for user id
+# Returns    : password hash string
+# Parameters : $user_id integer
+# Throws     : no exceptions
+# Comments   : ???
+# See Also   : n/a
+sub USER_USER_ID_PASS(){
+	my ($self, $user_id) = @_;
+	my $password_hash = $self->redis_connection->get("user:$user_id:pass");
+	return $password_hash;
+}
+
+############################################
+# Usage      : $dbRedis->USERS_NEXT_ID();
+# Purpose    : get users next id.
+# Returns    : id integer
+# Parameters : none
+# Throws     : no exceptions
+# Comments   : returns Id for new user
+# See Also   : n/a
+sub USERS_NEXT_ID(){
+	my ($self) = @_;
+	my $next_user_id = $self->redis_connection->get("users:nextId");
+	return $next_user_id;
+}
+
+############################################
+# Usage      : $dbRedis->USERS_USER_ID_LOGIN(3);
+# Purpose    : get user login in text form for user id.
+# Returns    : login string
+# Parameters : $user_id integer
+# Throws     : no exceptions
+# Comments   : ???
+# See Also   : n/a
+sub USERS_USER_ID_LOGIN(){
+	my ($self, $user_id) = @_;
+	my $user_login = $self->redis_connection->get("user:$user_id:login");
+	return $user_login;
+}
+
+
+
+############################################
+# Usage      : $dbRedis->USERS_USER_ID_EMAIL(3);
+# Purpose    : get user email in text form for user id.
+# Returns    : email string
+# Parameters : $user_id integer
+# Throws     : no exceptions
+# Comments   : ???
+# See Also   : n/a
+sub USERS_USER_ID_EMAIL(){
+	my ($self, $user_id) = @_;
+	my $user_email = $self->redis_connection->get("user:$user_id:email");
+	return $user_email;
+}
+
+############################################
+# Usage      : $dbRedis->USERS_USER_ID_POD_NEXT_ID(3);
+# Purpose    : get next id for uesr podcast
+# Returns    : id integer
+# Parameters : $user_id integer
+# Throws     : no exceptions
+# Comments   : ???
+# See Also   : n/a
+sub USERS_USER_ID_POD_NEXT_ID(){
+	my ($self, $user_id) = @_;
+	my $next_pod_id = $self->redis_connection->get("user:$user_id:pod:nextId");
+	return $next_pod_id;
+}
+
+############################################
+# Usage      : $dbRedis->USERS_USER_ID_POD_NEXT_ID(3);
+# Purpose    : get list of user podcasts names
+# Returns    : id integer
+# Parameters : $user_id integer
+# Throws     : no exceptions
+# Comments   : ???
+# See Also   : n/a
+sub USERS_USER_ID_POD_POD_ZSET(){
+	my ($self, $user_id) = @_;
+	my @user_podcasts_names = $self->redis_connection->get("user:$user_id:pod:pod_zset");
+	return @user_podcasts_names;
+}
+
+
 
 1;

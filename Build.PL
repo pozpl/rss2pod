@@ -65,6 +65,7 @@ my $build = App::Build->new(
 		'MIME::Base64'                             => 0,
 		'Encode::Detect::Detector'                 => 0,
 		'JSON'                                     => 0,
+		'Template::Tiny'						   => 0,	
 	},
 	install_base => '/opt/rss2pod',
 );
