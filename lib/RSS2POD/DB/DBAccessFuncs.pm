@@ -1,4 +1,4 @@
-package RSS2POD::DB::DBAccessFunc;
+package RSS2POD::DB::DBAccessFuncs;
 use strict;
 use warnings;
 use Moose::Role;

@@ -1,6 +1,7 @@
 use Test::More tests => 41;
 use Encode;
 use lib "../lib";
+use Moose;
 use RSS2POD::DB::DBRedis;
 use Redis;
 use JSON;
