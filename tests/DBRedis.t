@@ -45,9 +45,9 @@ feeds:vqueuelist - list queue of tasks to voicefy the task is json object wirh f
 =cut
 
 #default test user
-local $TEST_USER          = "DEFAULT_TEST_USER";
-local $TEST_USER_PASSWORD = "DEFAULT_BLOODY_PASSWORD";
-local $TEST_USER_EMAIL    = "test_user@email.com";
+my $TEST_USER          = "DEFAULT_TEST_USER";
+my $TEST_USER_PASSWORD = "DEFAULT_BLOODY_PASSWORD";
+my $TEST_USER_EMAIL    = "test_user\@email.com";
 
 sub open_connection() {
 
@@ -55,6 +55,18 @@ sub open_connection() {
 ## Disable the automatic utf8 encoding => much more performance
 	my $redis = Redis->new( encoding => undef );
 	return $redis;
+}
+
+sub get_db_redis_instance(){
+	my $redis    = open_connection();
+	my $templater = new Template::Tiny(TRIM => 1);
+	my $db_redis = new RSS2POD::DB::DBRedis(
+					'redis_connection' => $redis,
+					'db_namspace'      => '',
+					'templater'        => $templater,					
+	);
+	
+	return $db_redis;
 }
 
 sub close_connection() {
@@ -144,7 +156,7 @@ sub check_get_feeds_urls() {
 
 sub check_get_and_del_feed_url_from_queue_of_new_feeds() {
 	my $redis = open_connection();
-
+	my $db_redis = RSS2POD::DB::DBRedis->new();
 	#put some urls into the quque of new feeds
 	my @urls_list = (
 		'http://url1.io', 'http://url2.io', 'http://url3.io', 'http://url4.io',
@@ -157,8 +169,7 @@ sub check_get_and_del_feed_url_from_queue_of_new_feeds() {
 		#add feed url to feeds:addurlqueue:set
 		$redis->sadd( $db_redis->FEEDS_ADDURLQUEUE_SET(), $single_url );
 	}
-
-	my $db_redis           = RSS2POD::DB::DBRedis->new();
+	
 	my $geted_urls_counter = 0;
 	while ( my $feed_url = $db_redis->get_and_del_feed_url_from_queue_of_new_feeds() ) {
 		$geted_urls_counter += 1 if exists $urls_hash{$feed_url};
@@ -222,7 +233,7 @@ sub check_add_feed_item_to_voicefy_queue() {
 
 	#by default we put text blob, that is feed item in string form
 	#prepare IT
-	$feed_id = 1;                                  #jast test value
+	my $feed_id = 1;                                  #jast test value
 	my $item      = "Test feed title   feed content";
 	my $item_txt  = LangUtils::TextHandler::prepare_text($item);
 	my $json      = JSON->new->allow_nonref;
@@ -412,11 +423,14 @@ sub check_del_and_get_old_items_from_feed() {
 	_create_test_feed($feed_test_url);
 	my $feed_id = $db_redis->get_feed_id_for_url($feed_test_url);
 
+
 	#generate a bunch of feed items and add it into the database
+	my $json      = JSON->new->allow_nonref;
 	my @generated_feed_items;
 	for my $item_num ( 1 .. 100 ) {
 		my $generated_item = _generate_feed_item( "title  $item_num  text", $feed_id );
 		push @generated_feed_items, $generated_item;
+		my $item_json = $json->encode($generated_item);
 		$db_redis->add_item_to_feed( $item_json, $feed_id );
 	}
 
@@ -720,7 +734,7 @@ sub check_add_feed_id_to_user_feeds() {
 	$db_redis->add_feed_id_to_user_feeds( $TEST_USER, $feed_id );
 
 	#CHECK
-	my @user_feeds_ids = $dv_redis->get_user_feeds_ids($TEST_USER);
+	my @user_feeds_ids = $db_redis->get_user_feeds_ids($TEST_USER);
 	my %user_feed_ids_hash;
 	@user_feed_ids_hash{@user_feeds_ids} = ();
 	my $all_ok = exists $user_feed_ids_hash{$feed_id} ? 1 : 0;
@@ -750,7 +764,7 @@ sub check_get_user_podcasts_ids() {
 	my @user_podcast_ids = $db_redis->get_user_podcasts_ids($TEST_USER);
 
 	#CHECK
-	$all_ok = 1;
+	my $all_ok = 1;
 	if ( $#user_podcast_ids != $number_of_podcasts ) {
 		for my $pod_id (@pod_ids_orig) {
 			if ( !exists $pod_ids_orig_hash{$pod_id} ) {
@@ -786,12 +800,12 @@ sub check_get_user_podcasts_id_title_map() {
 	  $db_redis->get_user_podcasts_id_title_map($TEST_USER);
 
 	#CHECK
-	$all_ok = 1;
+	my $all_ok = 1;
 	keys %pod_id_lable_hash;    #RESET HASH ITERATOR,
 	while ( my ( $pod_id_orig, $pod_lable_orig ) = each %pod_id_lable_hash ) {
 		my $elem_ok =
-		    ( !exists $user_podcast_id_lable_hash{$pod_id} ) ? 0
-		  : !( $user_podcast_id_lable_hash{$pod_} eq $pod_lable_orig ) ? 0
+		    ( !exists $user_podcast_id_lable_hash{$pod_id_orig} ) ? 0
+		  : !( $user_podcast_id_lable_hash{$pod_id_orig} eq $pod_lable_orig ) ? 0
 		  :                                                              1;
 		if ( !$elem_ok ) {
 			$all_ok = 0;
@@ -828,10 +842,10 @@ sub check_get_user_podcasts_titles() {
 	my %user_podcasts_titles_hash;
 	@user_podcasts_titles_hash{@user_podcasts_titles} = ();
 
-	$all_ok = 1;
+	my $all_ok = 1;
 	keys %pod_id_lable_hash;    #RESET HASH ITERATOR,
 	for my $pod_lable ( values %pod_id_lable_hash ) {
-		if ( !exists $user_podcasts_titels_hash{$pod_lable} ) {
+		if ( !exists $user_podcasts_titles_hash{$pod_lable} ) {
 			$all_ok = 0;
 		}
 	}
@@ -860,7 +874,7 @@ sub check_get_user_podcast_feeds_ids() {
 	}
 
 	#EXECUTE
-	my @user_feeds_ids = $dv_redis->get_user_podcast_feeds_ids( $TEST_USER, $podcast_id );
+	my @user_feeds_ids = $db_redis->get_user_podcast_feeds_ids( $TEST_USER, $podcast_id );
 
 	#CHECK
 	my %user_feed_ids_hash;
@@ -891,7 +905,7 @@ sub check_get_feeds_id_title_map() {
 	my %id_feed_title_map_orig;
 	my @feeds_ids;
 	for my $single_url (@urls_list) {
-		my $feet_id = _create_feed($single_url);
+		my $feed_id = _create_feed($single_url);
 		$db_redis->set_feed_title($single_url);
 		$id_feed_title_map_orig{$feed_id} = $single_url;
 		push @feeds_ids, $feed_id;
@@ -903,7 +917,7 @@ sub check_get_feeds_id_title_map() {
 	#CHECK
 	my $all_ok = 1;
 	for my $feed_id (@feeds_ids) {
-		$feed_ok =
+		my $feed_ok =
 		    ( !exists $feeds_id_title_map{$feed_id} ) ? 0
 		  : !( $feeds_id_title_map{$feed_id} eq $id_feed_title_map_orig{$feed_id} ) ? 0
 		  :                                                                           1;
@@ -934,7 +948,7 @@ sub check_get_user_feeds_ids() {
 	}
 
 	#EXECUTE
-	my @user_feeds_ids = $dv_redis->get_user_feeds_ids($TEST_USER);
+	my @user_feeds_ids = $db_redis->get_user_feeds_ids($TEST_USER);
 
 	#CHECK
 	my %user_feed_ids_hash;
@@ -1020,10 +1034,10 @@ sub check_set_new_podcast_item_ready_status() {
 
 	#EXECUTE
 	my $status = 'ok';
-	$db_redis->set_new_podcast_item_ready_status( $user_id, $podcast_id, $status );
+	$db_redis->set_new_podcast_item_ready_status( $user_id, $pod_id, $status );
 
 	#CHECK
-	$obtained_status =
+	my $obtained_status =
 	  $redis->get( $db_redis->USER_USER_ID_POD_POD_ID_GEN_MP3_STAT( $user_id, $pod_id ) );
 	my $all_ok = 0;
 	if ( $obtained_status && $obtained_status eq $status ) {
@@ -1052,10 +1066,10 @@ sub check_get_new_podcast_item_ready_status() {
 	  $redis->get( $db_redis->USER_USER_ID_POD_POD_NAME_ID( $user_id, $podcast_label ) );
 
 	my $status = 'ok';
-	$db_redis->set_new_podcast_item_ready_status( $user_id, $podcast_id, $status );
+	$db_redis->set_new_podcast_item_ready_status( $user_id, $pod_id, $status );
 
 	#EXECUTE
-	$obtained_status = $db_redis->get_new_podcast_item_ready_status();
+	my $obtained_status = $db_redis->get_new_podcast_item_ready_status();
 
 	#CHECK
 	my $all_ok = 0;
@@ -1088,18 +1102,18 @@ sub check_add_pod_file_path_lable_to_podcast() {
 		file_path => '/home/pozpl/podcast.mp3',
 		datatime  => '26.07.1000 12:56',
 	);
-	
+	my $json = JSON->new->allow_nonref;
 	my $encoded_file_struct = $json->encode( \%pod_file_struct );
 	
 	#EXECUTE
-	$db_redis->add_pod_file_path_lable_to_podcast( $user_id, $podcast_id, $encoded_file_struct);
+	$db_redis->add_pod_file_path_lable_to_podcast( $user_id, $pod_id, $encoded_file_struct);
 	
 	#CHECK
-	my @file_paths = $db_redis->get_user_podcast_files_paths($user_id, $podcast_id);
+	my @file_paths = $db_redis->get_user_podcast_files_paths($user_id, $pod_id);
 	my  %file_paths_hash;
 	@file_paths_hash{@file_paths} = ();
 	
-	my @file_lables = $db_redis->get_user_podcast_files_lables($user_id, $podcast_id);
+	my @file_lables = $db_redis->get_user_podcast_files_lables($user_id, $pod_id);
 	my %file_lables_hash;
 	@file_lables_hash{@file_lables} = ();
 	
@@ -1133,13 +1147,13 @@ sub check_get_user_podcast_files_paths() {
 		file_path => '/home/pozpl/podcast.mp3',
 		datatime  => '26.07.1000 12:56',
 	);
-	
+	my $json = JSON->new->allow_nonref;
 	my $encoded_file_struct = $json->encode( \%pod_file_struct );
 	
-	$db_redis->add_pod_file_path_lable_to_podcast( $user_id, $podcast_id, $encoded_file_struct);
+	$db_redis->add_pod_file_path_lable_to_podcast( $user_id, $pod_id, $encoded_file_struct);
 	
 	#EXECUTE
-	my @file_paths = $db_redis->get_user_podcast_files_paths($user_id, $podcast_id);
+	my @file_paths = $db_redis->get_user_podcast_files_paths($user_id, $pod_id);
 	my  %file_paths_hash;
 	@file_paths_hash{@file_paths} = ();
 	
@@ -1175,12 +1189,14 @@ sub check_get_user_podcast_files_lables() {
 		datatime  => '26.07.1000 12:56',
 	);
 	
+	my $json = JSON->new->allow_nonref;
+	
 	my $encoded_file_struct = $json->encode( \%pod_file_struct );
 	
-	$db_redis->add_pod_file_path_lable_to_podcast( $user_id, $podcast_id, $encoded_file_struct);
+	$db_redis->add_pod_file_path_lable_to_podcast( $user_id, $pod_id, $encoded_file_struct);
 	
 	#EXECUTE
-	my @file_lables = $db_redis->get_user_podcast_files_lables($user_id, $podcast_id);
+	my @file_lables = $db_redis->get_user_podcast_files_lables($user_id, $pod_id);
 	my %file_lables_hash;
 	@file_lables_hash{@file_lables} = ();
 	
@@ -1214,17 +1230,18 @@ sub check_get_amount_of_user_podcast_files() {
 		file_path => '/home/pozpl/podcast.mp3',
 		datatime  => '26.07.1000 12:56',
 	);
+	my $json = JSON->new->allow_nonref;
 	
 	my $encoded_file_struct = $json->encode( \%pod_file_struct );
 	
-	$db_redis->add_pod_file_path_lable_to_podcast( $user_id, $podcast_id, $encoded_file_struct);
+	$db_redis->add_pod_file_path_lable_to_podcast( $user_id, $pod_id, $encoded_file_struct);
 	
 	#EXECUTE
-	my $user_podcast_files = $db_redis->get_amount_of_user_podcast_files($user_id, $podcast_id);
+	my $user_podcast_files = $db_redis->get_amount_of_user_podcast_files($user_id, $pod_id);
 	
 	
 	#CHECK
-	my $all_ok = $user_popodcast_files == 1 ? 1 : 0;
+	my $all_ok = $user_podcast_files == 1 ? 1 : 0;
 	
 	#CLEAN
 	$db_redis->delete_user($TEST_USER);
@@ -1247,25 +1264,26 @@ sub check_del_and_get_old_podcasts_from_podlist() {
 	$db_redis->add_user_podcast( $TEST_USER, $podcast_label );
 	my $pod_id =
 	  $redis->get( $db_redis->USER_USER_ID_POD_POD_NAME_ID( $user_id, $podcast_label ) );
-
+	
+	my $json = JSON->new->allow_nonref;
 	for my $pod_idx (1..100){
 		my %pod_file_struct = (
 			file_path => "/home/pozpl/podcast_$pod_idx.mp3",
 			datatime  => '26.07.1000 12:56' . $pod_idx,
 		);
 		my $encoded_file_struct = $json->encode( \%pod_file_struct );	
-		$db_redis->add_pod_file_path_lable_to_podcast( $user_id, $podcast_id, $encoded_file_struct);
+		$db_redis->add_pod_file_path_lable_to_podcast( $user_id, $pod_id, $encoded_file_struct);
 	}
 	
-	my $max_podcast_in_podlist = 50; 
+	my $max_podcasts_in_podlist = 50; 
 	
 	#EXECUTE
 	my @old_podcasts = $db_redis->del_and_get_old_podcasts_from_podlist($user_id, 
-							$podcast_id, $max_podcasts_in_podlist);
+							$pod_id, $max_podcasts_in_podlist);
 	
 	
 	#CHECK
-	my $all_ok = ($old_podcasts == 50) ? 1 : 0;
+	my $all_ok = (@old_podcasts == 50) ? 1 : 0;
 	
 	#CLEAN
 	$db_redis->delete_user($TEST_USER);
@@ -1289,11 +1307,11 @@ sub check_get_podcast_last_check_time() {
 	my $pod_id =
 	  $redis->get( $db_redis->USER_USER_ID_POD_POD_NAME_ID( $user_id, $podcast_label ) );
 	
-	$last_chk_time = '26.07.1000 12:56';
+	my $last_chk_time = '26.07.1000 12:56';
 	$db_redis->check_set_podcast_last_check_time($user_id, $pod_id, $last_chk_time);
 	
 	#EXECUTE
-	my $obtained_last_chk_time = $db_redis->get_podcast_last_check_time($user_id, $podcast_id);
+	my $obtained_last_chk_time = $db_redis->get_podcast_last_check_time($user_id, $pod_id);
 	
 	
 	#CHECK
@@ -1321,13 +1339,13 @@ sub check_set_podcast_last_check_time() {
 	my $pod_id =
 	  $redis->get( $db_redis->USER_USER_ID_POD_POD_NAME_ID( $user_id, $podcast_label ) );
 	
-	$last_chk_time = '26.07.1000 12:56';
+	my $last_chk_time = '26.07.1000 12:56';
 	
 	#EXECUTE	
 	$db_redis->check_set_podcast_last_check_time($user_id, $pod_id, $last_chk_time);
 	
 	#CHECK
-	my $obtained_last_chk_time = $db_redis->get_podcast_last_check_time($user_id, $podcast_id);
+	my $obtained_last_chk_time = $db_redis->get_podcast_last_check_time($user_id, $pod_id);
 	my $all_ok = ($last_chk_time == $obtained_last_chk_time) ? 1 : 0;
 	
 	#CLEAN
@@ -1370,7 +1388,7 @@ sub check_get_users_feeds_new_items() {
 	my @new_items = $db_redis->get_users_feeds_new_items($user_id, $feed_id);
 	
 	#CHECK
-	my $all_ok = ($new_items != 1) 				? 0
+	my $all_ok = (@new_items != 1) 				? 0
 			:  !($new_items[0] eq $item_json)   ? 0
 			:									  1;
 	
@@ -1400,7 +1418,7 @@ sub check_set_feed_title() {
 	$db_redis->set_feed_title($feed_id, $feed_tile);
 	
 	#CHECK
-	$obtained_title = $db_redis->get_feed_title($feed_id);
+	my $obtained_title = $db_redis->get_feed_title($feed_id);
 	
 	my $all_ok = ($obtained_title eq $feed_tile) ? 1 : 0;
 	
@@ -1523,7 +1541,7 @@ sub check_del_user_feed() {
 	$db_redis->del_user_feed($user_id, $feed_id);
 	
 	#CHECK
-	my @user_feeds_ids = $dv_redis->get_user_feeds_ids($TEST_USER);
+	my @user_feeds_ids = $db_redis->get_user_feeds_ids($TEST_USER);
 	my %user_feed_ids_hash;
 	@user_feed_ids_hash{@user_feeds_ids} = ();
 	my $all_ok = exists $user_feed_ids_hash{$feed_id} ? 0 : 1;
@@ -1559,7 +1577,7 @@ sub check_del_feed_id_from_user_podcast() {
 	$db_redis->add_feed_id_to_user_podcast($feed_id);
 	
 	#EXECUTE
-	$db_redis->del_feed_id_from_user_podcast($user_id, $podcast_id, $feed_id);
+	$db_redis->del_feed_id_from_user_podcast($user_id, $pod_id, $feed_id);
 	
 	#CHECK
 	my @feeds_ids = $db_redis->get_user_podcast_feed_ids($user_id, $pod_id);
@@ -1576,6 +1594,21 @@ sub check_del_feed_id_from_user_podcast() {
 	close_connection();
 	return $all_ok;
 }
+
+#17
+sub check_get_filled_key(){
+	my $redis    = open_connection();
+	my $db_redis = get_db_redis_instance();
+	
+	my $filled_key = $db_redis->get_filled_key("ID_LOGIN", ('login' => 'pozpl'));
+	
+	my $all_ok = ($filled_key eq 'id:pozpl');
+	
+	return $all_ok;
+}
+
+
+ok(check_get_filled_key());
 
 ok( check_get_feeds_urls(), "Get feeds urls works fine" );
 ok(
