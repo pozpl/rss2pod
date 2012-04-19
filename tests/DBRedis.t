@@ -1600,7 +1600,7 @@ sub check_get_filled_key(){
 	my $redis    = open_connection();
 	my $db_redis = get_db_redis_instance();
 	
-	my $filled_key = $db_redis->get_filled_key("ID_LOGIN", ('login' => 'pozpl'));
+	my $filled_key = $db_redis->get_filled_key("ID_LOGIN", {login => 'pozpl'});
 	
 	my $all_ok = ($filled_key eq 'id:pozpl');
 	

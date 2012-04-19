@@ -46,7 +46,7 @@ feeds:vqueuelist - list queue of tasks to voicefy the task is json object wirh f
 =cut
 
 my %REDIS_KEYS_TEMPLATES_HASH = (
-	"ID_LOGIN" => "id:[% login %]",
+	"ID_LOGIN" => "id:[%login%]",
 #user:$user_id:pass - password of user
 #users:nextId - Id for next user (store all number of users)
 #user:$new_user_id:login - login for user with id
