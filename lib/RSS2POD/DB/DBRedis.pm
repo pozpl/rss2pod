@@ -47,38 +47,34 @@ feeds:vqueuelist - list queue of tasks to voicefy the task is json object wirh f
 
 my %REDIS_KEYS_TEMPLATES_HASH = (
 	"ID_LOGIN" => "id:[%login%]",
-#user:$user_id:pass - password of user
-#users:nextId - Id for next user (store all number of users)
-#user:$new_user_id:login - login for user with id
-#user:$new_user_id:email - email for user with id
-#
-#
-#user:$user_id:pod:nexId          - id of new podcast for user
-#user:$user_id:pod:pod_zset      - list of names of podcasts
-#user:$user_id:pod:$pod_id:rss_zset - list of rss id's for this podcast
-#user:$user_id:pod:$pod_id:rss_nextId - id (or weight in z set) of next feed to add to podcast
-#user:$user_id:pod:" . md5_hex($pod_name) . ":id - id of podcast with such name
-#user:$user_id:pod:$pod_id:last_chk_time - time of last checking in sec
-#
-#user:$user_id:pod:$pod_id:pod_files_names - list of stored user podcast files. stored struct {file_path: '$pod_file_name', datatime: '$user_datatime'}
-#user:$user_id:pod:$pod_id:gen_mp3_stat - status of mp3 generating 
-#
-#user:$user_id:feeds:feeds_id_zset - set of all id feeds that this user owns
-#user:$user_id:feeds:$feed_id:last_chk_num - number of last checked item for feed
-#user:$user_id:feeds:nextId - next id of feed for user
-#
-#feed:nextId             - next id for feed
-#feed:$feed_id:items - list of rss items for feed with id. Stores structure {lang: "" , text: "", file_name: ""}
-#feed:$feed_id:items_md5_zset - zset of md5 summs of items, to check, if new item is already exists in database
-#feed:$feed_id:items_shift - number of items, that we cut from head of list during application lifetime, the actual number of feeds in list is feeds_shift + count of elements now  in list
-#feed:" . md5_hex($feed_url) . ":id - id for feed with url stored in #feed_url
-#feed:$feed_id:title  - name or short description of chanal gained from rss provider.
-#feed:$feed_id:url - url of feed with id
-#
-#feeds:set:url            - set of all feeds url's in system
-#feeds:addurlqueue:set - set of new feeds that need to be added to working process
-#feeds:vqueuelist - list queue of tasks to voicefy the task is json object wirh fileds: file_name, feed_id, text, lang
+	"USER_USER_ID_PASS" => "user:[%user_id%]:pass",
+	"USERS_NEXT_ID"     => "users:next_id",
+	"USER_USER_ID_LOGIN" => "user:[%user_id%]:ligin",
+	"USER_USER_ID_EMAIL" => "user:[%user_id%]:email",
+	"USER_USER_ID_POD_NEXT_ID" => "user:[%user_id%]:pod:nexId",
+	"USER_USER_ID_POD_POD_ZSET" => "user:[%user_id%]:pod:pod_zset",
+	"USER_USER_ID_POD_POD_ID_RSS_ZSET" => "user:[%user_id%]:pod:[%pod_id%]:rss_zset",
+	"USER_USER_ID_POD_POD_ID_RSS_NEXT_ID" => "user:[%user_id%]:pod:[%pod_id%]:rss_next_id",
+	"USER_USER_ID_POD_POD_NAME_ID" => "user:[%user_id%]:pod:[%pod_name%]:id",
+	"USER_USER_ID_POD_POD_ID_LAST_CHK_TIME" => "user:[%user_id%]:pod:[%pod_id%]:last_chk_time",
+	"USER_USER_ID_POD_POD_ID_POD_FILES_NAMES" => "user:[%user_id%]:pod:[%pod_id%]:pod_files_names",
+	"USER_USER_ID_POD_POD_ID_GEN_MP3_STAT" => "user:[%user_id%]:pod:[%pod_id%]:gen_mp3_stat",
+	
+	"USER_USER_ID_FEEDS_FEEDS_ID_ZSET" => "user:[%user_id%]:feeds:feeds_id_zset",
+	"USER_USER_ID_FEEDS_FEED_ID_LAST_CHK_NUM" => "user:[%user_id%]:feeds:[%feed_id%]:last_chk_num",
+	"USER_USER_ID_FEEDS_NEXT_ID" => "user:[%user_id%]:feeds:next_id",
+	
+	"FEED_NEXT_ID" => "feed:next_id",
+	"FEED_ID_ITEMS" => "feed:[%feed_id%]:items",
+	"FEED_ID_ITEMS_HASH_ZSET" => "feed:[%feed_id%]:items_hash_zset",
+	"FEED_ID_ITEMS_SHIFT" => "feed:[%feed_id%]:items_shift",
+	"FEED_FEED_URL_ID" => "feed:[%feed_url%]:id",
+	"FEED_FEED_ID_TITLE" => "feed:[%feed_id%]:title",
+	"FEED_FEED_ID_URL" => "feed:[%feed_id%]:url",
 
+	"FEEDS_SET_URL" => "feeds:set:url",
+	"FEEDS_ADDURLQUEUE_SET" => "feeds:addurlqueue:set",
+	"FEEDS_VQUEUELIST" => "feeds:addurlqueue:set",
 );
 
 #redis connections
@@ -128,7 +124,20 @@ sub get_filled_key(){
 }
 
 #1
-sub get_feeds_urls(){} #get all feeds urls from a database and retun it as an array
+#
+############################################
+# Usage      : my @all_urls = get_feeds_urls();
+# Purpose    : get all feeds urls from a database and retun it as an array
+# Returns    : array of urls strings
+# Parameters : none
+# Throws     : no exceptions
+# Comments   : Generate feed item based on an input text field
+# See Also   : n/a
+sub get_feeds_urls(){
+	my ($self) = @_;
+	
+	$self->redis_connection;
+} 
 #2	 
 sub get_and_del_feed_url_from_queue_of_new_feeds(){} #get feed url from queue of new feeds that we need to add to downloading process
 #3

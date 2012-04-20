@@ -74,15 +74,7 @@ sub close_connection() {
 	$redis->quit();
 }
 
-sub _create_test_feed($) {
-	my ($feed_url) = @_;
 
-	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
-
-	$db_redis->del_feed($feed_url);                #delete all feed related information
-	my $feed_id = $db_redis->create_feed_for_url($feed_url);
-	return $feed_id;
-}
 
 ############################################
 # Usage      : _delete_test_feed("http://som.url")  or _delete_test_feed($feed_id);
@@ -120,6 +112,7 @@ sub _generate_feed_item($ $) {
 }
 
 sub check_get_feeds_urls() {
+	#PREPARE
 	my $redis = open_connection();
 
 	my @urls_list = (
@@ -130,18 +123,18 @@ sub check_get_feeds_urls() {
 	my %urls_hash;
 	@urls_hash{@urls_list} = ();
 
-	my $db_redis = RSS2POD::DB::DBRedis->new();
+	my $db_redis = get_db_redis_instance();
 
 	#add some new urls to the feeds urls set
 	for my $single_url (@urls_list) {
-		$redis->sadd( $db_redis->FEEDS_SET_URL(), $single_url );
+		_create_test_feed($single_url);		
 	}
-
+	#EXECUTE
 	my @out_feeds_urls_list = $db_redis->get_feeds_urls();
 	my %out_feeds_urls_hash;
 	@out_feeds_urls_hash{@out_feeds_urls_list} = ();
 
-	#check existance
+	#CHECK
 	my $is_feed_url_exist_in_out = 1;
 	for my $single_url (@urls_list) {
 		if ( !exists $out_feeds_urls_hash{$single_url} ) {
@@ -149,8 +142,7 @@ sub check_get_feeds_urls() {
 		}
 	}
 
-	close_connection();
-
+	$redis->quit();
 	return $is_feed_url_exist_in_out;
 }
 
@@ -1666,4 +1658,23 @@ ok( check_add_feed_id_to_user_podcast(), "add feed id to user's podcast" );
 ok( check_del_user_feed(), "delete feed id from user's list and all user's podcasts" );
 ok( check_del_feed_id_from_user_podcast(), "delete feed id from user's podcast" );
 ok( check_get_feed_id_for_url(),           "get feed id for URL ok" );
+
+
+############################################
+# Usage      : _create_test_feed("http://som.url")  or _delete_test_feed($feed_id);
+# Purpose    : delete feed from database
+# Returns    : none
+# Parameters : url of the feed to delete or id of that feed
+# Throws     : no exceptions
+# Comments   : n/a
+# See Also   : n/a
+sub _create_test_feed() {
+	my ($feed_url) = @_;
+
+	my $db_redis = get_db_redis_instance();    #connect to local redis
+
+	$db_redis->del_feed($feed_url);                #delete all feed related information
+	my $feed_id = $db_redis->create_feed_for_url($feed_url);
+	return $feed_id;
+}
 
