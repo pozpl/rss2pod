@@ -124,19 +124,23 @@ sub get_filled_key(){
 }
 
 #1
-#
 ############################################
 # Usage      : my @all_urls = get_feeds_urls();
 # Purpose    : get all feeds urls from a database and retun it as an array
 # Returns    : array of urls strings
 # Parameters : none
 # Throws     : no exceptions
-# Comments   : Generate feed item based on an input text field
+# Comments   : ???
 # See Also   : n/a
 sub get_feeds_urls(){
 	my ($self) = @_;
 	
-	$self->redis_connection;
+	my $feeds_urls_set_key = $self->get_filled_key('FEEDS_SET_URL', {});	
+		
+	my $redis = $self->redis_connection;
+	my @feeds_urls = $redis->smembers($feeds_urls_set_key);
+	
+	return @feeds_urls;	
 } 
 #2	 
 sub get_and_del_feed_url_from_queue_of_new_feeds(){} #get feed url from queue of new feeds that we need to add to downloading process
@@ -151,7 +155,24 @@ sub add_item_to_feed(){} #add item to current feed
 #7
 sub is_item_alrady_in_feed{} #check presence of given item in given feed
 #8	
-sub create_feed_for_url(){}  #add feed into system for given url
+############################################
+# Usage      : create_feed_for_url('http://some/triky/url/here.cgi');
+# Purpose    : add feed into system for given url
+# Returns    : none
+# Parameters : url string
+# Throws     : no exceptions
+# Comments   : ???
+# See Also   : n/a
+sub create_feed_for_url(){
+	my ($self, $url) = @_;
+	
+	my $new_id_key = $self->get_filled_key('FEED_NEXT_ID', {});
+	my $new_feed_id = $self->redis_connection->incr($new_id_key);
+	
+	my $feed_url_id_key = $self->get_filled_key('FEED_SET_URL', {});
+	#@TODO Write it!!!!
+	
+}  
 #9
 sub get_feed_id_for_url(){} #receive feed url and get feed id for this feed if it exists
 #10
