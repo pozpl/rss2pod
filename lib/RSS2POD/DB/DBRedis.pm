@@ -49,32 +49,36 @@ my %REDIS_KEYS_TEMPLATES_HASH = (
 	"ID_LOGIN" => "id:[%login%]",
 	"USER_USER_ID_PASS" => "user:[%user_id%]:pass",
 	"USERS_NEXT_ID"     => "users:next_id",
-	"USER_USER_ID_LOGIN" => "user:[%user_id%]:ligin",
-	"USER_USER_ID_EMAIL" => "user:[%user_id%]:email",
-	"USER_USER_ID_POD_NEXT_ID" => "user:[%user_id%]:pod:nexId",
-	"USER_USER_ID_POD_POD_ZSET" => "user:[%user_id%]:pod:pod_zset",
-	"USER_USER_ID_POD_POD_ID_RSS_ZSET" => "user:[%user_id%]:pod:[%pod_id%]:rss_zset",
-	"USER_USER_ID_POD_POD_ID_RSS_NEXT_ID" => "user:[%user_id%]:pod:[%pod_id%]:rss_next_id",
-	"USER_USER_ID_POD_POD_NAME_ID" => "user:[%user_id%]:pod:[%pod_name%]:id",
-	"USER_USER_ID_POD_POD_ID_LAST_CHK_TIME" => "user:[%user_id%]:pod:[%pod_id%]:last_chk_time",
-	"USER_USER_ID_POD_POD_ID_POD_FILES_NAMES" => "user:[%user_id%]:pod:[%pod_id%]:pod_files_names",
-	"USER_USER_ID_POD_POD_ID_GEN_MP3_STAT" => "user:[%user_id%]:pod:[%pod_id%]:gen_mp3_stat",
+	"USER_ID_LOGIN" => "user:[%id%]:ligin",
+	"USER_ID_EMAIL" => "user:[%id%]:email",
+	"USER_ID_POD_NEXT_ID" => "user:[%id%]:pod:nexId",
+	"USER_ID_POD_POD_ZSET" => "user:[%id%]:pod:pod_zset",
+	"USER_ID_POD_ID_RSS_ZSET" => "user:[%id%]:pod:[%id%]:rss_zset",
+	"USER_ID_POD_ID_RSS_NEXT_ID" => "user:[%id%]:pod:[%id%]:rss_next_id",
+	"USER_ID_POD_NAME_ID" => "user:[%id%]:pod:[%name%]:id",
+	"USER_ID_POD_ID_LAST_CHK_TIME" => "user:[%id%]:pod:[%id%]:last_chk_time",
+	"USER_ID_POD_ID_POD_FILES_NAMES" => "user:[%id%]:pod:[%id%]:pod_files_names",
+	"USER_ID_POD_ID_GEN_MP3_STAT" => "user:[%id%]:pod:[%id%]:gen_mp3_stat",
 	
-	"USER_USER_ID_FEEDS_FEEDS_ID_ZSET" => "user:[%user_id%]:feeds:feeds_id_zset",
-	"USER_USER_ID_FEEDS_FEED_ID_LAST_CHK_NUM" => "user:[%user_id%]:feeds:[%feed_id%]:last_chk_num",
-	"USER_USER_ID_FEEDS_NEXT_ID" => "user:[%user_id%]:feeds:next_id",
+	"USER_ID_FEEDS_FEEDS_ID_ZSET" => "user:[%id%]:feeds:feeds_id_zset",
+	"USER_ID_FEEDS_FEED_ID_LAST_CHK_NUM" => "user:[%id%]:feeds:[%id%]:last_chk_num",
+	"USER_ID_FEEDS_NEXT_ID" => "user:[%id%]:feeds:next_id",
 	
 	"FEED_NEXT_ID" => "feed:next_id",
-	"FEED_ID_ITEMS" => "feed:[%feed_id%]:items",
-	"FEED_ID_ITEMS_HASH_ZSET" => "feed:[%feed_id%]:items_hash_zset",
-	"FEED_ID_ITEMS_SHIFT" => "feed:[%feed_id%]:items_shift",
-	"FEED_FEED_URL_ID" => "feed:[%feed_url%]:id",
-	"FEED_FEED_ID_TITLE" => "feed:[%feed_id%]:title",
-	"FEED_FEED_ID_URL" => "feed:[%feed_id%]:url",
+	"FEED_ID_ITEMS" => "feed:[%id%]:items",
+	"FEED_ID_ITEMS_HASH_ZSET" => "feed:[%id%]:items_hash_zset",
+	"FEED_ID_ITEMS_SHIFT" => "feed:[%id%]:items_shift",
+	"FEED_URL_ID" => "feed:[%url%]:id",
+	"FEED_ID_TITLE" => "feed:[%id%]:title",
+	"FEED_ID_URL" => "feed:[%id%]:url",
 
 	"FEEDS_SET_URL" => "feeds:set:url",
 	"FEEDS_ADDURLQUEUE_SET" => "feeds:addurlqueue:set",
 	"FEEDS_VQUEUELIST" => "feeds:addurlqueue:set",
+);
+
+my %REDIS_KEYS_WILDCARDS_TEMPLATES_HASH = (
+	
 );
 
 #redis connections
@@ -114,12 +118,43 @@ sub _instantiate_templater(){
 # See Also   : n/a
 sub get_filled_key(){
 	my ($self, $key_name, $key_args_hash_ref) = @_;
-
+	
+	if(!$key_args_hash_ref){
+		$key_args_hash_ref = \{};
+	}
+	
 	my $key_template = $REDIS_KEYS_TEMPLATES_HASH{$key_name};
 	
 	my $filled_key = "";
 	$self->templater->process(\$key_template, $key_args_hash_ref, \$filled_key);
-	print "$filled_key \n";
+	$filled_key = $filled_key ? $filled_key : "";
+	
+	return $filled_key;
+}
+
+############################################
+# Usage      : $dbRedis->get_filled_key_wildcard("FEED_ID", ("ID" => md5_hex('pozpl')));
+# Purpose    : get propertly filled redis key  wildcard 
+# Returns    : string - redis key
+# Parameters : string KEY_ID id of templete for key
+#			   hash   key parameters, parameters to fill template
+# Throws     : no exceptions
+# Comments   : example of returned wildcard key feed:10*
+#			   this key can be used for massive deletions
+# See Also   : n/a
+sub get_filled_key_wildcard(){
+	my ($self, $key_name, $key_args_hash_ref) = @_;
+	
+	if(!$key_args_hash_ref){
+		$key_args_hash_ref = \{};
+	}
+	
+	my $key_template = $REDIS_KEYS_TEMPLATES_HASH{$key_name};
+	
+	my $filled_key = "";
+	$self->templater->process(\$key_template, $key_args_hash_ref, \$filled_key);
+	$filled_key = $filled_key ? $filled_key : "";
+	
 	return $filled_key;
 }
 
@@ -156,7 +191,7 @@ sub add_item_to_feed(){} #add item to current feed
 sub is_item_alrady_in_feed{} #check presence of given item in given feed
 #8	
 ############################################
-# Usage      : create_feed_for_url('http://some/triky/url/here.cgi');
+# Usage      : create_feed_for_url('http://some/tricky/url/here.cgi');
 # Purpose    : add feed into system for given url
 # Returns    : none
 # Parameters : url string
@@ -169,8 +204,17 @@ sub create_feed_for_url(){
 	my $new_id_key = $self->get_filled_key('FEED_NEXT_ID', {});
 	my $new_feed_id = $self->redis_connection->incr($new_id_key);
 	
-	my $feed_url_id_key = $self->get_filled_key('FEED_SET_URL', {});
-	#@TODO Write it!!!!
+	my $feed_id_title_key = $self->get_filled_key('FEED_ID_TITLE', {"id" =>$new_feed_id});
+	$self->redis_connection->set($feed_id_title_key, $url);
+	
+	my $feed_id_url_key = $self->get_filled_key('FEED_ID_URL', {"id" =>$new_feed_id});
+	$self->redis_connection->set($feed_id_url_key, $url);
+	
+	my $feed_url_id_key = $self->get_filled_key('FEED_URL_ID', {'url' => md5_hex($url)});
+	$self->redis_connection->set($feed_url_id_key, $new_feed_id);
+	
+	my $feed_url_set_key = $self->get_filled_key('FEED_SET_URL', {});
+	$self->redis_connection->sadd($feed_url_set_key, $url);
 	
 }  
 #9
@@ -178,7 +222,30 @@ sub get_feed_id_for_url(){} #receive feed url and get feed id for this feed if i
 #10
 sub del_and_get_old_items_from_feed(){} #trim feed items list, and get all trimmed entities
 #11
-sub del_feed(){}   #delete feed from database, it support even URL or feed ID
+############################################
+# Usage      : del_feed('http://some/tricky/url/here.cgi');
+# Purpose    : delete feed from database
+# Returns    : none
+# Parameters : url string or feed id
+# Throws     : no exceptions
+# Comments   : ???
+# See Also   : n/a
+sub del_feed(){
+	my ($self, $feed_identificator) = @_;
+	my $feed_url = "";
+	my $feed_id;
+	if($feed_identificator =~ /{d+}/xms){
+		$feed_id = $feed_identificator;
+		my $feed_id_url_key = $self->get_filled_key('FEED_ID_URL', {"id" =>$feed_id});
+		$feed_url = $self->redis_connection->get($feed_id_url_key);		
+	}else{
+		$feed_url = $feed_identificator;
+		my $feed_url_id_key = $self->get_filled_key('FEED_URL_ID', {'url' => md5_hex($feed_url)});
+		$feed_id = $self->redis_connection->get(md5_hex($feed_url_id_key));	
+	}	
+	
+	
+}   
 #12	
 sub set_feed_title(){} #set title for the feed with given id
 #13
