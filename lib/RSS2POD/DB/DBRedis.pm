@@ -47,7 +47,7 @@ feeds:vqueuelist - list queue of tasks to voicefy the task is json object wirh f
 
 my %REDIS_KEYS_TEMPLATES_HASH = (
 	"ID_LOGIN" => "id:[%login%]",
-	"USER_USER_ID_PASS" => "user:[%user_id%]:pass",
+	"USER_ID_PASS" => "user:[%id%]:pass",
 	"USERS_NEXT_ID"     => "users:next_id",
 	"USER_ID_LOGIN" => "user:[%id%]:ligin",
 	"USER_ID_EMAIL" => "user:[%id%]:email",
@@ -61,7 +61,7 @@ my %REDIS_KEYS_TEMPLATES_HASH = (
 	"USER_ID_POD_ID_GEN_MP3_STAT" => "user:[%id%]:pod:[%id%]:gen_mp3_stat",
 	
 	"USER_ID_FEEDS_FEEDS_ID_ZSET" => "user:[%id%]:feeds:feeds_id_zset",
-	"USER_ID_FEEDS_FEED_ID_LAST_CHK_NUM" => "user:[%id%]:feeds:[%id%]:last_chk_num",
+	"USER_ID_FEEDS_ID_LAST_CHK_NUM" => "user:[%id%]:feeds:[%id%]:last_chk_num",
 	"USER_ID_FEEDS_NEXT_ID" => "user:[%id%]:feeds:next_id",
 	
 	"FEED_NEXT_ID" => "feed:next_id",
@@ -78,7 +78,9 @@ my %REDIS_KEYS_TEMPLATES_HASH = (
 );
 
 my %REDIS_KEYS_WILDCARDS_TEMPLATES_HASH = (
-	
+	'USER_ID' => "user:[%id%]",
+	'USER_ID_POD_ID' => "user:[%id%]:pod:[%id%]",
+	'FEED_ID' => "feed:[%id%]",
 );
 
 #redis connections
@@ -149,11 +151,11 @@ sub get_filled_key_wildcard(){
 		$key_args_hash_ref = \{};
 	}
 	
-	my $key_template = $REDIS_KEYS_TEMPLATES_HASH{$key_name};
+	my $key_template = $REDIS_KEYS_WILDCARDS_TEMPLATES_HASH{$key_name};
 	
 	my $filled_key = "";
 	$self->templater->process(\$key_template, $key_args_hash_ref, \$filled_key);
-	$filled_key = $filled_key ? $filled_key : "";
+	$filled_key = $filled_key ? $filled_key . '*' : "";
 	
 	return $filled_key;
 }
@@ -232,8 +234,9 @@ sub del_and_get_old_items_from_feed(){} #trim feed items list, and get all trimm
 # See Also   : n/a
 sub del_feed(){
 	my ($self, $feed_identificator) = @_;
-	my $feed_url = "";
+	my $feed_url = "";	
 	my $feed_id;
+	my $feed_id_url_key = '';
 	if($feed_identificator =~ /{d+}/xms){
 		$feed_id = $feed_identificator;
 		my $feed_id_url_key = $self->get_filled_key('FEED_ID_URL', {"id" =>$feed_id});
@@ -243,7 +246,9 @@ sub del_feed(){
 		my $feed_url_id_key = $self->get_filled_key('FEED_URL_ID', {'url' => md5_hex($feed_url)});
 		$feed_id = $self->redis_connection->get(md5_hex($feed_url_id_key));	
 	}	
-	
+	my $feed_id_wild_key = $self->get_filled_key_wildcard('FEED_ID', {'id' => $feed_id});
+	$self->redis_connection->del($feed_id_wild_key);
+	$self->redis_connection->del($feed_id_url_key);
 	
 }   
 #12	
