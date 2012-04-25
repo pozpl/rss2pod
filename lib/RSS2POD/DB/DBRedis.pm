@@ -195,7 +195,7 @@ sub is_item_alrady_in_feed{} #check presence of given item in given feed
 ############################################
 # Usage      : create_feed_for_url('http://some/tricky/url/here.cgi');
 # Purpose    : add feed into system for given url
-# Returns    : none
+# Returns    : $feed_id int. ID of the created feed
 # Parameters : url string
 # Throws     : no exceptions
 # Comments   : ???
@@ -215,8 +215,10 @@ sub create_feed_for_url(){
 	my $feed_url_id_key = $self->get_filled_key('FEED_URL_ID', {'url' => md5_hex($url)});
 	$self->redis_connection->set($feed_url_id_key, $new_feed_id);
 	
-	my $feed_url_set_key = $self->get_filled_key('FEED_SET_URL', {});
+	my $feed_url_set_key = $self->get_filled_key('FEEDS_SET_URL', {});
 	$self->redis_connection->sadd($feed_url_set_key, $url);
+	
+	return $new_feed_id;
 	
 }  
 #9

@@ -1600,7 +1600,7 @@ sub check_get_filled_key(){
 }
 
 
-ok(check_get_filled_key());
+ok(check_get_filled_key(), "Filled key template");
 
 ok( check_get_feeds_urls(), "Get feeds urls works fine" );
 ok(
@@ -1675,6 +1675,7 @@ sub _create_test_feed() {
 
 	$db_redis->del_feed($feed_url);                #delete all feed related information
 	my $feed_id = $db_redis->create_feed_for_url($feed_url);
+	
 	return $feed_id;
 }
 
