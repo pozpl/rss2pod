@@ -148,18 +148,21 @@ sub check_get_feeds_urls() {
 
 sub check_get_and_del_feed_url_from_queue_of_new_feeds() {
 	my $redis = open_connection();
-	my $db_redis = RSS2POD::DB::DBRedis->new();
+	my $db_redis = get_db_redis_instance();
 	#put some urls into the quque of new feeds
 	my @urls_list = (
 		'http://url1.io', 'http://url2.io', 'http://url3.io', 'http://url4.io',
 		'http://url4.io',
 	);
+	
+	#clean queue set
+	while ( my $feed_url = $db_redis->get_and_del_feed_url_from_queue_of_new_feeds() ) {}
+	
 	my %urls_hash;
 	@urls_hash{@urls_list} = ();
 	for my $single_url (@urls_list) {
-
 		#add feed url to feeds:addurlqueue:set
-		$redis->sadd( $db_redis->FEEDS_ADDURLQUEUE_SET(), $single_url );
+		$db_redis->add_feed_url_to_queue_of_new_feeds( $single_url );
 	}
 	
 	my $geted_urls_counter = 0;
@@ -169,65 +172,28 @@ sub check_get_and_del_feed_url_from_queue_of_new_feeds() {
 	my @unic_urls = keys %urls_hash;
 	my $is_all_urls_geted = @unic_urls == $geted_urls_counter ? 1 : 0;
 
-	#check if urls was deleted;
-	my $is_url_presists = 0;
-	for my $single_url ( keys %urls_hash ) {
-		$is_url_presists = 1
-		  if $redis->sismember( $db_redis->FEEDS_ADDURLQUEUE_SET(), $single_url );
-	}
-
 	my $all_ok = 0;
-	if ( $is_all_urls_geted && !$is_url_presists ) {
+	if ( $is_all_urls_geted) {
 		$all_ok = 1;
 	}
 
-	close_connection();
+	$redis->quit();
 	return $all_ok;
 }
 
 sub check_add_feed_url_to_queue_of_new_feeds() {
-	my $redis = open_connection();
-
-	my $db_redis  = RSS2POD::DB::DBRedis->new();
-	my @urls_list = (
-		'http://url1.io', 'http://url2.io', 'http://url3.io', 'http://url4.io',
-		'http://url4.io',
-	);
-
-	#INITIANALISATION
-	for my $single_url (@urls_list) {
-		$db_redis->add_feed_url_to_queue_of_new_feeds($single_url);
-	}
-
-	#CHECK
-	my $all_ok = 1;
-	for my $single_url (@urls_list) {
-		my $is_url_presented =
-		  $redis->sismember( $db_redis->FEEDS_ADDURLQUEUE_SET(), $single_url );
-		if ( !$is_url_presented ) {
-			$all_ok = 0;
-		}
-
-	}
-
-	#CLEAN THE ROOM
-	for my $single_url (@urls_list) {
-		$redis->srem( $db_redis->FEEDS_ADDURLQUEUE_SET(), $single_url );
-	}
-
-	close_connection();
-	return $all_ok;
+	return check_get_and_del_feed_url_from_queue_of_new_feeds();
 }
 
 sub check_add_feed_item_to_voicefy_queue() {
 	my $redis    = open_connection();              #connect to local redis
-	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
+	my $db_redis = get_db_redis_instance();    #connect to local redis
 
 	#by default we put text blob, that is feed item in string form
 	#prepare IT
 	my $feed_id = 1;                                  #jast test value
 	my $item      = "Test feed title   feed content";
-	my $item_txt  = LangUtils::TextHandler::prepare_text($item);
+	my $item_txt  = RSS2POD::LangUtils::TextHandler::prepare_text($item);
 	my $json      = JSON->new->allow_nonref;
 	my $file_name = $feed_id . "_" . md5_hex($item_txt);
 	$item_txt->{'file_name'} = $file_name;
@@ -243,7 +209,7 @@ sub check_add_feed_item_to_voicefy_queue() {
 		if ( $item_from_queue eq $item_json ) { $all_ok = 1; }
 	}
 
-	close_connection();
+	$redis->quit();
 	return $all_ok;
 }
 

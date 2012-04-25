@@ -179,10 +179,40 @@ sub get_feeds_urls(){
 	
 	return @feeds_urls;	
 } 
-#2	 
-sub get_and_del_feed_url_from_queue_of_new_feeds(){} #get feed url from queue of new feeds that we need to add to downloading process
+#2
+############################################
+# Usage      : my @all_urls = get_and_del_feed_url_from_queue_of_new_feeds();
+# Purpose    : get feed url from queue of new feeds that we need to add to downloading process
+# Returns    : $feed_url string. Url of the feed from queue
+# Parameters : none
+# Throws     : no exceptions
+# Comments   : ???
+# See Also   : n/a
+sub get_and_del_feed_url_from_queue_of_new_feeds(){
+	my ($self) = @_;
+	
+	my $feeds_addurlqueue_set_key = $self->get_filled_key('FEEDS_ADDURLQUEUE_SET', {});	
+	my $url = $self->redis_connection->spop($feeds_addurlqueue_set_key);
+	
+	return $url; 
+} 
 #3
-sub add_feed_url_to_queue_of_new_feeds(){} #add feed url to download queue
+#
+############################################
+# Usage      : my @all_urls = add_feed_url_to_queue_of_new_feeds("http://some/feed");
+# Purpose    : add feed url to download queue
+# Returns    : none
+# Parameters : $feed_url string. Feed to be added
+# Throws     : no exceptions
+# Comments   : ???
+# See Also   : n/a
+sub add_feed_url_to_queue_of_new_feeds(){
+	my ($self, $url) = @_;
+	
+	my $feeds_addurlqueue_set_key = $self->get_filled_key('FEEDS_ADDURLQUEUE_SET', {});	
+	$self->redis_connection->sadd($feeds_addurlqueue_set_key, $url);
+} 
+
 #4	
 sub add_feed_item_to_voicefy_queue(){} #add item to voicefy queue
 #5
