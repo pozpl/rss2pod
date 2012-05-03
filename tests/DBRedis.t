@@ -205,7 +205,7 @@ sub check_add_feed_item_to_voicefy_queue() {
 
 	#check it
 	my $all_ok = 0;
-	while ( my $item_from_queue = $redis->lpop( $db_redis->FEEDS_VQUEUELIST() ) ) {
+	while ( my $item_from_queue = $db_redis->get_and_del_feed_item_from_voicefy_queue() ) {
 		if ( $item_from_queue eq $item_json ) { $all_ok = 1; }
 	}
 
@@ -215,7 +215,7 @@ sub check_add_feed_item_to_voicefy_queue() {
 
 sub check_get_and_del_feed_item_from_voicefy_queue() {
 	my $redis    = open_connection();              #connect to local redis
-	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
+	my $db_redis = get_db_redis_instance();    #connect to local redis
 
 	#PUT text blob into voicefy queue
 	my @text_blobs = (
@@ -228,7 +228,7 @@ sub check_get_and_del_feed_item_from_voicefy_queue() {
 	my %text_blobs_hash;
 	@text_blobs_hash{@text_blobs} = ();
 	for my $text_blob (@text_blobs) {
-		$redis->lpush( $db_redis->FEEDS_VQUEUELIST(), $text_blob );
+		$db_redis->add_feed_item_to_voicefy_queue($text_blob);
 	}
 	my $count_of_getted_blobs = 0;
 
@@ -242,7 +242,7 @@ sub check_get_and_del_feed_item_from_voicefy_queue() {
 	#Check
 	my $all_ok = ( @text_blobs == $count_of_getted_blobs ) ? 1 : 0;
 
-	close_connection();
+	$redis->quit();
 	return $all_ok;
 }
 

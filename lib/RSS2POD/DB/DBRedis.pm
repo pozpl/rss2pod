@@ -74,7 +74,7 @@ my %REDIS_KEYS_TEMPLATES_HASH = (
 
 	"FEEDS_SET_URL" => "feeds:set:url",
 	"FEEDS_ADDURLQUEUE_SET" => "feeds:addurlqueue:set",
-	"FEEDS_VQUEUELIST" => "feeds:addurlqueue:set",
+	"FEEDS_VQUEUELIST" => "feeds:vqueuelist",
 );
 
 my %REDIS_KEYS_WILDCARDS_TEMPLATES_HASH = (
@@ -199,7 +199,7 @@ sub get_and_del_feed_url_from_queue_of_new_feeds(){
 #3
 #
 ############################################
-# Usage      : my @all_urls = add_feed_url_to_queue_of_new_feeds("http://some/feed");
+# Usage      : add_feed_url_to_queue_of_new_feeds("http://some/feed");
 # Purpose    : add feed url to download queue
 # Returns    : none
 # Parameters : $feed_url string. Feed to be added
@@ -213,10 +213,37 @@ sub add_feed_url_to_queue_of_new_feeds(){
 	$self->redis_connection->sadd($feeds_addurlqueue_set_key, $url);
 } 
 
-#4	
-sub add_feed_item_to_voicefy_queue(){} #add item to voicefy queue
-#5
-sub get_and_del_feed_item_from_voicefy_queue(){} #get feed item and delete it from queue
+#4
+############################################
+# Usage      : add_feed_item_to_voicefy_queue("{some_json_here}");
+# Purpose    : add afeed item to the voicefy queue
+# Returns    : none
+# Parameters : string $feed_item - serialysed to JSON feed item
+# Throws     : no exceptions
+# Comments   : ???
+# See Also   : n/a
+sub add_feed_item_to_voicefy_queue(){
+	my ($self, $feed_item) = @_;
+	my $feeds_voicefy_list_key = $self->get_filled_key('FEEDS_VQUEUELIST', {});	
+	$self->redis_connection->lpush($feeds_voicefy_list_key, $feed_item);
+} 
+
+#5  #get feed item and delete it from queue
+############################################
+# Usage      : my $feed_item = get_and_del_feed_item_from_voicefy_queue();
+# Purpose    : get serialysed to string feed item, and delete it from queue
+# Returns    : $feed_item - string serialysed feed_item
+# Parameters : none
+# Throws     : no exceptions
+# Comments   : ???
+# See Also   : n/a
+sub get_and_del_feed_item_from_voicefy_queue(){
+	my ($self) = @_;
+	my $feeds_voicefy_list_key = $self->get_filled_key('FEEDS_VQUEUELIST', {});	
+	my $feed_item = $self->redis_connection->lpop($feeds_voicefy_list_key);
+	
+	return $feed_item;
+}
 #6	
 sub add_item_to_feed(){} #add item to current feed
 #7
