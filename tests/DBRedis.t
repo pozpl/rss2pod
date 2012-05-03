@@ -248,7 +248,7 @@ sub check_get_and_del_feed_item_from_voicefy_queue() {
 
 sub check_get_feed_id_for_url() {
 	my $redis    = open_connection();              #connect to local redis
-	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
+	my $db_redis = get_db_redis_instance();    #connect to local redis
 
 	#Prepare feed to add
 	my $feed_test_url = "http://my.test.url.com";
@@ -268,7 +268,7 @@ sub check_get_feed_id_for_url() {
 
 sub check_add_item_to_feed() {
 	my $redis    = open_connection();              #connect to local redis
-	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
+	my $db_redis = get_db_redis_instance();    #connect to local redis
 
 	#feed item is only JSON encoded text blob but we need text part of it anyway
 	#let's create test JSON encoded structure
@@ -310,7 +310,7 @@ sub check_add_item_to_feed() {
 
 sub check_is_item_alrady_in_feed() {
 	my $redis    = open_connection();              #connect to local redis
-	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
+	my $db_redis = get_db_redis_instance();    #connect to local redis
 
 	#Prepare feed to add
 	my $feed_test_url = "http://my.test.url.com";
@@ -343,7 +343,7 @@ sub check_is_item_alrady_in_feed() {
 
 sub check_create_feed_for_url() {
 	my $redis    = open_connection();              #connect to local redis
-	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
+	my $db_redis = get_db_redis_instance();    #connect to local redis
 
 	#prepare clear environment
 	my $feed_test_url = "http://my.test.url.com";

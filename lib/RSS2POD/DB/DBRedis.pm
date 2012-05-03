@@ -245,7 +245,25 @@ sub get_and_del_feed_item_from_voicefy_queue(){
 	return $feed_item;
 }
 #6	
-sub add_item_to_feed(){} #add item to current feed
+############################################
+# Usage      : add_item_to_feed(11, \%hash);
+# Purpose    : add item to current feed
+# Returns    : none
+# Parameters : int $feed_id - id of the feed item to add, 
+#			   string $item - serialysed to json feed item
+# Throws     : no exceptions
+# Comments   : ???
+# See Also   : n/a
+sub add_item_to_feed(){
+	my ($self, $feed_id, $item_ref) = @_;
+	my $feed_id_items_key = $self->get_filled_key('FEED_ID_ITEMS', {"id" =>$feed_id});
+	$self->redis_connection->lpush($feed_id_items_key, $item);
+	
+	my $feed_id_items_hash_zset_key = $self->get_filled_key('FEED_ID_ITEMS_HASH_ZSET', {"id" =>$feed_id});
+	
+	my $item_hash = $item_ref->{text};
+	$self->redis_connection->lpush($feed_id_items_hash_zset_key, $item_hash);
+} 
 #7
 sub is_item_alrady_in_feed{} #check presence of given item in given feed
 #8	
@@ -278,8 +296,23 @@ sub create_feed_for_url(){
 	return $new_feed_id;
 	
 }  
-#9
-sub get_feed_id_for_url(){} #receive feed url and get feed id for this feed if it exists
+#9 
+############################################
+# Usage      : get_feed_id_for_url('http://some/tricky/url/here.cgi');
+# Purpose    : receive feed url and get feed id for this feed if it exists
+# Returns    : $feed_id int. ID if feed with such url exists
+# Parameters : url string
+# Throws     : no exceptions
+# Comments   : ???
+# See Also   : n/a
+sub get_feed_id_for_url(){
+	my ($self, $url) = @_;
+	
+	my $feed_url_id_key = $self->get_filled_key('FEED_URL_ID', {'url' => md5_hex($url)});
+	my $feed_id = $self->redis_connection->get($feed_url_id_key);
+	
+	return $feed_id;
+} 
 #10
 sub del_and_get_old_items_from_feed(){} #trim feed items list, and get all trimmed entities
 #11
