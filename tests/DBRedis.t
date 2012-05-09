@@ -7,7 +7,7 @@ use Redis;
 use JSON;
 use RSS2POD::LangUtils::TextHandler qw(prepare_text);
 use Digest::MD5 qw(md5 md5_hex md5_base64);
-
+use Data::Dumper;
 =begin Redis_database_key_rules
 Redis database key rules
 id:md5_hex($user_login) - id for user login
@@ -90,26 +90,7 @@ sub _delete_test_feed($) {
 	$db_redis->del_feed($feed_url);
 }
 
-############################################
-# Usage      : _generate_feed_item("some text");
-# Purpose    : genrate item in text form
-# Returns    : json serialysed feed item
-# Parameters : text string, feed id
-# Throws     : no exceptions
-# Comments   : Generate feed item based on an input text field
-# See Also   : n/a
-sub _generate_feed_item($ $) {
-	my ( $item_raw, $feed_id ) = shift;
 
-	my $item_txt  = LangUtils::TextHandler::prepare_text($item_raw);
-	my $json      = JSON->new->allow_nonref;
-	my $file_name = $feed_id . "_" . md5_hex($item_txt);
-	$item_txt->{'file_name'} = $file_name;
-	$item_txt->{'feed_id'}   = $feed_id;
-	my $item_json = $json->encode($item_txt);
-
-	return $item_json;
-}
 
 sub check_get_feeds_urls() {
 	#PREPARE
@@ -127,7 +108,7 @@ sub check_get_feeds_urls() {
 
 	#add some new urls to the feeds urls set
 	for my $single_url (@urls_list) {
-		_create_test_feed($single_url);		
+		$db_redis->create_feed_for_url($single_url);		
 	}
 	#EXECUTE
 	my @out_feeds_urls_list = $db_redis->get_feeds_urls();
@@ -141,7 +122,10 @@ sub check_get_feeds_urls() {
 			$is_feed_url_exist_in_out = 0;
 		}
 	}
-
+	
+	for my $single_url (@urls_list) {
+		$db_redis->del_feed($single_url);		
+	}
 	$redis->quit();
 	return $is_feed_url_exist_in_out;
 }
@@ -262,7 +246,8 @@ sub check_get_feed_id_for_url() {
 	my $got_feed_url = $redis->get( $db_redis->FEED_FEED_ID_URL($feed_id) );
 
 	my $all_ok = $got_feed_url eq $feed_test_url ? 1 : 0;
-	close_connection();
+	$db_redis->del_feed($feed_test_url);
+	$redis->quit();
 	return $all_ok;
 }
 
@@ -281,7 +266,7 @@ sub check_add_item_to_feed() {
 
 	#prepare test blob
 	my $item      = "Test feed title   feed content";
-	my $item_txt  = LangUtils::TextHandler::prepare_text($item);
+	my $item_txt  = RSS2POD::LangUtils::TextHandler::prepare_text($item);
 	my $json      = JSON->new->allow_nonref;
 	my $file_name = $feed_id . "_" . md5_hex($item_txt);
 	$item_txt->{'file_name'} = $file_name;
@@ -289,22 +274,27 @@ sub check_add_item_to_feed() {
 	my $item_json = $json->encode($item_txt);
 
 	#EXECUTE
-	$db_redis->add_item_to_feed( $item_json, $feed_id );
+	$db_redis->add_item_to_feed($feed_id, $item_json);
 
 	#CHECK
 	my $all_ok = 1;
-	my @feed_items = $redis->lrange( $db_redis->FEED_FEED_ID_ITEMS($feed_id), 1, -1 );
+	my @feed_items = $db_redis->get_all_feed_items($feed_id);
 	my %feed_items_hash;
 	@feed_items_hash{@feed_items} = ();
-	$all_ok = exists $feed_items_hash{$item_json} ? 1 : 0;
+	my $item_is_stored_in_list = exists $feed_items_hash{$item_json} ? 1 : 0;
 
-	$all_ok = $redis->zscore( $db_redis->FEED_FEED_ID_ITEMS_MD5_ZSET($feed_id),
-		md5_hex($item_json) ) ? 1 : 0;
-
+	my $item_hash_is_stored = $db_redis->is_item_alrady_in_feed($feed_id, $item_json);
+	
+	if($item_is_stored_in_list && $item_hash_is_stored){
+		$all_ok = 1; 
+	}else{
+		$all_ok = 0;
+	}
+	
 	#delete feed
 	$db_redis->del_feed($feed_test_url);
 
-	close_connection();
+	$redis->quit();
 	return $all_ok;
 }
 
@@ -320,7 +310,7 @@ sub check_is_item_alrady_in_feed() {
 
 	#prepare test blob
 	my $item      = "Test feed title   feed content";
-	my $item_txt  = LangUtils::TextHandler::prepare_text($item);
+	my $item_txt  = RSS2POD::LangUtils::TextHandler::prepare_text($item);
 	my $json      = JSON->new->allow_nonref;
 	my $file_name = $feed_id . "_" . md5_hex($item_txt);
 	$item_txt->{'file_name'} = $file_name;
@@ -328,7 +318,7 @@ sub check_is_item_alrady_in_feed() {
 	my $item_json = $json->encode($item_txt);
 
 	#add item in JSON form into the feed
-	$db_redis->add_item_to_feed( $item_json, $feed_id );
+	$db_redis->add_item_to_feed( $feed_id, $item_json);
 
 	#EXECUTE
 	my $is_item_in_feed = $db_redis->is_item_alrady_in_feed( $feed_id, $item_json );
@@ -337,7 +327,7 @@ sub check_is_item_alrady_in_feed() {
 	my $all_ok = $is_item_in_feed ? 1 : 0;
 
 	$db_redis->del_feed($feed_test_url);    #delete all feed related information
-	close_connection();
+	$redis->quit();
 	return $all_ok;
 }
 
@@ -350,37 +340,48 @@ sub check_create_feed_for_url() {
 	$db_redis->del_feed($feed_test_url);           #delete feed
 
 	#EXECUTE
-	$db_redis->create_feed_for_url($feed_test_url);
+	my $new_feed_id = $db_redis->create_feed_for_url($feed_test_url);
 
 	#CHECK
 	my $feed_id = $db_redis->get_feed_id_for_url($feed_test_url);
-	my $all_ok =
-	    !defined $feed_id                                                   ? 0
-	  : !$redis->exists( $db_redis->FEED_NEXTID() )                         ? 0
-	  : !$redis->exists( $db_redis->FEED_FEED_ID_ITEMS($feed_id) )          ? 0
-	  : !$redis->exists( $db_redis->FEED_FEED_URL_ID($feed_test_url) )      ? 0
-	  : !$redis->exists( $db_redis->FEED_FEED_ID_ITEMS_SHIFT($feed_id) )    ? 0
-	  : !$redis->exists( $db_redis->FEED_FEED_ID_TITLE($feed_id) )          ? 0
-	  : !$redis->exists( $db_redis->FEED_FEED_ID_URL($feed_id) )            ? 0
-	  : !$redis->exists( $db_redis->FEED_FEED_ID_ITEMS_MD5_ZSET($feed_id) ) ? 0
-	  : !$redis->exists( $db_redis->FEEDS_SET_URL() )                       ? 0
-	  :                                                                       1;
+	my @all_urls = $db_redis->get_feeds_urls();
+	my %all_urls_hash;
+	@all_urls_hash{@all_urls} = ();
+	
+	my $all_ok = ($feed_id != $new_feed_id)              ?    0
+				: !exists $all_urls_hash{$feed_test_url} ?    0
+				:											  1;
+				
+		
+#	my $all_ok =
+#	    !defined $feed_id                                                   ? 0
+#	  : !$redis->exists( $db_redis->FEED_NEXTID() )                         ? 0
+#	  : !$redis->exists( $db_redis->FEED_FEED_ID_ITEMS($feed_id) )          ? 0
+#	  : !$redis->exists( $db_redis->FEED_FEED_URL_ID($feed_test_url) )      ? 0
+#	  : !$redis->exists( $db_redis->FEED_FEED_ID_ITEMS_SHIFT($feed_id) )    ? 0
+#	  : !$redis->exists( $db_redis->FEED_FEED_ID_TITLE($feed_id) )          ? 0
+#	  : !$redis->exists( $db_redis->FEED_FEED_ID_URL($feed_id) )            ? 0
+#	  : !$redis->exists( $db_redis->FEED_FEED_ID_ITEMS_MD5_ZSET($feed_id) ) ? 0
+#	  : !$redis->exists( $db_redis->FEEDS_SET_URL() )                       ? 0
+#	  :                                                                       1;
 
 	#CLEAN
 	$db_redis->del_feed($feed_test_url);    #delete feed
-	close_connection();
+	$redis->quit();
 	return $all_ok;
 }
 
 sub check_del_and_get_old_items_from_feed() {
 	my $redis    = open_connection();              #connect to local redis
-	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
+	my $db_redis = get_db_redis_instance();    #connect to local redis
+
 
 	#PREPARE
-	my $feed_test_url = "http://my.test.url.com";
-	_create_test_feed($feed_test_url);
-	my $feed_id = $db_redis->get_feed_id_for_url($feed_test_url);
-
+	my $feed_test_url = "http://my.testold.url.com";
+	
+	$db_redis->del_feed($feed_test_url);    #delete feed
+	my $feed_id = $db_redis->create_feed_for_url($feed_test_url);
+	
 
 	#generate a bunch of feed items and add it into the database
 	my $json      = JSON->new->allow_nonref;
@@ -389,35 +390,36 @@ sub check_del_and_get_old_items_from_feed() {
 		my $generated_item = _generate_feed_item( "title  $item_num  text", $feed_id );
 		push @generated_feed_items, $generated_item;
 		my $item_json = $json->encode($generated_item);
-		$db_redis->add_item_to_feed( $item_json, $feed_id );
+		$db_redis->add_item_to_feed($feed_id,  $item_json);
 	}
 
 	#EXECUTE
 	my @goten_feed_items = $db_redis->del_and_get_old_items_from_feed( $feed_id, 50 );
-
+#	print Dumper(@goten_feed_items);
 	#CHECK
 	my $all_ok = 1;
 	if ( @goten_feed_items != 50 ) {    #there was 100 generated items
-		$all_ok = 0;
+		$all_ok = 0; #print "NUmber of elements is not 50 \n";
 	}
 	for my $test_feed_item (@goten_feed_items) {    #no item is persitent now
 		if ( $db_redis->is_item_alrady_in_feed( $feed_id, $test_feed_item ) ) {
-			$all_ok = 0;
+			$all_ok = 0; print "Feed item $test_feed_item \n";
 		}
 	}
 
 	#CLEAN ENVIRONMENT
-	_delete_test_feed($feed_test_url);
-	close_connection();
+	$db_redis->del_feed($feed_test_url);    #delete feed
+	$redis->quit();
 	return $all_ok;
 }
 
 sub check_del_feed() {
 	my $redis    = open_connection();              #connect to local redis
-	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
+	my $db_redis = get_db_redis_instance();    #connect to local redis
+
 
 	#prepare clear environment
-	my $feed_test_url = "http://my.test.url.com";
+	my $feed_test_url = "http://my.test.url2.com";
 	$db_redis->create_feed_for_url($feed_test_url);
 	my $feed_id = $db_redis->get_feed_id_for_url($feed_test_url);
 
@@ -451,7 +453,8 @@ sub check_del_feed() {
 
 sub check_add_new_user() {
 	my $redis    = open_connection();              #connect to local redis
-	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
+	my $db_redis = get_db_redis_instance();    #connect to local redis
+
 
 	#PREPARE
 	$db_redis->delete_user($TEST_USER);
@@ -481,7 +484,8 @@ sub check_add_new_user() {
 
 sub check_delete_user() {
 	my $redis    = open_connection();              #connect to local redis
-	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
+	my $db_redis = get_db_redis_instance();    #connect to local redis
+
 
 	#PREPARE
 	$db_redis->add_new_user( $TEST_USER, $TEST_USER_PASSWORD, $TEST_USER_EMAIL );
@@ -528,7 +532,8 @@ sub check_delete_user() {
 
 sub check_is_user_exists() {
 	my $redis    = open_connection();              #connect to local redis
-	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
+	my $db_redis = get_db_redis_instance();    #connect to local redis
+
 
 	#PREPARE
 	$db_redis->add_new_user( $TEST_USER, $TEST_USER_PASSWORD, $TEST_USER_EMAIL );
@@ -572,7 +577,8 @@ sub check_update_user_password() {
 
 sub check_is_user_password_valid() {
 	my $redis    = open_connection();              #connect to local redis
-	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
+	my $db_redis = get_db_redis_instance();    #connect to local redis
+
 
 	#PREPARE
 	$db_redis->add_new_user( $TEST_USER, $TEST_USER_PASSWORD, $TEST_USER_EMAIL );
@@ -600,7 +606,7 @@ sub check_is_user_password_valid() {
 
 sub check_update_user_email() {
 	my $redis    = open_connection();              #connect to local redis
-	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
+	my $db_redis = get_db_redis_instance();    #connect to local redis
 
 	#PREPARE
 	$db_redis->add_new_user( $TEST_USER, $TEST_USER_PASSWORD, $TEST_USER_EMAIL );
@@ -621,7 +627,8 @@ sub check_update_user_email() {
 
 sub check_get_user_email() {
 	my $redis    = open_connection();              #connect to local redis
-	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
+	my $db_redis = get_db_redis_instance();    #connect to local redis
+
 
 	#PREPARE
 	$db_redis->add_new_user( $TEST_USER, $TEST_USER_PASSWORD, $TEST_USER_EMAIL );
@@ -640,7 +647,7 @@ sub check_get_user_email() {
 
 sub check_add_user_podcast() {
 	my $redis    = open_connection();              #connect to local redis
-	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
+	my $db_redis = get_db_redis_instance();    #connect to local redis
 
 	#PREPARE
 	$db_redis->add_new_user( $TEST_USER, $TEST_USER_PASSWORD, $TEST_USER_EMAIL );
@@ -682,7 +689,8 @@ sub check_add_user_podcast() {
 
 sub check_add_feed_id_to_user_feeds() {
 	my $redis    = open_connection();              #connect to local redis
-	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
+	my $db_redis = get_db_redis_instance();    #connect to local redis
+
 
 	#PREPARE
 	$db_redis->add_new_user( $TEST_USER, $TEST_USER_PASSWORD, $TEST_USER_EMAIL );
@@ -705,7 +713,7 @@ sub check_add_feed_id_to_user_feeds() {
 
 sub check_get_user_podcasts_ids() {
 	my $redis    = open_connection();              #connect to local redis
-	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
+	my $db_redis = get_db_redis_instance();    #connect to local redis
 
 	#PREPARE
 	$db_redis->add_new_user( $TEST_USER, $TEST_USER_PASSWORD, $TEST_USER_EMAIL );
@@ -739,7 +747,7 @@ sub check_get_user_podcasts_ids() {
 
 sub check_get_user_podcasts_id_title_map() {
 	my $redis    = open_connection();              #connect to local redis
-	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
+	my $db_redis = get_db_redis_instance();    #connect to local redis
 
 	#PREPARE
 	$db_redis->add_new_user( $TEST_USER, $TEST_USER_PASSWORD, $TEST_USER_EMAIL );
@@ -779,7 +787,8 @@ sub check_get_user_podcasts_id_title_map() {
 
 sub check_get_user_podcasts_titles() {
 	my $redis    = open_connection();              #connect to local redis
-	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
+	my $db_redis = get_db_redis_instance();    #connect to local redis
+
 
 	#PREPARE
 	$db_redis->add_new_user( $TEST_USER, $TEST_USER_PASSWORD, $TEST_USER_EMAIL );
@@ -817,7 +826,8 @@ sub check_get_user_podcasts_titles() {
 
 sub check_get_user_podcast_feeds_ids() {
 	my $redis    = open_connection();              #connect to local redis
-	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
+	my $db_redis = get_db_redis_instance();    #connect to local redis
+
 
 	#PREPARE
 	$db_redis->add_new_user( $TEST_USER, $TEST_USER_PASSWORD, $TEST_USER_EMAIL );
@@ -852,7 +862,7 @@ sub check_get_user_podcast_feeds_ids() {
 
 sub check_get_feeds_id_title_map() {
 	my $redis    = open_connection();              #connect to local redis
-	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
+	my $db_redis = get_db_redis_instance();    #connect to local redis
 
 	#PREPARE
 	my @urls_list = (
@@ -895,7 +905,7 @@ sub check_get_feeds_id_title_map() {
 
 sub check_get_user_feeds_ids() {
 	my $redis    = open_connection();              #connect to local redis
-	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
+	my $db_redis = get_db_redis_instance();    #connect to local redis
 
 	#PREPARE
 	$db_redis->add_new_user( $TEST_USER, $TEST_USER_PASSWORD, $TEST_USER_EMAIL );
@@ -927,7 +937,8 @@ sub check_get_user_feeds_ids() {
 
 sub check_del_user_podcast() {
 	my $redis    = open_connection();              #connect to local redis
-	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
+	my $db_redis = get_db_redis_instance();    #connect to local redis
+
 
 	#PREPARE
 	$db_redis->$db_redis->add_new_user( $TEST_USER, $TEST_USER_PASSWORD,
@@ -979,7 +990,8 @@ sub check_del_user_podcast() {
 #1
 sub check_set_new_podcast_item_ready_status() {
 	my $redis    = open_connection();              #connect to local redis
-	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
+	my $db_redis = get_db_redis_instance();    #connect to local redis
+
 
 	#PREPARE
 	$db_redis->$db_redis->add_new_user( $TEST_USER, $TEST_USER_PASSWORD,
@@ -1012,7 +1024,7 @@ sub check_set_new_podcast_item_ready_status() {
 #2
 sub check_get_new_podcast_item_ready_status() {
 	my $redis    = open_connection();              #connect to local redis
-	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
+	my $db_redis = get_db_redis_instance();    #connect to local redis
 
 	#PREPARE
 	$db_redis->$db_redis->add_new_user( $TEST_USER, $TEST_USER_PASSWORD,
@@ -1045,7 +1057,8 @@ sub check_get_new_podcast_item_ready_status() {
 #3
 sub check_add_pod_file_path_lable_to_podcast() {
 	my $redis    = open_connection();              #connect to local redis
-	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
+	my $db_redis = get_db_redis_instance();    #connect to local redis
+
 
 	#PREPARE
 	$db_redis->$db_redis->add_new_user( $TEST_USER, $TEST_USER_PASSWORD,
@@ -1091,7 +1104,8 @@ sub check_add_pod_file_path_lable_to_podcast() {
 #4
 sub check_get_user_podcast_files_paths() {
 	my $redis    = open_connection();              #connect to local redis
-	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
+	my $db_redis = get_db_redis_instance();    #connect to local redis
+
 	
 	$db_redis->$db_redis->add_new_user( $TEST_USER, $TEST_USER_PASSWORD,
 		$TEST_USER_EMAIL );
@@ -1131,7 +1145,8 @@ sub check_get_user_podcast_files_paths() {
 sub check_get_user_podcast_files_lables() {
 	
 	my $redis    = open_connection();              #connect to local redis
-	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
+	my $db_redis = get_db_redis_instance();    #connect to local redis
+
 	
 	#PREPARE
 	$db_redis->$db_redis->add_new_user( $TEST_USER, $TEST_USER_PASSWORD,
@@ -1173,7 +1188,8 @@ sub check_get_user_podcast_files_lables() {
 #6
 sub check_get_amount_of_user_podcast_files() {
 	my $redis    = open_connection();              #connect to local redis
-	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
+	my $db_redis = get_db_redis_instance();    #connect to local redis
+
 	
 	#PREPARE
 	$db_redis->$db_redis->add_new_user( $TEST_USER, $TEST_USER_PASSWORD,
@@ -1212,7 +1228,8 @@ sub check_get_amount_of_user_podcast_files() {
 #7
 sub check_del_and_get_old_podcasts_from_podlist() {
 	my $redis    = open_connection();              #connect to local redis
-	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
+	my $db_redis = get_db_redis_instance();    #connect to local redis
+
 	
 	#PREPARE
 	$db_redis->$db_redis->add_new_user( $TEST_USER, $TEST_USER_PASSWORD,
@@ -1254,7 +1271,8 @@ sub check_del_and_get_old_podcasts_from_podlist() {
 #8
 sub check_get_podcast_last_check_time() {
 	my $redis    = open_connection();              #connect to local redis
-	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
+	my $db_redis = get_db_redis_instance();    #connect to local redis
+
 	
 	#PREPARE
 	$db_redis->$db_redis->add_new_user( $TEST_USER, $TEST_USER_PASSWORD,
@@ -1286,7 +1304,8 @@ sub check_get_podcast_last_check_time() {
 #9
 sub check_set_podcast_last_check_time() {
 	my $redis    = open_connection();              #connect to local redis
-	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
+	my $db_redis = get_db_redis_instance();    #connect to local redis
+
 	
 	#PREPARE
 	$db_redis->$db_redis->add_new_user( $TEST_USER, $TEST_USER_PASSWORD,
@@ -1316,7 +1335,8 @@ sub check_set_podcast_last_check_time() {
 #10
 sub check_get_users_feeds_new_items() {
 	my $redis    = open_connection();              #connect to local redis
-	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
+	my $db_redis = get_db_redis_instance();    #connect to local redis
+
 	
 	#PREPARE
 	$db_redis->$db_redis->add_new_user( $TEST_USER, $TEST_USER_PASSWORD,
@@ -1361,7 +1381,8 @@ sub check_get_users_feeds_new_items() {
 #11
 sub check_set_feed_title() {
 	my $redis    = open_connection();              #connect to local redis
-	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
+	my $db_redis = get_db_redis_instance();    #connect to local redis
+
 	
 	#PREPARE
 	my $feed_test_url = "http://my.test.url.com";
@@ -1390,7 +1411,8 @@ sub check_set_feed_title() {
 #12
 sub check_is_feed_with_this_url_exists() {
 	my $redis    = open_connection();              #connect to local redis
-	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
+	my $db_redis = get_db_redis_instance();    #connect to local redis
+
 	
 	#PREPARE
 	my $feed_test_url = "http://my.test.url.com";
@@ -1415,7 +1437,8 @@ sub check_is_feed_with_this_url_exists() {
 #13
 sub check_set_user_feed_last_checked_item_num() {
 	my $redis    = open_connection();              #connect to local redis
-	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
+	my $db_redis = get_db_redis_instance();    #connect to local redis
+
 	
 	#PREPARE
 	$db_redis->$db_redis->add_new_user( $TEST_USER, $TEST_USER_PASSWORD,
@@ -1449,7 +1472,8 @@ sub check_set_user_feed_last_checked_item_num() {
 #14
 sub check_add_feed_id_to_user_podcast() {
 	my $redis    = open_connection();              #connect to local redis
-	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
+	my $db_redis = get_db_redis_instance();    #connect to local redis
+
 	
 	#PREPARE
 	$db_redis->$db_redis->add_new_user( $TEST_USER, $TEST_USER_PASSWORD,
@@ -1487,7 +1511,8 @@ sub check_add_feed_id_to_user_podcast() {
 #15
 sub check_del_user_feed() {
 	my $redis    = open_connection();              #connect to local redis
-	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
+	my $db_redis = get_db_redis_instance();    #connect to local redis
+
 	
 	#PREPARE
 	$db_redis->add_new_user( $TEST_USER, $TEST_USER_PASSWORD, $TEST_USER_EMAIL );
@@ -1515,7 +1540,8 @@ sub check_del_user_feed() {
 #16
 sub check_del_feed_id_from_user_podcast() {
 	my $redis    = open_connection();              #connect to local redis
-	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
+	my $db_redis = get_db_redis_instance();    #connect to local redis
+
 	
 	#PREPARE
 	$db_redis->$db_redis->add_new_user( $TEST_USER, $TEST_USER_PASSWORD,
@@ -1555,9 +1581,9 @@ sub check_del_feed_id_from_user_podcast() {
 
 #17
 sub check_get_filled_key(){
-	my $redis    = open_connection();
-	my $db_redis = get_db_redis_instance();
-	
+	my $redis    = open_connection();              #connect to local redis
+	my $db_redis = get_db_redis_instance();    #connect to local redis
+
 	my $filled_key = $db_redis->get_filled_key("ID_LOGIN", {login => 'pozpl'});
 	
 	my $all_ok = ($filled_key eq 'id:pozpl');
@@ -1645,3 +1671,24 @@ sub _create_test_feed() {
 	return $feed_id;
 }
 
+
+############################################
+# Usage      : _generate_feed_item("some text");
+# Purpose    : genrate item in text form
+# Returns    : json serialysed feed item
+# Parameters : text string, feed id
+# Throws     : no exceptions
+# Comments   : Generate feed item based on an input text field
+# See Also   : n/a
+sub _generate_feed_item() {
+	my ( $item_raw, $feed_id ) = @_;
+
+	my $item_txt  = RSS2POD::LangUtils::TextHandler::prepare_text($item_raw);
+	my $json      = JSON->new->allow_nonref;
+	my $file_name = $feed_id . "_" . md5_hex($item_txt);
+	$item_txt->{'file_name'} = $file_name;
+	$item_txt->{'feed_id'}   = $feed_id;
+	my $item_json = $json->encode($item_txt);
+
+	return $item_json;
+}

@@ -5,8 +5,7 @@ use Redis;
 use Digest::MD5 qw(md5 md5_hex md5_base64);
 use Template::Tiny;
 use Data::Dumper;
-
-
+use Time::HiRes;
 with 'RSS2POD::DB::DBAccessFuncs';
 
 =begin Redis_database_key_rules
@@ -53,21 +52,22 @@ my %REDIS_KEYS_TEMPLATES_HASH = (
 	"USER_ID_EMAIL" => "user:[%id%]:email",
 	"USER_ID_POD_NEXT_ID" => "user:[%id%]:pod:nexId",
 	"USER_ID_POD_POD_ZSET" => "user:[%id%]:pod:pod_zset",
-	"USER_ID_POD_ID_RSS_ZSET" => "user:[%id%]:pod:[%id%]:rss_zset",
-	"USER_ID_POD_ID_RSS_NEXT_ID" => "user:[%id%]:pod:[%id%]:rss_next_id",
+	"USER_ID_POD_ID_RSS_ZSET" => "user:[%id%]:pod:[%pod_id%]:rss_zset",
+	"USER_ID_POD_ID_RSS_NEXT_ID" => "user:[%id%]:pod:[%pod_id%]:rss_next_id",
 	"USER_ID_POD_NAME_ID" => "user:[%id%]:pod:[%name%]:id",
-	"USER_ID_POD_ID_LAST_CHK_TIME" => "user:[%id%]:pod:[%id%]:last_chk_time",
-	"USER_ID_POD_ID_POD_FILES_NAMES" => "user:[%id%]:pod:[%id%]:pod_files_names",
-	"USER_ID_POD_ID_GEN_MP3_STAT" => "user:[%id%]:pod:[%id%]:gen_mp3_stat",
+	"USER_ID_POD_ID_LAST_CHK_TIME" => "user:[%id%]:pod:[%pod_id%]:last_chk_time",
+	"USER_ID_POD_ID_POD_FILES_NAMES" => "user:[%id%]:pod:[%pod_id%]:pod_files_names",
+	"USER_ID_POD_ID_GEN_MP3_STAT" => "user:[%id%]:pod:[%pod_id%]:gen_mp3_stat",
 	
 	"USER_ID_FEEDS_FEEDS_ID_ZSET" => "user:[%id%]:feeds:feeds_id_zset",
-	"USER_ID_FEEDS_ID_LAST_CHK_NUM" => "user:[%id%]:feeds:[%id%]:last_chk_num",
+	"USER_ID_FEEDS_ID_LAST_CHK_NUM" => "user:[%id%]:feeds:[%feed_id%]:last_chk_num",
 	"USER_ID_FEEDS_NEXT_ID" => "user:[%id%]:feeds:next_id",
 	
 	"FEED_NEXT_ID" => "feed:next_id",
 	"FEED_ID_ITEMS" => "feed:[%id%]:items",
 	"FEED_ID_ITEMS_HASH_ZSET" => "feed:[%id%]:items_hash_zset",
 	"FEED_ID_ITEMS_SHIFT" => "feed:[%id%]:items_shift",
+	"FEED_ID_ITEMS_COUNT" => "feed:[%id%]:items_count",
 	"FEED_URL_ID" => "feed:[%url%]:id",
 	"FEED_ID_TITLE" => "feed:[%id%]:title",
 	"FEED_ID_URL" => "feed:[%id%]:url",
@@ -78,9 +78,9 @@ my %REDIS_KEYS_TEMPLATES_HASH = (
 );
 
 my %REDIS_KEYS_WILDCARDS_TEMPLATES_HASH = (
-	'USER_ID' => "user:[%id%]",
-	'USER_ID_POD_ID' => "user:[%id%]:pod:[%id%]",
-	'FEED_ID' => "feed:[%id%]",
+	'USER_ID' => "user:[%id%]:",
+	'USER_ID_POD_ID' => "user:[%id%]:pod:[%pod_id%]:",
+	'FEED_ID' => "feed:[%id%]:",
 );
 
 #redis connections
@@ -246,7 +246,7 @@ sub get_and_del_feed_item_from_voicefy_queue(){
 }
 #6	
 ############################################
-# Usage      : add_item_to_feed(11, \%hash);
+# Usage      : add_item_to_feed(11, '{some_json object}');
 # Purpose    : add item to current feed
 # Returns    : none
 # Parameters : int $feed_id - id of the feed item to add, 
@@ -255,17 +255,57 @@ sub get_and_del_feed_item_from_voicefy_queue(){
 # Comments   : ???
 # See Also   : n/a
 sub add_item_to_feed(){
-	my ($self, $feed_id, $item_ref) = @_;
+	my ($self, $feed_id, $item_seriaiysed) = @_;
+
 	my $feed_id_items_key = $self->get_filled_key('FEED_ID_ITEMS', {"id" =>$feed_id});
-	$self->redis_connection->lpush($feed_id_items_key, $item);
+	$self->redis_connection->lpush($feed_id_items_key, $item_seriaiysed);
 	
-	my $feed_id_items_hash_zset_key = $self->get_filled_key('FEED_ID_ITEMS_HASH_ZSET', {"id" =>$feed_id});
+	my $feed_id_items_hash_zset_key = $self->get_filled_key('FEED_ID_ITEMS_HASH_ZSET', 
+															{"id" =>$feed_id});
+	my $item_hash = md5_hex($item_seriaiysed);
 	
-	my $item_hash = $item_ref->{text};
-	$self->redis_connection->lpush($feed_id_items_hash_zset_key, $item_hash);
+	
+	my $feed_id_items_count_key = $self->get_filled_key('FEED_ID_ITEMS_COUNT', 
+															{"id" =>$feed_id});
+	my $item_count = $self->redis_connection->incr($feed_id_items_count_key);
+	$self->redis_connection->zadd($feed_id_items_hash_zset_key, $item_count, $item_hash);
 } 
-#7
-sub is_item_alrady_in_feed{} #check presence of given item in given feed
+#7 
+############################################
+# Usage      : is_item_alrady_in_feed(11, '{some_json object}');
+# Purpose    : check presence of the given item in the given feed
+# Returns    : true if item is presented false otherwise
+# Parameters : int $feed_id - id of the feed item to add, 
+#			   string $item - serialysed to json feed item
+# Throws     : no exceptions
+# Comments   : ???
+# See Also   : n/a
+sub is_item_alrady_in_feed(){
+	my ($self, $feed_id, $item_seriaiysed) = @_;
+	
+	my $feed_id_items_hash_zset_key = $self->get_filled_key('FEED_ID_ITEMS_HASH_ZSET', 
+															{"id" =>$feed_id});
+	my $item_hash = md5_hex($item_seriaiysed);
+	my $item_score = $self->redis_connection->zscore($feed_id_items_hash_zset_key, $item_hash);
+	my $is_in_feed = $item_score ? 1 : 0;
+	return $is_in_feed;
+} 
+
+############################################
+# Usage      : my @feed_items = get_all_feed_items(11);
+# Purpose    : get list of all items in the given feed
+# Returns    : list of serialysed items
+# Parameters : int $feed_id - id of the feed item to add, 
+# Throws     : no exceptions
+# Comments   : ???
+# See Also   : n/a
+sub get_all_feed_items(){
+	my ($self, $feed_id) = @_;
+	my $feed_id_items_key = $self->get_filled_key('FEED_ID_ITEMS', {"id" =>$feed_id});
+	my @feed_items = $self->redis_connection->lrange($feed_id_items_key, -1, 1);
+	
+	return @feed_items;
+}
 #8	
 ############################################
 # Usage      : create_feed_for_url('http://some/tricky/url/here.cgi');
@@ -278,22 +318,31 @@ sub is_item_alrady_in_feed{} #check presence of given item in given feed
 sub create_feed_for_url(){
 	my ($self, $url) = @_;
 	
-	my $new_id_key = $self->get_filled_key('FEED_NEXT_ID', {});
-	my $new_feed_id = $self->redis_connection->incr($new_id_key);
-	
-	my $feed_id_title_key = $self->get_filled_key('FEED_ID_TITLE', {"id" =>$new_feed_id});
-	$self->redis_connection->set($feed_id_title_key, $url);
-	
-	my $feed_id_url_key = $self->get_filled_key('FEED_ID_URL', {"id" =>$new_feed_id});
-	$self->redis_connection->set($feed_id_url_key, $url);
-	
 	my $feed_url_id_key = $self->get_filled_key('FEED_URL_ID', {'url' => md5_hex($url)});
-	$self->redis_connection->set($feed_url_id_key, $new_feed_id);
+	my $ret_feed_id = $self->redis_connection->get($feed_url_id_key);	
 	
-	my $feed_url_set_key = $self->get_filled_key('FEEDS_SET_URL', {});
-	$self->redis_connection->sadd($feed_url_set_key, $url);
+	if(! $ret_feed_id){
 	
-	return $new_feed_id;
+		my $new_id_key = $self->get_filled_key('FEED_NEXT_ID', {});
+		my $new_feed_id = $self->redis_connection->incr($new_id_key);
+	
+		my $feed_id_title_key = $self->get_filled_key('FEED_ID_TITLE', {"id" =>$new_feed_id});
+		$self->redis_connection->set($feed_id_title_key, $url);
+	
+		my $feed_id_url_key = $self->get_filled_key('FEED_ID_URL', {"id" =>$new_feed_id});
+		$self->redis_connection->set($feed_id_url_key, $url);
+	
+		$self->redis_connection->set($feed_url_id_key, $new_feed_id);
+	
+		my $feed_id_items_shift = $self->get_filled_key('FEED_ID_ITEMS_SHIFT', {"id" =>$new_feed_id});
+		$self->redis_connection->set($feed_id_items_shift, 0);
+	
+		my $feed_url_set_key = $self->get_filled_key('FEEDS_SET_URL', {});
+		$self->redis_connection->sadd($feed_url_set_key, $url);
+		
+		$ret_feed_id = $new_feed_id;
+	}
+	return $ret_feed_id;
 	
 }  
 #9 
@@ -314,7 +363,51 @@ sub get_feed_id_for_url(){
 	return $feed_id;
 } 
 #10
-sub del_and_get_old_items_from_feed(){} #trim feed items list, and get all trimmed entities
+############################################
+# Usage      : @old_items = del_and_get_old_items_from_feed($feed_id, $max_items_in_feed);
+# Purpose    : trim feed items list, and get all trimmed entities
+# Returns    : list of old deleted elements
+# Parameters : $feed_id - int id of the feed to be trimmed
+#			   $max_items_in_feed - maximum number of elements to be left intact in the feed 
+# Throws     : no exceptions
+# Comments   : ???
+# See Also   : n/a
+sub del_and_get_old_items_from_feed(){
+	my ($self, $feed_id, $max_items_in_feed) = @_;
+	
+	my $feed_id_items_key = $self->get_filled_key('FEED_ID_ITEMS', {"id" =>$feed_id});
+		
+	my $list_length = $self->redis_connection->llen($feed_id_items_key);
+	
+	my @dead_items = ();
+	
+	if ( $max_items_in_feed < $list_length ) {
+		my $trim_num = $list_length - $max_items_in_feed;
+
+		@dead_items = $self->redis_connection->lrange( $feed_id_items_key, $max_items_in_feed, -1 );		
+		my $redis_ok = $self->redis_connection->ltrim( $feed_id_items_key, 0,  $max_items_in_feed - 1);		
+		my $feed_id_items_shift_key = $self->get_filled_key('FEED_ID_ITEMS_SHIFT', {"id" =>$feed_id});
+		
+		#incr shift
+		my $items_shift =
+		  $self->redis_connection->incrby( $feed_id_items_shift_key, $trim_num );
+		
+	}
+
+	#now work with md5 zset
+	my $feed_id_items_hash_zset_key = $self->get_filled_key('FEED_ID_ITEMS_HASH_ZSET', 
+															{"id" =>$feed_id});
+	my $md5_zset_length =
+	  $self->redis_connection->zcount( $feed_id_items_hash_zset_key, '-inf', '+inf' );
+	
+	if ( $md5_zset_length > $max_items_in_feed) {
+		#instead of lpush zadd add elements to the right, so we need remove from left!!!
+		$self->redis_connection->zremrangebyrank($feed_id_items_hash_zset_key,
+				                                 0, ($md5_zset_length - $max_items_in_feed));		
+	}
+	
+	return @dead_items;
+} 
 #11
 ############################################
 # Usage      : del_feed('http://some/tricky/url/here.cgi');
@@ -336,12 +429,20 @@ sub del_feed(){
 	}else{
 		$feed_url = $feed_identificator;
 		my $feed_url_id_key = $self->get_filled_key('FEED_URL_ID', {'url' => md5_hex($feed_url)});
-		$feed_id = $self->redis_connection->get(md5_hex($feed_url_id_key));	
+
+		$feed_id = $self->redis_connection->get($feed_url_id_key);				
+		$self->redis_connection->del($feed_url_id_key);	
 	}	
-	my $feed_id_wild_key = $self->get_filled_key_wildcard('FEED_ID', {'id' => $feed_id});
-	$self->redis_connection->del($feed_id_wild_key);
-	$self->redis_connection->del($feed_id_url_key);
 	
+	my $feed_url_set_key = $self->get_filled_key('FEEDS_SET_URL', {});
+	$self->redis_connection->srem($feed_url_set_key, $feed_url);
+	
+	my $feed_id_wild_key = $self->get_filled_key_wildcard('FEED_ID', {'id' => $feed_id});
+	my @keys_to_del = $self->redis_connection->keys($feed_id_wild_key); 
+	
+	foreach my $key_to_del (@keys_to_del){print "KEY TO DEL $key_to_del $feed_id_wild_key\n";
+		$self->redis_connection->del($key_to_del);
+	}	
 }   
 #12	
 sub set_feed_title(){} #set title for the feed with given id
