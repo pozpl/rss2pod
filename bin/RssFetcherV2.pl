@@ -281,7 +281,7 @@ sub delete_old_entries() {
 		my $trim_num = $list_length - $max_items_per_feed;
 
 		#delete files with tts data from disk
-		my @dead_items = $redis->lrange( "feed:$feed_id:items", $trim_num, -1 );
+		my @dead_items = $redis->lrange( "feed:$feed_id:items", $max_items_per_feed, -1 );
 		my @file_names;
 		my $json = JSON->new->allow_nonref;
 		foreach my $item_json (@dead_items) {
@@ -290,7 +290,7 @@ sub delete_old_entries() {
 		}
 		delete_old_tts_files(@file_names);
 
-		my $redis_ok = $redis->ltrim( "feed:$feed_id:items", $trim_num, -1 );
+		my $redis_ok = $redis->ltrim( "feed:$feed_id:items", 0,  $max_items_per_feed - 1 );
 		my $items_shift =
 		  $redis->incrby( "feed:$feed_id:items_shift", $trim_num );
 		if ( $config->param("general.debug") ) {
