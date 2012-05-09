@@ -34,8 +34,8 @@ sub DetectMainParametrs{
 		
 		$language = defined $language ? $language : 'EN';
 		
-		print "LANG: $language \n";
-		print "TEXT: $text\n";
+#		print "LANG: $language \n";
+#		print "TEXT: $text\n";
 		$language =~ tr/A-Z/a-z/;
 		
 		return ($text_charset,$language);
