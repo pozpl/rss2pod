@@ -427,27 +427,19 @@ sub check_del_feed() {
 	$db_redis->del_feed($feed_test_url);
 
 	#CHECK
-	my $all_ok =
-	    !defined $feed_id                                                  ? 0
-	  : $redis->exists( $db_redis->FEED_FEED_ID_ITEMS($feed_id) )          ? 0
-	  : $redis->exists( $db_redis->FEED_FEED_URL_ID($feed_test_url) )      ? 0
-	  : $redis->exists( $db_redis->FEED_FEED_ID_ITEMS_SHIFT($feed_id) )    ? 0
-	  : $redis->exists( $db_redis->FEED_FEED_ID_TITLE($feed_id) )          ? 0
-	  : $redis->exists( $db_redis->FEED_FEED_ID_URL($feed_id) )            ? 0
-	  : $redis->exists( $db_redis->FEED_FEED_ID_ITEMS_MD5_ZSET($feed_id) ) ? 0
-	  :                                                                      1;
-
+	$feed_id = $db_redis->get_feed_id_for_url($feed_test_url);
+	
+	my @feeds_urls = $db_redis->get_feeds_urls();
+	my %feeds_urls_hash;
+	@feeds_urls_hash{@feeds_urls} = ();
+	my $is_feed_with_url_exists = $db_redis->is_feed_with_this_url_exists($feed_test_url);
+	
+	my $all_ok = defined $feed_id                          ? 0
+				: exists($feeds_urls_hash{$feed_test_url}) ? 0
+				:  $is_feed_with_url_exists 			   ? 0
+				:                                       	 1; 
 	#CLEAN
-	#delete manualy
-	if ( !$all_ok ) {
-		$redis->del( $db_redis->FEED_FEED_ID_ITEMS($feed_id) );
-		$redis->del( $db_redis->FEED_FEED_URL_ID($feed_test_url) );
-		$redis->del( $db_redis->FEED_FEED_ID_ITEMS_SHIFT($feed_id) );
-		$redis->del( $db_redis->FEED_FEED_ID_TITLE($feed_id) );
-		$redis->del( $db_redis->FEED_FEED_ID_URL($feed_id) );
-		$redis->del( $db_redis->FEED_FEED_ID_ITEMS_MD5_ZSET($feed_id) );
-	}
-	close_connection();
+	$redis->quit();
 	return $all_ok;
 }
 
@@ -463,19 +455,20 @@ sub check_add_new_user() {
 	$db_redis->add_new_user( $TEST_USER, $TEST_USER_PASSWORD, $TEST_USER_EMAIL );
 
 	#CHECK
-	my $user_id = $redis->get( $db_redis->ID_USER_LOGIN($TEST_USER) );
-	my $all_ok =
-	    !defined $user_id                                                        ? 0
-	  : !$redis->exists( $db_redis->USER_USER_ID_PASS($user_id) )                ? 0
-	  : !$redis->exists( $db_redis->USERS_NEXTID() )                             ? 0
-	  : !$redis->exists( $db_redis->USER_USER_ID_LOGIN($user_id) )               ? 0
-	  : !$redis->exists( $db_redis->USER_USER_ID_EMAIL($user_id) )               ? 0
-	  : !$redis->exists( $db_redis->USER_USER_ID_POD_NEXTID($user_id) )          ? 0
-	  : !$redis->exists( $db_redis->USER_USER_ID_POD_POD_ZSET($user_id) )        ? 0
-	  : !$redis->exists( $db_redis->USER_USER_ID_FEEDS_FEEDS_ID_ZSET($user_id) ) ? 0
-	  : !$redis->exists( $db_redis->USER_USER_ID_FEEDS_NEXTID($user_id) )        ? 0
-	  :                                                                            1;
-
+	#my $user_id = $redis->get( $db_redis->ID_USER_LOGIN($TEST_USER) );
+	
+#	my $all_ok =
+#	    !defined $user_id                                                        ? 0
+#	  : !$redis->exists( $db_redis->USER_USER_ID_PASS($user_id) )                ? 0
+#	  : !$redis->exists( $db_redis->USERS_NEXTID() )                             ? 0
+#	  : !$redis->exists( $db_redis->USER_USER_ID_LOGIN($user_id) )               ? 0
+#	  : !$redis->exists( $db_redis->USER_USER_ID_EMAIL($user_id) )               ? 0
+#	  : !$redis->exists( $db_redis->USER_USER_ID_POD_NEXTID($user_id) )          ? 0
+#	  : !$redis->exists( $db_redis->USER_USER_ID_POD_POD_ZSET($user_id) )        ? 0
+#	  : !$redis->exists( $db_redis->USER_USER_ID_FEEDS_FEEDS_ID_ZSET($user_id) ) ? 0
+#	  : !$redis->exists( $db_redis->USER_USER_ID_FEEDS_NEXTID($user_id) )        ? 0
+#	  :                                                                            1;
+	
 	#CLEAN
 	$db_redis->delete_user($TEST_USER);
 	close_connection();

@@ -422,17 +422,21 @@ sub del_feed(){
 	my $feed_url = "";	
 	my $feed_id;
 	my $feed_id_url_key = '';
+	my $feed_url_id_key = '';
 	if($feed_identificator =~ /{d+}/xms){
 		$feed_id = $feed_identificator;
 		my $feed_id_url_key = $self->get_filled_key('FEED_ID_URL', {"id" =>$feed_id});
 		$feed_url = $self->redis_connection->get($feed_id_url_key);		
+		 $feed_url_id_key = $self->get_filled_key('FEED_URL_ID', {'url' => md5_hex($feed_url)});
+		
 	}else{
 		$feed_url = $feed_identificator;
 		my $feed_url_id_key = $self->get_filled_key('FEED_URL_ID', {'url' => md5_hex($feed_url)});
 
-		$feed_id = $self->redis_connection->get($feed_url_id_key);				
-		$self->redis_connection->del($feed_url_id_key);	
+		$feed_id = $self->redis_connection->get($feed_url_id_key);			
 	}	
+	
+	$self->redis_connection->del($feed_url_id_key);
 	
 	my $feed_url_set_key = $self->get_filled_key('FEEDS_SET_URL', {});
 	$self->redis_connection->srem($feed_url_set_key, $feed_url);
@@ -440,7 +444,7 @@ sub del_feed(){
 	my $feed_id_wild_key = $self->get_filled_key_wildcard('FEED_ID', {'id' => $feed_id});
 	my @keys_to_del = $self->redis_connection->keys($feed_id_wild_key); 
 	
-	foreach my $key_to_del (@keys_to_del){print "KEY TO DEL $key_to_del $feed_id_wild_key\n";
+	foreach my $key_to_del (@keys_to_del){
 		$self->redis_connection->del($key_to_del);
 	}	
 }   
@@ -450,8 +454,21 @@ sub set_feed_title(){} #set title for the feed with given id
 sub get_feeds_id_title_map(){} #get hash pod_feed{id} = feed_title
 	
 	#'add_new_feed', #add feed url, title
-#14	
-sub is_feed_with_this_url_exists(){}  #check feed for url
+#14 #check feed for url
+############################################
+# Usage      : $is_exists = is_feed_with_this_url_exists('http://some/tricky/url/here.cgi');
+# Purpose    : check if the feed with the given url exists
+# Returns    : true if exists, false otherwise
+# Parameters : url string
+# Throws     : no exceptions
+# Comments   : ???
+# See Also   : n/a
+sub is_feed_with_this_url_exists(){
+	my ($self, $url) = @_;
+	
+	my $feed_url_set_key = $self->get_filled_key('FEEDS_SET_URL', {});
+	return $self->redis_connection->sismember($feed_url_set_key, $url);	
+}  
 #15	
 sub set_new_podcast_item_ready_status(){}   #setst new podcast redines status
 #16
@@ -475,10 +492,75 @@ sub get_podcast_last_check_time(){} #get last time, when user asks for this podc
 sub set_podcast_last_check_time(){} #set time of last succesful feeds items getting
 #25
 sub get_users_feeds_new_items(){} #get new items for user feeds
-#26	
-sub add_new_user(){}   #add new user
-#27
-sub delete_user(){}    #delete user
+#26	#add new user
+############################################
+# Usage      : add_new_user("user_login", "user_secret_password","user@email.em");
+# Purpose    : add a new user inoo the system
+# Returns    : status of operation true if succede
+# Parameters : user login- string, user_password - string, user_email - string
+# Throws     : no exceptions
+# Comments   : ???
+# See Also   : n/a
+sub add_new_user(){
+	my ($self, $login, $password, $email) = @_;
+	
+	my $users_next_id_key = $self->get_filled_key('USERS_NEXT_ID', {});	
+	my $new_user_id = $self->redis_connection->incr($users_next_id_key);
+	
+	my $id_login_key = $self->get_filled_key('ID_LOGIN', {"login" => md5_hex($login)});
+	my $set_ok = $self->redis_connection->set( $id_login_key, $new_user_id );
+	
+	my $user_id_login_key = $self->get_filled_key('USER_ID_LOGIN', {"id" => $new_user_id});
+	$set_ok = $self->redis_connection->set( $user_id_login_key, $login );
+	
+	my $user_id_email_key = $self->get_filled_key('USER_ID_EMAIL', {"id" => $new_user_id});
+	$set_ok = $self->redis_connection->set( $user_id_email_key, $email );
+	
+	my $user_id_pass_key = $self->get_filled_key('USER_ID_PASS', {"id" => $new_user_id});
+	$set_ok = $self->redis_connection->set( $user_id_pass_key,  md5_hex($password) );
+	
+	my $status = 0;
+	if($set_ok){
+		$status = 1;
+	}
+	
+	return $status;
+}   
+#27 #delete user
+############################################
+# Usage      : delete_user("user_login"); delete_user(11);
+# Purpose    : delete user
+# Returns    : status of operation true if succede
+# Parameters : user login- string OR user id - int
+# Throws     : no exceptions
+# Comments   : ???
+# See Also   : n/a
+sub delete_user(){
+	my ($self, $user_identificator) = @_;
+	
+	my $user_id = 0;
+	my $user_login = "";
+	my $id_login_key = "";
+	if($user_identificator =~ /{d+}/xms){
+		$user_id = $user_identificator;
+		my $user_id_login_key = $self->get_filled_key('USER_ID_LOGIN', {"id" => $user_id});
+		$user_login = $self->redis_connection->get($user_id_login_key);
+		$id_login_key = $self->get_filled_key('ID_LOGIN', {"login" => md5_hex($user_login)});		
+	}else{
+		$user_login = $user_identificator;
+		my $id_login_key = $self->get_filled_key('ID_LOGIN', {"login" => md5_hex($user_login)});
+		$user_id = $self->redis_connection->get($id_login_key);				
+	}	
+	$self->redis_connection->del($id_login_key);
+	
+	my $user_id_wild_key = $self->get_filled_key_wildcard('USER_ID', {'id' => $user_id});
+	my @keys_to_del = $self->redis_connection->keys($user_id_wild_key); 
+	
+	foreach my $key_to_del (@keys_to_del){
+		$self->redis_connection->del($key_to_del);
+	}	
+	
+}    
 #28
 sub is_user_exists(){} #check if user with such login exists
 #29
