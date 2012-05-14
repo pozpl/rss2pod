@@ -351,20 +351,8 @@ sub check_create_feed_for_url() {
 	my $all_ok = ($feed_id != $new_feed_id)              ?    0
 				: !exists $all_urls_hash{$feed_test_url} ?    0
 				:											  1;
-				
+	my $exists = !exists $all_urls_hash{$feed_test_url};			
 		
-#	my $all_ok =
-#	    !defined $feed_id                                                   ? 0
-#	  : !$redis->exists( $db_redis->FEED_NEXTID() )                         ? 0
-#	  : !$redis->exists( $db_redis->FEED_FEED_ID_ITEMS($feed_id) )          ? 0
-#	  : !$redis->exists( $db_redis->FEED_FEED_URL_ID($feed_test_url) )      ? 0
-#	  : !$redis->exists( $db_redis->FEED_FEED_ID_ITEMS_SHIFT($feed_id) )    ? 0
-#	  : !$redis->exists( $db_redis->FEED_FEED_ID_TITLE($feed_id) )          ? 0
-#	  : !$redis->exists( $db_redis->FEED_FEED_ID_URL($feed_id) )            ? 0
-#	  : !$redis->exists( $db_redis->FEED_FEED_ID_ITEMS_MD5_ZSET($feed_id) ) ? 0
-#	  : !$redis->exists( $db_redis->FEEDS_SET_URL() )                       ? 0
-#	  :                                                                       1;
-
 	#CLEAN
 	$db_redis->del_feed($feed_test_url);    #delete feed
 	$redis->quit();
@@ -403,7 +391,7 @@ sub check_del_and_get_old_items_from_feed() {
 	}
 	for my $test_feed_item (@goten_feed_items) {    #no item is persitent now
 		if ( $db_redis->is_item_alrady_in_feed( $feed_id, $test_feed_item ) ) {
-			$all_ok = 0; print "Feed item $test_feed_item \n";
+			$all_ok = 0; 
 		}
 	}
 
@@ -455,23 +443,11 @@ sub check_add_new_user() {
 	$db_redis->add_new_user( $TEST_USER, $TEST_USER_PASSWORD, $TEST_USER_EMAIL );
 
 	#CHECK
-	#my $user_id = $redis->get( $db_redis->ID_USER_LOGIN($TEST_USER) );
-	
-#	my $all_ok =
-#	    !defined $user_id                                                        ? 0
-#	  : !$redis->exists( $db_redis->USER_USER_ID_PASS($user_id) )                ? 0
-#	  : !$redis->exists( $db_redis->USERS_NEXTID() )                             ? 0
-#	  : !$redis->exists( $db_redis->USER_USER_ID_LOGIN($user_id) )               ? 0
-#	  : !$redis->exists( $db_redis->USER_USER_ID_EMAIL($user_id) )               ? 0
-#	  : !$redis->exists( $db_redis->USER_USER_ID_POD_NEXTID($user_id) )          ? 0
-#	  : !$redis->exists( $db_redis->USER_USER_ID_POD_POD_ZSET($user_id) )        ? 0
-#	  : !$redis->exists( $db_redis->USER_USER_ID_FEEDS_FEEDS_ID_ZSET($user_id) ) ? 0
-#	  : !$redis->exists( $db_redis->USER_USER_ID_FEEDS_NEXTID($user_id) )        ? 0
-#	  :                                                                            1;
-	
+	my $all_ok = $db_redis->is_user_exists($TEST_USER);
+		
 	#CLEAN
 	$db_redis->delete_user($TEST_USER);
-	close_connection();
+	$redis->quit();
 	return $all_ok;
 }
 
@@ -482,44 +458,15 @@ sub check_delete_user() {
 
 	#PREPARE
 	$db_redis->add_new_user( $TEST_USER, $TEST_USER_PASSWORD, $TEST_USER_EMAIL );
-	my $user_id = $redis->get( $db_redis->ID_USER_LOGIN($TEST_USER) );
-
+	
 	#EXECUTE
 	$db_redis->delete_user($TEST_USER);
 
 	#CHECK
-	#check all necessary fields
-	my $all_ok =
-	    !defined $user_id                                                       ? 0
-	  : $redis->exists( $db_redis->USER_USER_ID_PASS($user_id) )                ? 0
-	  : $redis->exists( $db_redis->USER_USER_ID_LOGIN($user_id) )               ? 0
-	  : $redis->exists( $db_redis->USER_USER_ID_EMAIL($user_id) )               ? 0
-	  : $redis->exists( $db_redis->USER_USER_ID_POD_NEXTID($user_id) )          ? 0
-	  : $redis->exists( $db_redis->USER_USER_ID_POD_POD_ZSET($user_id) )        ? 0
-	  : $redis->exists( $db_redis->USER_USER_ID_FEEDS_FEEDS_ID_ZSET($user_id) ) ? 0
-	  : $redis->exists( $db_redis->USER_USER_ID_FEEDS_NEXTID($user_id) )        ? 0
-	  :                                                                           1;
+	my $all_ok = $db_redis->is_user_exists($TEST_USER);  
 
-   #check pattern on database keys, we do not check podcast specific keys in previous test
-	if ( defined $user_id ) {
-		my @user_pattern_keys = $redis->keys("user:$user_id:*");
-		if ( @user_pattern_keys > 0 ) {
-			$all_ok = 0;
-		}
-	}
-	if ( defined $user_id && !$all_ok ) {
-		$redis->del( $db_redis->USER_USER_ID_PASS($user_id) );
-		$redis->del( $db_redis->USER_USER_ID_LOGIN($user_id) );
-		$redis->del( $db_redis->USER_USER_ID_EMAIL($user_id) );
-		$redis->del( $db_redis->USER_USER_ID_POD_NEXTID($user_id) );
-		$redis->del( $db_redis->USER_USER_ID_POD_POD_ZSET($user_id) );
-		$redis->del( $db_redis->USER_USER_ID_FEEDS_FEEDS_ID_ZSET($user_id) );
-		$redis->del( $db_redis->USER_USER_ID_FEEDS_NEXTID($user_id) );
-
-		#delete keys by pattern
-		$redis->del("user:$user_id:*");
-	}
-	close_connection();
+	#	CLEAN
+	$redis->quit();
 	return $all_ok;
 }
 
@@ -542,13 +489,13 @@ sub check_is_user_exists() {
 
 	#CLEAN ENVIRONMENT
 	$db_redis->delete_user($TEST_USER);
-	close_connection();
+	$redis->quit();
 	return $all_ok;
 }
 
 sub check_update_user_password() {
 	my $redis    = open_connection();              #connect to local redis
-	my $db_redis = RSS2POD::DB::DBRedis->new();    #connect to local redis
+	my $db_redis = get_db_redis_instance();    #connect to local redis
 
 	#PREPARE
 	$db_redis->add_new_user( $TEST_USER, $TEST_USER_PASSWORD, $TEST_USER_EMAIL );
@@ -1585,41 +1532,29 @@ sub check_get_filled_key(){
 }
 
 
-ok(check_get_filled_key(), "Filled key template");
+ok(check_get_filled_key(), "Filled key template"); #1
 
-ok( check_get_feeds_urls(), "Get feeds urls works fine" );
+ok( check_get_feeds_urls(), "Get feeds urls works fine" ); #2
 ok(
-	check_get_and_del_feed_url_from_queue_of_new_feeds(),
+	check_get_and_del_feed_url_from_queue_of_new_feeds(), 
 	"Get and del value from the set of urls works"
-);
+);#3
 ok( check_add_feed_url_to_queue_of_new_feeds(),
-	"Add value to the set of new urls works" );
-ok( check_add_feed_item_to_voicefy_queue(), "Add feed item to the voicefy queue works" );
+	"Add value to the set of new urls works" ); #4
+ok( check_add_feed_item_to_voicefy_queue(), "Add feed item to the voicefy queue works" ); #5
 ok(
 	check_get_and_del_feed_item_from_voicefy_queue(),
 	"Get and delete feed item from the voicefy queue"
-);
-ok( check_add_item_to_feed(),                "Add item to a feed works" );
-ok( check_is_item_alrady_in_feed(),          "Check is a item already in a feed works" );
-ok( check_create_feed_for_url(),             "Create new feed for a provided URL works" );
-ok( check_del_and_get_old_items_from_feed(), "get and delete old items function works" );
-ok( check_del_feed(),                        "feed deletion is ok" );
-ok( check_set_new_podcast_item_ready_status(),  "set new podcast item ready status ok" );
-ok( check_add_pod_file_path_lable_to_podcast(), "add filre path lable to podcast ok" );
-ok( check_get_user_podcast_files_paths(),       "get podcast's file paths ok" );
-ok( check_get_user_podcast_files_lables(),      'get users podcast file lables ok' );
-ok( check_get_amount_of_user_podcast_files(),   'get podcast files amount ok' );
-ok(
-	check_del_and_get_old_podcasts_from_podlist(),
-	"get and delete old podcasts from podlist"
-);
-ok( check_get_podcast_last_check_time(), "get last time podcast was checked" );
-ok( check_set_podcast_last_check_time(), 'set last time podcast was checked' );
-ok( check_get_users_feeds_new_items(),
-	'get new items that was added to the user feeds since last check' );
-ok( check_add_new_user(),                        "add new user ok" );
-ok( check_delete_user(),                         'delete user ok' );
-ok( check_is_user_exists(),                      'is user exists' );
+); #6
+ok( check_add_item_to_feed(),                "Add item to a feed works" ); #7
+ok( check_is_item_alrady_in_feed(),          "Check is a item already in a feed works" ); #8
+ok( check_create_feed_for_url(),             "Create new feed for a provided URL works" ); #9
+ok( check_del_and_get_old_items_from_feed(), "get and delete old items function works" ); #10
+ok( check_del_feed(),                        "feed deletion is ok" ); # 11
+
+ok( check_add_new_user(),                        "add new user ok" ); #12
+ok( check_delete_user(),                         'delete user ok' );  #13
+ok( check_is_user_exists(),                      'is user exists' );  #14
 ok( check_update_user_password(),                'update user\' pasword ok' );
 ok( check_is_user_password_valid(),              'get user password hash ok ' );
 ok( check_update_user_email(),                   "update user email ok" );
@@ -1633,6 +1568,21 @@ ok( check_get_user_podcast_feeds_ids(),          "get list of user's feeds ids" 
 ok( check_get_user_podcast_feeds_id_title_map(), "get map of user's feed{id}=title" );
 ok( check_get_user_feeds_ids(),                  "get user's feeds ids" );
 ok( check_del_user_podcast(),                    "delete user podcast" );
+
+
+ok( check_set_new_podcast_item_ready_status(),  "set new podcast item ready status ok" );
+ok( check_add_pod_file_path_lable_to_podcast(), "add filre path lable to podcast ok" );
+ok( check_get_user_podcast_files_paths(),       "get podcast's file paths ok" );
+ok( check_get_user_podcast_files_lables(),      'get users podcast file lables ok' );
+ok( check_get_amount_of_user_podcast_files(),   'get podcast files amount ok' );
+ok(
+	check_del_and_get_old_podcasts_from_podlist(),
+	"get and delete old podcasts from podlist"
+);
+ok( check_get_podcast_last_check_time(), "get last time podcast was checked" );
+ok( check_set_podcast_last_check_time(), 'set last time podcast was checked' );
+ok( check_get_users_feeds_new_items(),
+	'get new items that was added to the user feeds since last check' );
 ok( check_set_feed_title(),                      "add new feed to database" );
 ok( check_is_feed_with_this_url_exists(), "is feed with given URL exists in database" );
 ok(

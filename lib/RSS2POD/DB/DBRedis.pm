@@ -321,7 +321,7 @@ sub create_feed_for_url(){
 	my $feed_url_id_key = $self->get_filled_key('FEED_URL_ID', {'url' => md5_hex($url)});
 	my $ret_feed_id = $self->redis_connection->get($feed_url_id_key);	
 	
-	if(! $ret_feed_id){
+	if(! defined $ret_feed_id){
 	
 		my $new_id_key = $self->get_filled_key('FEED_NEXT_ID', {});
 		my $new_feed_id = $self->redis_connection->incr($new_id_key);
@@ -425,17 +425,16 @@ sub del_feed(){
 	my $feed_url_id_key = '';
 	if($feed_identificator =~ /{d+}/xms){
 		$feed_id = $feed_identificator;
-		my $feed_id_url_key = $self->get_filled_key('FEED_ID_URL', {"id" =>$feed_id});
+		$feed_id_url_key = $self->get_filled_key('FEED_ID_URL', {"id" =>$feed_id});
 		$feed_url = $self->redis_connection->get($feed_id_url_key);		
-		 $feed_url_id_key = $self->get_filled_key('FEED_URL_ID', {'url' => md5_hex($feed_url)});
+		$feed_url_id_key = $self->get_filled_key('FEED_URL_ID', {'url' => md5_hex($feed_url)});
 		
 	}else{
 		$feed_url = $feed_identificator;
-		my $feed_url_id_key = $self->get_filled_key('FEED_URL_ID', {'url' => md5_hex($feed_url)});
+		$feed_url_id_key = $self->get_filled_key('FEED_URL_ID', {'url' => md5_hex($feed_url)});
 
-		$feed_id = $self->redis_connection->get($feed_url_id_key);			
+		$feed_id = $self->redis_connection->get($feed_url_id_key);					
 	}	
-	
 	$self->redis_connection->del($feed_url_id_key);
 	
 	my $feed_url_set_key = $self->get_filled_key('FEEDS_SET_URL', {});
@@ -541,7 +540,7 @@ sub delete_user(){
 	my $user_id = 0;
 	my $user_login = "";
 	my $id_login_key = "";
-	if($user_identificator =~ /{d+}/xms){
+ 	if($user_identificator =~ /{d+}/xms){
 		$user_id = $user_identificator;
 		my $user_id_login_key = $self->get_filled_key('USER_ID_LOGIN', {"id" => $user_id});
 		$user_login = $self->redis_connection->get($user_id_login_key);
@@ -561,8 +560,36 @@ sub delete_user(){
 	}	
 	
 }    
-#28
-sub is_user_exists(){} #check if user with such login exists
+#28 
+############################################
+# Usage      : $is_exists = is_user_exists("user_login"); delete_user(11);
+# Purpose    : check if user with such login exists
+# Returns    : true if user exists false otherwises
+# Parameters : user login- string OR user id - int
+# Throws     : no exceptions
+# Comments   : ???
+# See Also   : n/a
+sub is_user_exists(){
+	my ($self, $user_identificator) = @_;
+	
+	my $user_id = 0;
+	my $user_login = "";
+	my $id_login_key = "";
+	if($user_identificator =~ /{d+}/xms){
+		$user_id = $user_identificator;
+		my $user_id_login_key = $self->get_filled_key('USER_ID_LOGIN', {"id" => $user_id});
+		$user_login = $self->redis_connection->get($user_id_login_key);
+		$id_login_key = $self->get_filled_key('ID_LOGIN', {"login" => md5_hex($user_login)});		
+	}else{
+		$user_login = $user_identificator;
+		my $id_login_key = $self->get_filled_key('ID_LOGIN', {"login" => md5_hex($user_login)});
+		$user_id = $self->redis_connection->get($id_login_key);				
+	}
+	
+	my $user_exists = (defined $user_id && $user_id != 0 && !($user_login  eq "") ) ? 1 : 0;
+	
+	return $user_exists;
+} 
 #29
 sub update_user_password(){}
 #30
