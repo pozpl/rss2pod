@@ -511,7 +511,7 @@ sub check_update_user_password() {
 
 	#CLEAN ENVIRONMENT
 	$db_redis->delete_user($TEST_USER);
-	close_connection();
+	$redis->quit();
 	return $all_ok;
 }
 
@@ -540,7 +540,7 @@ sub check_is_user_password_valid() {
 
 	#CLEAN ENVIRONMENT
 	$db_redis->delete_user($TEST_USER);
-	close_connection();
+	$redis->quit();
 	return $all_ok;
 }
 
@@ -561,7 +561,7 @@ sub check_update_user_email() {
 
 	#CLEAN ENVIRONMENT
 	$db_redis->delete_user($TEST_USER);
-	close_connection();
+	$redis->quit();
 	return $all_ok;
 }
 
@@ -581,7 +581,7 @@ sub check_get_user_email() {
 
 	#CLEAN ENVIRONMENT
 	$db_redis->delete_user($TEST_USER);
-	close_connection();
+	$redis->quit();
 	return $all_ok;
 }
 
