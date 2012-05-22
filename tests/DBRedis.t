@@ -516,7 +516,6 @@ sub check_update_user_password() {
 }
 
 sub check_is_user_password_valid() {
-	my $redis    = open_connection();              #connect to local redis
 	my $db_redis = get_db_redis_instance();    #connect to local redis
 
 
@@ -540,12 +539,10 @@ sub check_is_user_password_valid() {
 
 	#CLEAN ENVIRONMENT
 	$db_redis->delete_user($TEST_USER);
-	$redis->quit();
 	return $all_ok;
 }
 
 sub check_update_user_email() {
-	my $redis    = open_connection();              #connect to local redis
 	my $db_redis = get_db_redis_instance();    #connect to local redis
 
 	#PREPARE
@@ -561,12 +558,10 @@ sub check_update_user_email() {
 
 	#CLEAN ENVIRONMENT
 	$db_redis->delete_user($TEST_USER);
-	$redis->quit();
 	return $all_ok;
 }
 
 sub check_get_user_email() {
-	my $redis    = open_connection();              #connect to local redis
 	my $db_redis = get_db_redis_instance();    #connect to local redis
 
 
@@ -581,12 +576,10 @@ sub check_get_user_email() {
 
 	#CLEAN ENVIRONMENT
 	$db_redis->delete_user($TEST_USER);
-	$redis->quit();
 	return $all_ok;
 }
 
 sub check_add_user_podcast() {
-	my $redis    = open_connection();              #connect to local redis
 	my $db_redis = get_db_redis_instance();    #connect to local redis
 
 	#PREPARE
@@ -595,40 +588,16 @@ sub check_add_user_podcast() {
 
 	#EXECUTE
 	$db_redis->add_user_podcast( $TEST_USER, $podcast_label );
-
+	
 	#CHECK
-	my $user_id = $redis->get( $db_redis->ID_USER_LOGIN($TEST_USER) );
-	my $all_ok =
-	    !$redis->exists( $db_redis->USER_USER_ID_POD_NEXTID($user_id) )   ? 0
-	  : !$redis->exists( $db_redis->USER_USER_ID_POD_POD_ZSET($user_id) ) ? 0
-	  :                                                                     1;
-	if ($all_ok) {
-		if ( $redis->exists( $db_redis->USER_USER_ID_POD_POD_NAME_ID($user_id) ) ) {
-			my $pod_id = $redis->get( $db_redis->USER_USER_ID_POD_POD_NAME_ID($user_id) );
-
-			$all_ok =
-			  !$redis->exists(
-				$db_redis->USER_USER_ID_POD_POD_ID_RSS_ZSET( $user_id, $pod_id ) ) ? 0
-			  : !$redis->exists(
-				$db_redis->USER_USER_ID_POD_POD_ID_RSS_NEXTID( $user_id, $pod_id ) ) ? 0
-			  : !$redis->exists(
-				$db_redis->USER_USER_ID_POD_POD_ID_LAST_CHK_TIME( $user_id, $pod_id ) )
-			  ? 0
-			  : 1;
-		}
-		else {
-			$all_ok = 0;
-		}
-	}
-
+	my $all_ok = $db_redis->is_user_podcast_exists($TEST_USER, $podcast_label);
+	
 	#CLEAN ENVIRONMENT
 	$db_redis->delete_user($TEST_USER);
-	close_connection();
 	return $all_ok;
 }
 
 sub check_add_feed_id_to_user_feeds() {
-	my $redis    = open_connection();              #connect to local redis
 	my $db_redis = get_db_redis_instance();    #connect to local redis
 
 
@@ -647,12 +616,11 @@ sub check_add_feed_id_to_user_feeds() {
 
 	#CLEAN ENVIRONMENT
 	$db_redis->delete_user($TEST_USER);
-	close_connection();
+	
 	return $all_ok;
 }
 
 sub check_get_user_podcasts_ids() {
-	my $redis    = open_connection();              #connect to local redis
 	my $db_redis = get_db_redis_instance();    #connect to local redis
 
 	#PREPARE
@@ -681,7 +649,6 @@ sub check_get_user_podcasts_ids() {
 
 	#CLEAN ENVIRONMENT
 	$db_redis->delete_user($TEST_USER);
-	close_connection();
 	return $all_ok;
 }
 
@@ -1411,18 +1378,15 @@ sub check_set_user_feed_last_checked_item_num() {
 
 #14
 sub check_add_feed_id_to_user_podcast() {
-	my $redis    = open_connection();              #connect to local redis
 	my $db_redis = get_db_redis_instance();    #connect to local redis
 
 	
 	#PREPARE
 	$db_redis->$db_redis->add_new_user( $TEST_USER, $TEST_USER_PASSWORD,
 		$TEST_USER_EMAIL );
-	my $user_id       = $redis->get( $db_redis->ID_USER_LOGIN($TEST_USER) );
+	
 	my $podcast_label = "brand new podcast";
 	$db_redis->add_user_podcast( $TEST_USER, $podcast_label );
-	my $pod_id =
-	  $redis->get( $db_redis->USER_USER_ID_POD_POD_NAME_ID( $user_id, $podcast_label ) );
 	  
 	my $feed_test_url = "http://my.test.url.com";
 	$db_redis->del_feed($feed_test_url);           #delete feed
@@ -1431,10 +1395,11 @@ sub check_add_feed_id_to_user_podcast() {
 	my $feed_id = $db_redis->get_feed_id_for_url($feed_test_url);
 	
 	#EXECUTE
-	$db_redis->add_feed_id_to_user_podcast($feed_id);
+	$db_redis->add_feed_id_to_user_podcast($TEST_USER, $podcast_label,$feed_id);
 	
 	#CHECK
-	my @feeds_ids = $db_redis->get_user_podcast_feed_ids($user_id, $pod_id);
+	my @feeds_ids = $db_redis->get_user_podcast_feed_ids($TEST_USER, $podcast_label);
+	print "@feeds_ids";
 	my %feeds_ids_hash;
 	@feeds_ids_hash{@feeds_ids} = ();
 	
@@ -1444,13 +1409,11 @@ sub check_add_feed_id_to_user_podcast() {
 	$db_redis->del_feed($feed_test_url);           #delete feed
 	$db_redis->delete_user($TEST_USER);
 	
-	close_connection();
 	return $all_ok;
 }
 
 #15
 sub check_del_user_feed() {
-	my $redis    = open_connection();              #connect to local redis
 	my $db_redis = get_db_redis_instance();    #connect to local redis
 
 	
@@ -1458,10 +1421,10 @@ sub check_del_user_feed() {
 	$db_redis->add_new_user( $TEST_USER, $TEST_USER_PASSWORD, $TEST_USER_EMAIL );
 	my $feed_id = "1";
 	$db_redis->add_feed_id_to_user_feeds( $TEST_USER, $feed_id );
-	my $user_id       = $redis->get( $db_redis->ID_USER_LOGIN($TEST_USER) );
+	#my $user_id       = $redis->get( $db_redis->ID_USER_LOGIN($TEST_USER) );
 	
 	#EXECUTE
-	$db_redis->del_user_feed($user_id, $feed_id);
+	$db_redis->del_user_feed($TEST_USER, $feed_id);
 	
 	#CHECK
 	my @user_feeds_ids = $db_redis->get_user_feeds_ids($TEST_USER);
@@ -1471,9 +1434,7 @@ sub check_del_user_feed() {
 
 	#CLEAN ENVIRONMENT
 	$db_redis->delete_user($TEST_USER);
-
 	
-	close_connection();
 	return $all_ok;
 }
 

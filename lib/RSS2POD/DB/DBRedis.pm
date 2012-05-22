@@ -569,12 +569,12 @@ sub add_new_user() {
 	return $status;
 }
 
-sub get_user_id_by_login(){
-	my ($self, $login) = @_;
+sub get_user_id_by_login() {
+	my ( $self, $login ) = @_;
 	my $id_login_key =
 	  $self->get_filled_key( 'ID_LOGIN', { "login" => md5_hex($login) } );
 	my $user_id = $self->redis_connection->get($id_login_key);
-	
+
 	return $user_id;
 }
 
@@ -779,32 +779,83 @@ sub add_user_podcast() {
 	if ( defined $user_id && $user_id >= 0 ) {
 		my $user_id_pod_zset_key =
 		  $self->get_filled_key( 'USER_ID_POD_POD_ZSET', { 'id' => $user_id } );
-		my $is_podcast_exists = $self->redis_connection->score($user_id_pod_pod_zset_key);
+		my $is_podcast_exists =
+		  $self->redis_connection->zscore( $user_id_pod_zset_key, $podcast_name );
 		if ( !$is_podcast_exists ) {
 
-			my $new_id_key = $self->get_filled_key( 'USER_ID_POD_NEXT_ID', {'id' => $user_id} );
+			my $new_id_key =
+			  $self->get_filled_key( 'USER_ID_POD_NEXT_ID', { 'id' => $user_id } );
 			my $new_pod_id = $self->redis_connection->incr($new_id_key);
 
-			my $pod_name_id_key =
-			  $self->get_filled_key( 'USER_ID_POD_NAME_ID', {'id' => $user_id ,
-			  												"name" => md5_hex($podcast_name) } );
+			my $pod_name_id_key = $self->get_filled_key(
+				'USER_ID_POD_NAME_ID',
+				{
+					'id'   => $user_id,
+					"name" => md5_hex($podcast_name)
+				}
+			);
 			$self->redis_connection->set( $pod_name_id_key, $new_pod_id );
 
-			#my $pod_id_name_key =
-			#$self->get_filled_key( 'USER_ID_POD_NAME', { "id" => $user_id, 'pod_id' => $new_pod_id } );
-			#$self->redis_connection->set( $pod_id_name_key, $pod_name_id_key );
+#my $pod_id_name_key =
+#$self->get_filled_key( 'USER_ID_POD_NAME', { "id" => $user_id, 'pod_id' => $new_pod_id } );
+#$self->redis_connection->set( $pod_id_name_key, $pod_name_id_key );
 
-			
-
-			my $last_chk_time_key =
-			  $self->get_filled_key( 'USER_ID_POD_ID_LAST_CHK_TIME', { "id" => $user_id, 'pod_id' => $new_pod_id } );
+			my $last_chk_time_key = $self->get_filled_key( 'USER_ID_POD_ID_LAST_CHK_TIME',
+				{ "id" => $user_id, 'pod_id' => $new_pod_id } );
 			$self->redis_connection->set( $last_chk_time_key, 0 );
 
-			$self->redis_connection->zadd( $feed_url_set_key, $url );
+			$self->redis_connection->zadd( $user_id_pod_zset_key, $new_pod_id,
+				$podcast_name );
 
-			$ret_feed_id = $new_feed_id;
 		}
 	}
+
+}
+
+###########################################
+# Usage      : $is_exists = is_user_podcast_exists($user_login, $podcast_name);
+# Purpose    : check if podcast with given name is already exists for given user
+# Returns    : true if exists false otherwise
+# Parameters : user login- string, podcast_name - string
+# Throws     : no exceptions
+# Comments   : ???
+# See Also   : n/a
+sub is_user_podcast_exists() {
+	my ( $self, $user_login, $podcast_name ) = @_;
+
+	my $user_id                = $self->get_user_id_by_login($user_login);
+	my $is_user_podcast_exists = 0;
+	if ( defined $user_id && $user_id >= 0 ) {
+		my $user_id_pod_zset_key =
+		  $self->get_filled_key( 'USER_ID_POD_POD_ZSET', { 'id' => $user_id } );
+		my $podcast_score =
+		  $self->redis_connection->zscore( $user_id_pod_zset_key, $podcast_name );
+		if ( defined($podcast_score) && $podcast_score >= 0 ) {
+
+			my $pod_name_id_key = $self->get_filled_key(
+				'USER_ID_POD_NAME_ID',
+				{
+					'id'   => $user_id,
+					"name" => md5_hex($podcast_name)
+				}
+			);
+			if ( $self->redis_connection->exists($pod_name_id_key) ) {
+				my $podcast_id = $self->redis_connection->get($pod_name_id_key);
+
+				my $last_chk_time_key =
+				  $self->get_filled_key( 'USER_ID_POD_ID_LAST_CHK_TIME',
+					{ "id" => $user_id, 'pod_id' => $podcast_id } );
+				my $last_chk_time = $self->redis_connection->get($last_chk_time_key);
+
+				if ( $last_chk_time >= 0 && $podcast_id > 0 ) {
+					$is_user_podcast_exists = 1;
+				}
+			}
+
+		}
+	}
+
+	return $is_user_podcast_exists;
 
 }
 
@@ -821,22 +872,96 @@ sub get_user_podcasts_id_title_map() { }    #get hash podcsast{id} = poscast_tit
 sub get_user_podcasts_titles() { }          #get list of podcast titles
 
 #38
-sub get_user_podcast_feeds_ids() { }        #get all feeds that contained in the podcast
+###########################################
+# Usage      : @feeds_ids = get_user_podcast_feeds_ids($user_login, $podcast_name);
+# Purpose    : get array of id of feeds for user podcast
+# Returns    : array of feed ids
+# Parameters : user login- string, podcast_name - string
+# Throws     : no exceptions
+# Comments   : ???
+# See Also   : n/a
+sub get_user_podcast_feeds_ids() {
+	my ( $self, $user_login, $podcast_lable ) = @_;
+	
+	my @feeds_list = ();
+	
+	my $user_id         = $self->get_user_id_by_login($user_login);
+	my $pod_name_id_key = $self->get_filled_key(
+		'USER_ID_POD_NAME_ID',
+		{
+			'id'   => $user_id,
+			"name" => md5_hex($podcast_lable)
+		}
+	);
+	if ( $self->redis_connection->exists($pod_name_id_key) ) {
+		my $podcast_id = $self->redis_connection->get($pod_name_id_key);
+		
+		my $pod_rss_zset_key = $self->get_filled_key('USER_ID_POD_ID_RSS_ZSET',
+			{
+				'id' => $user_id,
+				'pod_id' => $podcast_id
+			}
+		);
+		@feeds_list = $self->redis_connection->zrangebyscore( $pod_rss_zset_key, '-inf', '+inf');
+		print @feeds_list;
+	}
+	return @feeds_list;
+}
 
 #39
-sub get_user_feeds_ids() { }                #get user feeds ids
+sub get_user_feeds_ids() { }    #get user feeds ids
 
 #'set_user_feed_last_time_chek', #set user feed last time check
 #40
 sub set_user_feed_last_checked_item_num() { }    #set user's feed last checked item number
 
 #41
-sub add_feed_id_to_user_podcast() { }            #add feed id to user podcast feed list
+###########################################
+# Usage      : add_feed_id_to_user_podcast($user_login, $podcast_name, $feed_id);
+# Purpose    : add feed id to the list of user podcasts
+# Returns    : none
+# Parameters : user login- string, podcast_name - string, feed id - int
+# Throws     : no exceptions
+# Comments   : ???
+# See Also   : n/a
+sub add_feed_id_to_user_podcast() {
+	my ( $self, $user_login, $podcast_lable, $feed_id ) = @_;
+	my $return_stat = 0;
+
+	my $user_id         = $self->get_user_id_by_login($user_login);
+	my $pod_name_id_key = $self->get_filled_key(
+		'USER_ID_POD_NAME_ID',
+		{
+			'id'   => $user_id,
+			"name" => md5_hex($podcast_lable)
+		}
+	);
+	if ( $self->redis_connection->exists($pod_name_id_key) ) {
+		my $podcast_id = $self->redis_connection->get($pod_name_id_key);
+		
+		my $pod_next_id_key = $self->get_filled_key('USER_ID_POD_ID_RSS_NEXT_ID',
+			{
+				'id' => $user_id,
+				'pod_id' => $podcast_id
+			}
+		);
+		my $pod_feed_next_id = $self->redis_connection->incr($pod_next_id_key);
+		my $pod_rss_zset_key = $self->get_filled_key('USER_ID_POD_ID_RSS_ZSET',
+			{
+				'id' => $user_id,
+				'pod_id' => $podcast_id
+			}
+		);
+		$self->redis_connection->zadd( $pod_rss_zset_key, $pod_feed_next_id, $feed_id );
+		$return_stat = $pod_feed_next_id;
+	}
+	return $return_stat;
+}
 
 #42
-sub del_user_feed() { }                          #delete feed from user feeds list
+sub del_user_feed() { }    #delete feed from user feeds list
 
 #43
-sub del_feed_id_from_user_podcast() { }          #del feed id from podcast
+sub del_feed_id_from_user_podcast() { }    #del feed id from podcast
 
 1;
