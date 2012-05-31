@@ -859,11 +859,70 @@ sub is_user_podcast_exists() {
 
 }
 
-#34
-sub add_feed_id_to_user_feeds() { }    #add new feed to user list
+#34#add new feed to user list
+###########################################
+# Usage      : add_feed_id_to_user_feeds($user_login, $feed_id);
+# Purpose    : add feed id to user given by login
+# Returns    : array of feed ids
+# Parameters : user login- string, feed_id - int
+# Throws     : no exceptions
+# Comments   : ???
+# See Also   : n/a
+sub add_feed_id_to_user_feeds() {
+	my ( $self, $user_login, $feed_id ) = @_;
+
+	my $user_id = $self->get_user_id_by_login($user_login);
+	my $user_feeds_zset =
+	  $self->get_filled_key( 'USER_ID_FEEDS_FEEDS_ID_ZSET', { 'id' => $user_id } );
+
+	my $feed_rank = $self->redis_connection->zscore( $user_feeds_zset, $feed_id );
+
+	if ( !$feed_rank ) {
+		my $user_feed_next_id_key =
+					$self->get_filled_key( 'USER_ID_FEEDS_NEXT_ID', { 'id' => $user_id } );
+		my $new_feed_id = $self->redis_connection->incr($user_feed_next_id_key);
+		$self->redis_connection->zadd( $user_feeds_zset, $new_feed_id, $feed_id );
+		my $user_feed_last_check_num_key = $self->get_filled_key(
+			'USER_ID_FEEDS_ID_LAST_CHK_NUM',
+			{
+				'id'      => $user_id,
+				'feed_id' => $feed_id,
+			}
+		);
+		$self->redis_connection->set($user_feed_last_check_num_key, 0);
+		print "ADD\n";
+	}
+
+}
+
+
+###########################################
+# Usage      : add_feed_id_to_user_feeds($user_login, $feed_id);
+# Purpose    : add feed id to user given by login
+# Returns    : array of feed ids
+# Parameters : user login- string, feed_id - int
+# Throws     : no exceptions
+# Comments   : ???
+# See Also   : n/a
+sub get_user_feeds_ids() {
+	my ( $self, $user_login ) = @_;
+
+	my @feeds_list = ();
+
+	my $user_id = $self->get_user_id_by_login($user_login);
+	my $user_feeds_zset =
+	  $self->get_filled_key( 'USER_ID_FEEDS_FEEDS_ID_ZSET', { 'id' => $user_id } );
+	print "\nAHTUNG\n"; 
+	if ( $self->redis_connection->exists($user_feeds_zset) ) {
+		@feeds_list = $self->redis_connection->zrangebyscore($user_feeds_zset, '-ing', '+inf' );		
+	}
+
+	return @feeds_list;
+
+}
 
 #35
-sub get_user_podcasts_ids() { }        #get list of all user podcasts
+sub get_user_podcasts_ids() { }    #get list of all user podcasts
 
 #36
 sub get_user_podcasts_id_title_map() { }    #get hash podcsast{id} = poscast_title
@@ -882,9 +941,9 @@ sub get_user_podcasts_titles() { }          #get list of podcast titles
 # See Also   : n/a
 sub get_user_podcast_feeds_ids() {
 	my ( $self, $user_login, $podcast_lable ) = @_;
-	
+
 	my @feeds_list = ();
-	
+
 	my $user_id         = $self->get_user_id_by_login($user_login);
 	my $pod_name_id_key = $self->get_filled_key(
 		'USER_ID_POD_NAME_ID',
@@ -895,21 +954,20 @@ sub get_user_podcast_feeds_ids() {
 	);
 	if ( $self->redis_connection->exists($pod_name_id_key) ) {
 		my $podcast_id = $self->redis_connection->get($pod_name_id_key);
-		
-		my $pod_rss_zset_key = $self->get_filled_key('USER_ID_POD_ID_RSS_ZSET',
+
+		my $pod_rss_zset_key = $self->get_filled_key(
+			'USER_ID_POD_ID_RSS_ZSET',
 			{
-				'id' => $user_id,
+				'id'     => $user_id,
 				'pod_id' => $podcast_id
 			}
 		);
-		@feeds_list = $self->redis_connection->zrangebyscore( $pod_rss_zset_key, '-inf', '+inf');
-		print @feeds_list;
+		@feeds_list =
+		  $self->redis_connection->zrangebyscore( $pod_rss_zset_key, '-inf', '+inf' );
 	}
 	return @feeds_list;
 }
 
-#39
-sub get_user_feeds_ids() { }    #get user feeds ids
 
 #'set_user_feed_last_time_chek', #set user feed last time check
 #40
@@ -938,17 +996,19 @@ sub add_feed_id_to_user_podcast() {
 	);
 	if ( $self->redis_connection->exists($pod_name_id_key) ) {
 		my $podcast_id = $self->redis_connection->get($pod_name_id_key);
-		
-		my $pod_next_id_key = $self->get_filled_key('USER_ID_POD_ID_RSS_NEXT_ID',
+
+		my $pod_next_id_key = $self->get_filled_key(
+			'USER_ID_POD_ID_RSS_NEXT_ID',
 			{
-				'id' => $user_id,
+				'id'     => $user_id,
 				'pod_id' => $podcast_id
 			}
 		);
 		my $pod_feed_next_id = $self->redis_connection->incr($pod_next_id_key);
-		my $pod_rss_zset_key = $self->get_filled_key('USER_ID_POD_ID_RSS_ZSET',
+		my $pod_rss_zset_key = $self->get_filled_key(
+			'USER_ID_POD_ID_RSS_ZSET',
 			{
-				'id' => $user_id,
+				'id'     => $user_id,
 				'pod_id' => $podcast_id
 			}
 		);

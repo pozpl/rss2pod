@@ -613,7 +613,7 @@ sub check_add_feed_id_to_user_feeds() {
 	my %user_feed_ids_hash;
 	@user_feed_ids_hash{@user_feeds_ids} = ();
 	my $all_ok = exists $user_feed_ids_hash{$feed_id} ? 1 : 0;
-
+	print @user_feeds_ids;
 	#CLEAN ENVIRONMENT
 	$db_redis->delete_user($TEST_USER);
 	
