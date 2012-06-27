@@ -11,3 +11,5 @@ html_templates/jslib/dijit
 html/jslib/soundmanager
 html/jslib
 rss2pod.komodoproject
+_build
+cpanm

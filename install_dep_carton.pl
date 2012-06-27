@@ -142,7 +142,7 @@ sub install_deps(){
 	$local_arch_lib =	$path_to_project . '/local/lib/perl5/' . $perl_arch;
 	
 	
-	open( my $sh_out, "perl -I $local_lib -I $local_arch_lib ./local/bin/carton install |" ) || die "Failed: $!\n";
+	open( my $sh_out, "perl -I $local_lib -I $local_arch_lib ./local/bin/carton install --force |" ) || die "Failed: $!\n";
 	while ( my $out_line = <$sh_out> ) {
 		print $ps_line;
 	}
