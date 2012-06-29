@@ -275,14 +275,13 @@ sub get_podcast_file_names() {
 			  ( $last_checked + 1 ) - $feeds_items_shift;
 			$first_item_position = 0 if $first_item_position < 0;
 			my $how_many_items_get = $feeds_list_length - $first_item_position;
-			$how_many_items_get = 0 if $how_many_items_get < 0;
-
-			if ( $how_many_items_get > 50 ) {
-				$how_many_items_get = 50;
-			}
+			$how_many_items_get = $how_many_items_get < 0   ? 0
+								 : $how_many_items_get > 50 ? 50
+								 :				              $how_many_items_get;
+			
 			my @feeds_items_json =
 			  $redis->lrange( "feed:$feed_id:items",
-				$feeds_list_length - $how_many_items_get,
+				$first_item_position,
 				$feeds_list_length );
 			my $json = JSON->new->allow_nonref;
 			foreach my $feed_str_json (@feeds_items_json) {
@@ -294,7 +293,7 @@ sub get_podcast_file_names() {
 
 			my $redis_ok = $redis->set(
 				"user:$user_id:feeds:$feed_id:last_chk_num",
-				$feeds_list_length + $feeds_items_shift
+				$feed_item_list_len + $feeds_items_shift
 			);
 		}
 
