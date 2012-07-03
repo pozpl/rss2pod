@@ -6,7 +6,7 @@ build_requires:
   App::Build: 0
   Module::Build: 0.38
 dynamic_config: 0
-generated_by: 'Module::Build version 0.4, CPAN::Meta::Converter version 2.120921'
+generated_by: 'Module::Build version 0.38, CPAN::Meta::Converter version 2.113640'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -52,11 +52,13 @@ requires:
   Moose::Role: 0
   Net::Daemon: 0
   POSIX: 0
+  Plack: 0
   Redis: 0
   Starman: 0
   Sys::Syslog: 0
   Template::Tiny: 0
   Time::HiRes: 0
+  Ubic: 0
   XML::Feed: 0
   XML::RSS: 0
   bytes: 0
