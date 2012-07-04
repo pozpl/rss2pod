@@ -26,12 +26,12 @@ my $app3 = sub {
 };
 
 
-#my $app1 = sub {
-#    return [ 200, [], [ "Hello John" ] ];
-#};
-
 
 builder {
+		enable "Plack::Middleware::Static",
+          path => qr{^/(images|js|css|jslib|templates)/}, root => './';
+		
+
         mount "/index.cgi" => builder {$app1};
         mount "/run_auth.cgi" => builder {$app3;};
         mount "/podmanager.cgi" => builder {$app2;};
