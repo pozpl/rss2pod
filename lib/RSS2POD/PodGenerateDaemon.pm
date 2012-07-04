@@ -293,8 +293,10 @@ sub get_podcast_file_names() {
 
 			my $redis_ok = $redis->set(
 				"user:$user_id:feeds:$feed_id:last_chk_num",
-				$feed_item_list_len + $feeds_items_shift
+				$feed_item_list_len + $last_checked
 			);
+			my $last_check_num = $feed_item_list_len + $last_checked;
+			syslog( 'info', "Set $last_check_num for user id: $user_id and feed id: $feed_id" );
 		}
 
 		my $redis_ok = $redis->set( "user:$user_id:pod:$pod_id:last_chk_time",
