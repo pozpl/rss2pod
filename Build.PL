@@ -56,6 +56,7 @@ my $build = App::Build->new(
 		'Lingua::Translit'                         => 0,
 		'Lingua::Identify'                         => 0.5,
 		'LWP::Simple'                              => 0,
+		'Plack::Middleware::Static'                => 0,
 		'Moose'                                    => 0,
 		'Redis'                                    => 0,
 		'Starman'                                  => 0,
