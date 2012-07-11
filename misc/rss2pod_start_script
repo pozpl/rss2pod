@@ -3,6 +3,7 @@
 pidfile_rssfetcher=/var/run/rss2pod_rssfetcher.pid
 pidfile_voicefier=/var/run/rss2pod_voicefier.pid
 pidfile_podgenerator=/var/run/rss2pod_podgenerator.pid
+pidfile_starman=/var/run/rss2pod_starman.pid
 
 #if [ -n "${RSS2POD_HOME:-x}" ]; then
 #RSS2POD_HOME="/opt/rss2pod"
@@ -24,6 +25,11 @@ start() {
         ebegin "Starting podcasts generation service"
         $RSS2POD_HOME/misc/run_podgenerator.sh  $RSS2POD_HOME $RSS2POD_LOCAL_LIB $RSS2POD_LOCAL_ARCH_SPECIFIC_LIB > $pidfile_podgenerator
         eend $? "Failed to start podcasts generation service!"
+        
+        cd $RSS2POD_HOME/html
+        ebegin "Starting Starman HTTP server"
+        $RSS2POD_HOME/misc/run_starman.sh  $RSS2POD_HOME $RSS2POD_LOCAL_LIB $RSS2POD_LOCAL_ARCH_SPECIFIC_LIB > $pidfile_starman
+        eend $? "Failed to start Starman!"
 }
 
 stop() {
@@ -40,7 +46,12 @@ stop() {
     ebegin "Stopping podcasts generation service"
 	kill -9 $( cat $pidfile_podgenerator)
 	rm -f ${pidfile_podgenerator}
-	eend $? "Failed to stop podcasts generation service!"    
+	eend $? "Failed to stop podcasts generation service!"
+	
+	ebegin "Stopping Starman HTTP server"
+	kill -9 $( cat $pidfile_starman)
+	rm -f ${pidfile_starman}
+	eend $? "Failed to stop Starmsn!"    
 }
 
 checkconfig() {
