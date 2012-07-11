@@ -12,4 +12,6 @@ html/jslib/soundmanager
 html/jslib
 rss2pod.komodoproject
 _build
+cpanmhtml/jslib/audiojs
+html/jslib/soundmanager
 cpanm
