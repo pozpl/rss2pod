@@ -28,8 +28,8 @@ my $app3 = sub {
 
 
 builder {
-		enable "Plack::Middleware::Static",
-          path => qr{^/(images|js|css|jslib|templates)/}, root => './';
+	enable "Plack::Middleware::Static",
+         path => qr{^/(images|js|css|jslib|templates)/}, root => './';
 		
 
         mount "/index.cgi" => builder {$app1};
